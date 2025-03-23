@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home_screen.dart';
+import 'splash_screen.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
@@ -17,21 +17,38 @@ class _InputScreenState extends State<InputScreen> {
   String? _selectedBirthTime = "모름";
   bool _agreedToTerms = false;
 
+  static const Map<String, String> _birthTimeMap = {
+    "자시 (23:30~1:30)": "00:30",
+    "축시 (1:30~3:30)": "02:30",
+    "인시 (3:30~5:30)": "04:30",
+    "묘시 (5:30~7:30)": "06:30",
+    "진시 (7:30~9:30)": "08:30",
+    "사시 (9:30~11:30)": "10:30",
+    "오시 (11:30~13:30)": "12:30",
+    "미시 (13:30~15:30)": "14:30",
+    "신시 (15:30~17:30)": "16:30",
+    "유시 (17:30~19:30)": "18:30",
+    "술시 (19:30~21:30)": "20:30",
+    "해시 (21:30~23:30)": "22:30",
+  };
+
   final List<String> _birthTimeOptions = [
     "모름",
-    "자시 (23:30~1:30)",
-    "축시 (1:30~3:30)",
-    "인시 (3:30~5:30)",
-    "묘시 (5:30~7:30)",
-    "진시 (7:30~9:30)",
-    "사시 (9:30~11:30)",
-    "오시 (11:30~13:30)",
-    "미시 (13:30~15:30)",
-    "신시 (15:30~17:30)",
-    "유시 (17:30~19:30)",
-    "술시 (19:30~21:30)",
-    "해시 (21:30~23:30)",
+    ..._birthTimeMap.keys,
   ];
+
+  String _calendarToServer(String calendar) {
+    switch (calendar) {
+      case "양력":
+        return "solar";
+      case "음력":
+        return "lunar";
+      case "음력(윤달)":
+        return "lunarLeaf";
+      default:
+        return "solar";
+    }
+  }
 
   Future<void> _saveAndGoHome() async {
     if (_nameController.text.isEmpty ||
@@ -44,22 +61,24 @@ class _InputScreenState extends State<InputScreen> {
     }
 
     final prefs = await SharedPreferences.getInstance();
+    final serverBirthTime =
+        _selectedBirthTime == "모름" ? null : _birthTimeMap[_selectedBirthTime!];
+
     await prefs.setBool('isFirstRun', false);
     await prefs.setString('name', _nameController.text);
     await prefs.setString('gender', _gender);
     await prefs.setString('birthDate', _selectedDate!.toIso8601String());
-    await prefs.setBool('solar', _calendarType == "양력");
+    await prefs.setString('solar', _calendarToServer(_calendarType));
 
-    final birthTime = (_selectedBirthTime == "모름") ? null : _selectedBirthTime;
-    if (birthTime == null) {
+    if (serverBirthTime == null) {
       await prefs.remove('birthTime');
     } else {
-      await prefs.setString('birthTime', birthTime);
+      await prefs.setString('birthTime', serverBirthTime);
     }
 
     if (!mounted) return;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        context, MaterialPageRoute(builder: (_) => const SplashScreen()));
   }
 
   Future<void> _pickDate() async {
@@ -77,7 +96,7 @@ class _InputScreenState extends State<InputScreen> {
               onSurface: Colors.grey[800]!,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: Colors.grey[500]),
+              style: TextButton.styleFrom(foregroundColor: Colors.grey[800]),
             ),
           ),
           child: child!,
@@ -206,7 +225,7 @@ class _InputScreenState extends State<InputScreen> {
                               ),
                             ),
                             Icon(Icons.calendar_today,
-                                size: 20, color: primaryColor),
+                                size: 20, color: Colors.grey[800]),
                           ],
                         ),
                       ),
