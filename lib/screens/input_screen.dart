@@ -97,6 +97,7 @@ class _InputScreenState extends State<InputScreen> {
 
     return Theme(
       data: ThemeData(
+        fontFamily: 'Pretendard',
         primarySwatch: Colors.grey,
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor!)
             .copyWith(primary: primaryColor, secondary: primaryColor),
@@ -163,14 +164,14 @@ class _InputScreenState extends State<InputScreen> {
                         Radio<String>(
                           value: 'M',
                           groupValue: _gender,
-                          activeColor: Colors.grey[800],
+                          activeColor: primaryColor,
                           onChanged: (val) => setState(() => _gender = val!),
                         ),
                         const Text("남"),
                         Radio<String>(
                           value: 'F',
                           groupValue: _gender,
-                          activeColor: Colors.grey[800],
+                          activeColor: primaryColor,
                           onChanged: (val) => setState(() => _gender = val!),
                         ),
                         const Text("여"),
@@ -270,7 +271,7 @@ class _InputScreenState extends State<InputScreen> {
               Row(
                 children: [
                   Checkbox(
-                    activeColor: Colors.grey[800],
+                    activeColor: primaryColor,
                     value: _agreedToTerms,
                     onChanged: (val) => setState(() => _agreedToTerms = val!),
                   ),
