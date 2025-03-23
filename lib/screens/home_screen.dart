@@ -35,29 +35,62 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // 1st section: 인사, 날짜, 날씨
           Container(
-            height: screenHeight / 3,
+            height: screenHeight / 3.7,
             width: double.infinity,
-            color: const Color(0xFFDCF5DC), // 연두
-            padding: const EdgeInsets.fromLTRB(24, 60, 24, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 231, 244, 231),
+            ),
+            padding: const EdgeInsets.fromLTRB(24, 65, 5, 16),
+            child: Stack(
               children: [
-                Text(
-                  "반가워요 $userName님!",
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                Positioned(
+                  top: -30,
+                  right: -30,
+                  child: Image.asset(
+                    "assets/images/home_main.png",
+                    width: 230,
+                    height: 230,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                const Text(
-                  "오늘은 어떤 하루일까요?",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "반가워요 $userName님!",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[800],
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/today');
+                      },
+                      child: const Text(
+                        "오늘은\n어떤 하루일까요?",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Pretendard',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _getTodayDate(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[700],
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildWeatherInfo(),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  _getTodayDate(),
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                ),
-                const SizedBox(height: 20),
-                _buildWeatherInfo(),
               ],
             ),
           ),
@@ -100,33 +133,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildWeatherInfo() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 5,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.wb_sunny, color: Colors.orange, size: 32),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text("1° | -7°",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text("대체로 맑지만 오후에 비가 올 예정이에요",
-                  style: TextStyle(fontSize: 14, color: Colors.grey)),
-            ],
-          ),
-        ],
+    return SizedBox(
+      width: 330, // ← 원하는 너비로 조절
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 5,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.wb_sunny, color: Colors.orange, size: 10),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "1° | -7°",
+                  style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  "대체로 맑지만 오후에 비가 올 예정이에요",
+                  style: TextStyle(fontSize: 8, color: Colors.grey),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
