@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'splash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/today');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const SplashScreen()),
+                        );
                       },
                       child: const Text(
                         "오늘은\n어떤 하루일까요?",
