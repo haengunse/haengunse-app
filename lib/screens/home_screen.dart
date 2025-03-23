@@ -1,66 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String userName = "행운세";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadName();
+  }
+
+  Future<void> _loadName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('name') ?? "행운세";
+    setState(() {
+      userName = name;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.green[50],
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text("오늘의 운세"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              // 새로고침 기능 추가 가능
-            },
-          )
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // 1st section: 인사, 날짜, 날씨
+          Container(
+            height: screenHeight / 3,
+            width: double.infinity,
+            color: const Color(0xFFDCF5DC), // 연두
+            padding: const EdgeInsets.fromLTRB(24, 60, 24, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "반가워요 $userName님!",
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Text(
+                  "오늘은 어떤 하루일까요?",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _getTodayDate(),
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                ),
+                const SizedBox(height: 20),
+                _buildWeatherInfo(),
+              ],
+            ),
+          ),
+
+          // 2nd section: 운세 카드 타이틀
+          Container(
+            height: screenHeight / 3,
+            width: double.infinity,
+            color: const Color(0xFFFFF7D6), // 연노랑
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("다양한 운세를 알아볼까요?",
+                    style: TextStyle(fontSize: 13, color: Colors.grey)),
+                SizedBox(height: 8),
+                Text("운세 카드",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+
+          // 3rd section: 운세 차트
+          Container(
+            height: screenHeight / 3,
+            width: double.infinity,
+            color: const Color(0xFFE3F2FD), // 연하늘
+            padding: const EdgeInsets.all(24),
+            child: _buildHoroscopeChart(),
+          ),
         ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildGreetingSection(),
-            const SizedBox(height: 20),
-            _buildWeatherInfo(),
-            const SizedBox(height: 20),
-            _buildFortuneCards(context),
-            const SizedBox(height: 20),
-            _buildHoroscopeChart(),
-          ],
-        ),
       ),
     );
   }
 
-  Widget _buildGreetingSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "반가워요 행운세님!",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const Text(
-          "오늘은 어떤 하루일까요?",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          "2025년 1월 9일",
-          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-        ),
-      ],
-    );
+  String _getTodayDate() {
+    final now = DateTime.now();
+    return "${now.year}년 ${now.month}월 ${now.day}일";
   }
 
   Widget _buildWeatherInfo() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -79,57 +120,13 @@ class HomeScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              Text(
-                "1° | -7°",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "대체로 맑지만 오후에 비가 올 예정이에요",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
+              Text("1° | -7°",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text("대체로 맑지만 오후에 비가 올 예정이에요",
+                  style: TextStyle(fontSize: 14, color: Colors.grey)),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFortuneCards(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildFortuneCard(context, "별자리 운세", Icons.star, Colors.amber),
-        _buildFortuneCard(context, "행운아이템", Icons.local_florist, Colors.green),
-        _buildFortuneCard(context, "꿈 해몽", Icons.cloud, Colors.blueGrey),
-      ],
-    );
-  }
-
-  Widget _buildFortuneCard(
-      BuildContext context, String title, IconData icon, Color color) {
-    return GestureDetector(
-      onTap: () {
-        // 상세 화면 이동 추가 가능
-      },
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Container(
-          width: 100,
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Icon(icon, color: color, size: 40),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

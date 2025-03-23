@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'splash_screen.dart';
+import 'home_screen.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
@@ -78,7 +78,7 @@ class _InputScreenState extends State<InputScreen> {
 
     if (!mounted) return;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => const SplashScreen()));
+        context, MaterialPageRoute(builder: (_) => const HomeScreen()));
   }
 
   Future<void> _pickDate() async {
