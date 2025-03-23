@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
+import 'package:haengunse/service/today.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,7 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        final data = await getTodayRequestData();
+                        debugPrint("요청 데이터: $data");
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
