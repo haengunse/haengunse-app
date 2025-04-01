@@ -55,7 +55,7 @@ class SessionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.7,
+      height: screenHeight / 3.7, //세션 화면 비율
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),

@@ -61,24 +61,29 @@ class _InputScreenState extends State<InputScreen> {
     }
 
     final prefs = await SharedPreferences.getInstance();
-    final serverBirthTime =
-        _selectedBirthTime == "모름" ? null : _birthTimeMap[_selectedBirthTime!];
+
+    final formattedBirthDate =
+        "${_selectedDate!.year.toString().padLeft(4, '0')}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
+
+    final isSolar = _calendarType == "양력" ? "true" : "false";
 
     await prefs.setBool('isFirstRun', false);
     await prefs.setString('name', _nameController.text);
     await prefs.setString('gender', _gender);
-    await prefs.setString('birthDate', _selectedDate!.toIso8601String());
-    await prefs.setString('solar', _calendarToServer(_calendarType));
+    await prefs.setString('birthDate', formattedBirthDate);
+    await prefs.setString('solar', isSolar);
 
-    if (serverBirthTime == null) {
-      await prefs.remove('birthTime');
-    } else {
-      await prefs.setString('birthTime', serverBirthTime);
-    }
+    final birthTimeLabel =
+        _selectedBirthTime == null || _selectedBirthTime == "모름"
+            ? "null"
+            : _selectedBirthTime!;
+    await prefs.setString('birthTime', birthTimeLabel);
 
     if (!mounted) return;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
   }
 
   Future<void> _pickDate() async {
@@ -247,7 +252,7 @@ class _InputScreenState extends State<InputScreen> {
                         underline: const SizedBox(),
                         iconEnabledColor: primaryColor,
                         dropdownColor: Colors.white,
-                        items: ["양력", "음력", "음력(윤달)"]
+                        items: ["양력", "음력"]
                             .map((e) =>
                                 DropdownMenuItem(value: e, child: Text(e)))
                             .toList(),
