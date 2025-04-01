@@ -1,20 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/screens/splash_screen.dart';
-import 'package:haengunse/service/today.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+import 'package:haengunse/config.dart';
 
 class SessionLucky extends StatelessWidget {
-  final String userName;
   final double screenHeight;
+  final String userName;
 
   const SessionLucky({
     super.key,
-    required this.userName,
     required this.screenHeight,
+    required this.userName,
   });
 
   String _getTodayDate() {
     final now = DateTime.now();
     return "${now.year}년 ${now.month}월 ${now.day}일";
+  }
+
+  Future<void> _handleTodayRequest(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final birthDate = prefs.getString('birthDate');
+    final solar = prefs.getString('solar');
+    final birthTime = prefs.getString('birthTime');
+    final gender = prefs.getString('gender');
+    final name = userName;
+
+    if ([birthDate, solar, birthTime, gender, name].contains(null) ||
+        name!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("유저 정보가 누락되어 요청할 수 없습니다.")),
+      );
+      return;
+    }
+
+    final jsonData = {
+      'birthDate': birthDate,
+      'solar': solar,
+      'birthTime': birthTime,
+      'gender': gender,
+      'name': name,
+    };
+
+    debugPrint("보낼 데이터: $jsonData");
+
+    try {
+      final url = Config.todayApiUrl;
+
+      final dio = Dio();
+      final response = await dio.get(
+        url,
+        options: Options(headers: {'Content-Type': 'application/json'}),
+        data: jsonData,
+      );
+
+      debugPrint("요청 성공 응답: ${response.data}");
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SplashScreen()),
+        );
+      }
+    } catch (e) {
+      debugPrint("요청 실패: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("데이터 요청 실패")),
+      );
+    }
   }
 
   Widget _buildWeatherInfo() {
@@ -55,7 +109,7 @@ class SessionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.7, //세션 화면 비율
+      height: screenHeight / 3.7,
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
@@ -84,14 +138,7 @@ class SessionLucky extends StatelessWidget {
                     fontFamily: 'Pretendard',
                   )),
               GestureDetector(
-                onTap: () async {
-                  final data = await getTodayRequestData();
-                  debugPrint("요청 데이터: $data");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SplashScreen()),
-                  );
-                },
+                onTap: () => _handleTodayRequest(context),
                 child: const Text(
                   "오늘은\n어떤 하루일까요?",
                   style: TextStyle(

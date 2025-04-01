@@ -4,6 +4,7 @@ import 'screens/home_screen.dart';
 import 'screens/input_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/today_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runApp(const MyApp());

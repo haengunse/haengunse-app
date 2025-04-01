@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           SessionLucky(userName: userName, screenHeight: screenHeight),
-          SessionCard(screenHeight: screenHeight),
-          SessionDay(screenHeight: screenHeight),
+          SessionCard(screenHeight: screenHeight), //여기 수정할 것
+          SessionDay(screenHeight: screenHeight), //여기 수정할 것
         ],
       ),
     );
