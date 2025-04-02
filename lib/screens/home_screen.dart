@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/home/session_lucky.dart';
-import 'package:haengunse/screens/home/session_card.dart';
-import 'package:haengunse/screens/home/session_day.dart';
+import 'package:haengunse/screens/home/lucky_section.dart';
+import 'package:haengunse/screens/home/card_section.dart';
+import 'package:haengunse/screens/home/day_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: Column(
         children: [
-          SessionLucky(userName: userName, screenHeight: screenHeight),
-          SessionCard(screenHeight: screenHeight), //여기 수정할 것
-          SessionDay(screenHeight: screenHeight), //여기 수정할 것
+          SectionLucky(userName: userName, screenHeight: screenHeight),
+          SectionCard(screenHeight: screenHeight), //여기 수정할 것
+          SectionDay(screenHeight: screenHeight), //여기 수정할 것
         ],
       ),
     );

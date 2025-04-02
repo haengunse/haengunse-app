@@ -51,7 +51,13 @@ class SectionCard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final card = snapshot.data![index];
                     return GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, card.route),
+                      onTap: () async {
+                        final success =
+                            await CardService.requestCardData(card.route);
+                        if (success && context.mounted) {
+                          Navigator.pushNamed(context, card.route);
+                        }
+                      },
                       child: _buildFortuneCard(
                         imagePath: card.imagePath,
                         smallTitle: card.smallTitle,
