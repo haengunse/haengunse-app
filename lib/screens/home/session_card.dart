@@ -8,7 +8,7 @@ class SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3,
+      height: screenHeight / 3.5,
       width: double.infinity,
       color: const Color.fromARGB(231, 243, 243, 243),
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
@@ -41,19 +41,19 @@ class SessionCard extends StatelessWidget {
               children: [
                 _buildFortuneCard(
                   imagePath: 'assets/images/fortune_star.png',
-                  smallTitle: '오늘의 양자리는',
+                  smallTitle: '별이 건네는 이야기',
                   bigTitle: '별자리 운세',
                 ),
                 const SizedBox(width: 10),
                 _buildFortuneCard(
                   imagePath: 'assets/images/fortune_zodiac.png',
-                  smallTitle: '오늘의 뱀띠는',
+                  smallTitle: '열두 띠의 하루',
                   bigTitle: '띠 운세',
                 ),
                 const SizedBox(width: 10),
                 _buildFortuneCard(
                   imagePath: 'assets/images/fortune_dream.png',
-                  smallTitle: '오늘의 꿈은',
+                  smallTitle: '꿈이 알려주는 마음의 신호',
                   bigTitle: '꿈 해몽',
                 ),
               ],

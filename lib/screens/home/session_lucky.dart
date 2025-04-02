@@ -144,7 +144,7 @@ class SessionLucky extends StatelessWidget {
                   "오늘은\n어떤 하루일까요? ->",
                   style: TextStyle(
                       fontSize: 27,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Pretendard'),
                 ),
               ),
