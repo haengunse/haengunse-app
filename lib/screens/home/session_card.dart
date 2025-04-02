@@ -8,10 +8,10 @@ class SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.4,
+      height: screenHeight / 3.3,
       width: double.infinity,
       color: const Color.fromARGB(231, 243, 243, 243),
-      padding: const EdgeInsets.fromLTRB(15, 15, 10, 15),
+      padding: const EdgeInsets.fromLTRB(15, 20, 10, 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

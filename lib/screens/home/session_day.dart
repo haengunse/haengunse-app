@@ -44,7 +44,7 @@ class SessionDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 2.7,
+      height: screenHeight / 2.8,
       width: double.infinity,
       color: const Color.fromARGB(231, 243, 243, 243),
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
@@ -63,7 +63,7 @@ class SessionDay extends StatelessWidget {
           const SizedBox(height: 15),
           _buildPreviewCard("오늘의 당신을 위한 랜덤 질문을 뽑아봤어요."),
           _buildPreviewCard("오늘 하루, 마음에 담아두면 좋을 한마디예요."),
-          _buildPreviewCard("오늘 당신께 필요한 행운 포인트를 모아봤어요."),
+          _buildPreviewCard("오늘 당신께 필요한 행운 아이템을 모아봤어요."),
         ],
       ),
     );
