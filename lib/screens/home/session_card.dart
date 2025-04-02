@@ -10,8 +10,8 @@ class SessionCard extends StatelessWidget {
     return Container(
       height: screenHeight / 3,
       width: double.infinity,
-      color: const Color.fromARGB(255, 240, 240, 240),
-      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+      color: const Color.fromARGB(231, 243, 243, 243),
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,7 +35,7 @@ class SessionCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           SizedBox(
-            height: 155,
+            height: 145,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
@@ -70,16 +70,16 @@ class SessionCard extends StatelessWidget {
     required String bigTitle,
   }) {
     return Container(
-      width: 130,
+      width: 135,
       height: 130,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 5,
+            blurRadius: 4,
             spreadRadius: 2,
             offset: Offset(0, -1),
           ),
