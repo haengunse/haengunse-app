@@ -33,7 +33,7 @@ class SessionCard extends StatelessWidget {
               fontFamily: 'Pretendard',
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           SizedBox(
             height: 145,
             child: ListView(
@@ -70,7 +70,7 @@ class SessionCard extends StatelessWidget {
     required String bigTitle,
   }) {
     return Container(
-      width: 135,
+      width: 130,
       height: 130,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
@@ -83,6 +83,12 @@ class SessionCard extends StatelessWidget {
             spreadRadius: 2,
             offset: Offset(0, -1),
           ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
@@ -94,7 +100,7 @@ class SessionCard extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(imagePath),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.scaleDown,
                 ),
               ),
             ),
