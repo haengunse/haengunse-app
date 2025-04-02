@@ -74,15 +74,16 @@ class SessionLucky extends StatelessWidget {
   Widget _buildWeatherInfo() {
     return SizedBox(
       width: 330,
+      height: 35,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              blurRadius: 5,
+              blurRadius: 1,
               spreadRadius: 2,
             ),
           ],
@@ -109,12 +110,12 @@ class SessionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.7,
+      height: screenHeight / 3,
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 65, 5, 16),
+      padding: const EdgeInsets.fromLTRB(24, 110, 5, 16),
       child: Stack(
         children: [
           Positioned(
