@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SessionDay extends StatelessWidget {
+class SectionDay extends StatelessWidget {
   final double screenHeight;
 
-  const SessionDay({super.key, required this.screenHeight});
+  const SectionDay({super.key, required this.screenHeight});
 
   Widget _buildPreviewCard(String title) {
     return Container(

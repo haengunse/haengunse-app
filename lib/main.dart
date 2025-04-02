@@ -1,7 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'utils/route.dart';
+import 'package:haengunse/utils/route.dart';
 
 void main() {
   runApp(const MyApp());

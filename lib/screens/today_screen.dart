@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:haengunse/screens/home_screen.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({super.key});

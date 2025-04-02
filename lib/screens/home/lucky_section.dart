@@ -4,11 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:haengunse/config.dart';
 
-class SessionLucky extends StatelessWidget {
+class SectionLucky extends StatelessWidget {
   final double screenHeight;
   final String userName;
 
-  const SessionLucky({
+  const SectionLucky({
     super.key,
     required this.screenHeight,
     required this.userName,

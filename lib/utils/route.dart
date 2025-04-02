@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screens/home_screen.dart';
-import '../screens/input_screen.dart';
-import '../screens/splash_screen.dart';
-import '../screens/today_screen.dart';
-import '../screens/card/star_screen.dart';
-import '../screens/card/zodiac_screen.dart';
-import '../screens/card/dream_screen.dart';
+import 'package:haengunse/screens/home_screen.dart';
+import 'package:haengunse/screens/input_screen.dart';
+import 'package:haengunse/screens/splash_screen.dart';
+import 'package:haengunse/screens/today_screen.dart';
+import 'package:haengunse/screens/card/star_screen.dart';
+import 'package:haengunse/screens/card/zodiac_screen.dart';
+import 'package:haengunse/screens/card/dream_screen.dart';
 import 'package:haengunse/service/card_service.dart';
 
 class RouteGenerator {

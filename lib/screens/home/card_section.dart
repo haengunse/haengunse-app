@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/card_service.dart';
 
-class SessionCard extends StatelessWidget {
+class SectionCard extends StatelessWidget {
   final double screenHeight;
 
-  const SessionCard({super.key, required this.screenHeight});
+  const SectionCard({super.key, required this.screenHeight});
 
   @override
   Widget build(BuildContext context) {
