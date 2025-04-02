@@ -32,7 +32,7 @@ class SessionDay extends StatelessWidget {
     return Container(
       height: screenHeight / 3,
       width: double.infinity,
-      color: const Color.fromARGB(231, 243, 243, 243),
+      color: const Color.fromARGB(231, 154, 148, 148),
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

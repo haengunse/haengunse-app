@@ -71,8 +71,8 @@ class SessionCard extends StatelessWidget {
   }) {
     return Container(
       width: 130,
-      height: 130,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      height: 150,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -94,13 +94,14 @@ class SessionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          AspectRatio(
+            aspectRatio: 1.2,
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(imagePath),
-                  fit: BoxFit.scaleDown,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
