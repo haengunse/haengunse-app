@@ -8,10 +8,10 @@ class SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.5,
+      height: screenHeight / 3.4,
       width: double.infinity,
       color: const Color.fromARGB(231, 243, 243, 243),
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 15, 10, 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +33,7 @@ class SessionCard extends StatelessWidget {
               fontFamily: 'Pretendard',
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
           SizedBox(
             height: 145,
             child: ListView(
@@ -79,13 +79,13 @@ class SessionCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 4,
-            spreadRadius: 2,
+            blurRadius: 1,
+            spreadRadius: 1,
             offset: Offset(0, -1),
           ),
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 5,
+            blurRadius: 1,
             spreadRadius: 1,
             offset: Offset(0, 2),
           ),

@@ -44,9 +44,9 @@ class SessionDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 2.63,
+      height: screenHeight / 2.7,
       width: double.infinity,
-      color: const Color(0xFFF3F3F3),
+      color: const Color.fromARGB(231, 243, 243, 243),
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

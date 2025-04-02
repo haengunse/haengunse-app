@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: Column(
         children: [
           SessionLucky(userName: userName, screenHeight: screenHeight),
