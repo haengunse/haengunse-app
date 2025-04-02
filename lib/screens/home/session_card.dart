@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/service/card_service.dart';
 
 class SessionCard extends StatelessWidget {
   final double screenHeight;
@@ -36,27 +37,30 @@ class SessionCard extends StatelessWidget {
           const SizedBox(height: 20),
           SizedBox(
             height: 145,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildFortuneCard(
-                  imagePath: 'assets/images/fortune_star.png',
-                  smallTitle: '별이 건네는 이야기',
-                  bigTitle: '별자리 운세',
-                ),
-                const SizedBox(width: 10),
-                _buildFortuneCard(
-                  imagePath: 'assets/images/fortune_zodiac.png',
-                  smallTitle: '열두 띠의 하루',
-                  bigTitle: '띠 운세',
-                ),
-                const SizedBox(width: 10),
-                _buildFortuneCard(
-                  imagePath: 'assets/images/fortune_dream.png',
-                  smallTitle: '꿈이 알려주는 마음의 신호',
-                  bigTitle: '꿈 해몽',
-                ),
-              ],
+            child: FutureBuilder<List<FortuneCardData>>(
+              future: CardService.fetchFortuneCards(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snapshot.data!.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 10),
+                  itemBuilder: (context, index) {
+                    final card = snapshot.data![index];
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, card.route),
+                      child: _buildFortuneCard(
+                        imagePath: card.imagePath,
+                        smallTitle: card.smallTitle,
+                        bigTitle: card.bigTitle,
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
