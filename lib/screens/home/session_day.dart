@@ -5,24 +5,38 @@ class SessionDay extends StatelessWidget {
 
   const SessionDay({super.key, required this.screenHeight});
 
-  Widget _buildChartRow(String title, String left, String right) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: const TextStyle(fontSize: 16)),
-            Row(
-              children: [
-                Text(left, style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(width: 10),
-                Text(right, style: const TextStyle(color: Colors.redAccent)),
-              ],
+  Widget _buildPreviewCard(String title) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF5E5E5E),
+                fontFamily: 'Pretendard',
+              ),
             ),
-          ],
-        ),
+          ),
+          const Icon(Icons.arrow_forward_ios_rounded,
+              size: 16, color: Colors.black54),
+        ],
       ),
     );
   }
@@ -30,18 +44,26 @@ class SessionDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3,
+      height: screenHeight / 2.63,
       width: double.infinity,
-      color: const Color.fromARGB(231, 154, 148, 148),
-      padding: const EdgeInsets.all(24),
+      color: const Color(0xFFF3F3F3),
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("운세 차트",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          _buildChartRow("오늘의 오하야사 순위", "물병자리", "쌍둥이자리"),
-          _buildChartRow("오늘의 띠별 운세", "양띠", "돼지띠"),
+          const Text(
+            "오늘, 나의 하루 미리보기",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+              fontFamily: 'Pretendard',
+            ),
+          ),
+          const SizedBox(height: 15),
+          _buildPreviewCard("오늘의 전반적인 흐름은 어떨까요?"),
+          _buildPreviewCard("오늘의 작은 주의사항은 어떤 게 있을까요?"),
+          _buildPreviewCard("오늘의 행운포인트"),
         ],
       ),
     );
