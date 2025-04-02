@@ -73,7 +73,7 @@ class SessionLucky extends StatelessWidget {
 
   Widget _buildWeatherInfo() {
     return SizedBox(
-      width: 330,
+      width: 340,
       height: 35,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
@@ -90,7 +90,7 @@ class SessionLucky extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.wb_sunny, color: Colors.orange, size: 10),
+            const Icon(Icons.wb_sunny, color: Colors.orange, size: 20),
             const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +115,7 @@ class SessionLucky extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 110, 5, 16),
+      padding: const EdgeInsets.fromLTRB(24, 100, 5, 16),
       child: Stack(
         children: [
           Positioned(
@@ -134,16 +134,16 @@ class SessionLucky extends StatelessWidget {
               Text("반가워요 $userName님!",
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     color: Colors.grey[800],
                     fontFamily: 'Pretendard',
                   )),
               GestureDetector(
                 onTap: () => _handleTodayRequest(context),
                 child: const Text(
-                  "오늘은\n어떤 하루일까요?",
+                  "오늘은\n어떤 하루일까요? ->",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 27,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Pretendard'),
                 ),
@@ -156,7 +156,7 @@ class SessionLucky extends StatelessWidget {
                     color: Colors.grey[700],
                     fontFamily: 'Pretendard'),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 13),
               _buildWeatherInfo(),
             ],
           ),
