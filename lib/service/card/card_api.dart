@@ -60,8 +60,7 @@ class CardService {
         uri = Config.zodiacApiUrl;
         break;
       case CardRoute.dream:
-        uri = Config.dreamApiUrl;
-        break;
+        return true;
       default:
         debugPrint("알 수 없는 route: $route");
         return false;
