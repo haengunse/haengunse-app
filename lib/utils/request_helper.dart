@@ -52,18 +52,27 @@ void _goToError(
   required VoidCallback retry,
 }) {
   Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (pageContext) => ErrorPage(
+    PageRouteBuilder(
+      opaque: false,
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 200), // 전환 속도
+      pageBuilder: (_, __, ___) => ErrorPage(
         title: title,
         message: message,
         errorType: errorType,
         onRetry: () {
-          Navigator.of(pageContext).pop();
+          Navigator.of(context).pop();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             retry();
           });
         },
       ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
     ),
   );
 }
