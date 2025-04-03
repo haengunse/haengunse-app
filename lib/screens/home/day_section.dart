@@ -25,7 +25,6 @@ class SectionDay extends StatelessWidget {
 
   void _handleRandomTap(BuildContext context) {
     final url = Config.messageRandomUrl;
-    debugPrint("📍 현재 요청 URL: $url");
 
     handleRequest<String>(
       context: context,

@@ -8,9 +8,6 @@ class DayService {
   static Future<String> fetchAnswer(String url) async {
     try {
       final response = await _dio.get(url);
-      debugPrint('📩 응답 상태 코드: ${response.statusCode}');
-      debugPrint('📦 응답 데이터: ${response.data}');
-      debugPrint('🔎 응답 타입: ${response.data.runtimeType}');
 
       if (response.statusCode == 200) {
         final data = response.data;
