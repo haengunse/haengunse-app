@@ -4,24 +4,12 @@ import 'package:haengunse/screens/day/cookie_screen.dart';
 import 'package:haengunse/screens/day/item_screen.dart';
 import 'package:haengunse/service/day_service.dart';
 import 'package:haengunse/config.dart';
+import 'package:haengunse/utils/request_helper.dart';
 
 class SectionDay extends StatelessWidget {
   final double screenHeight;
 
   const SectionDay({super.key, required this.screenHeight});
-
-  Future<void> _handleTap<T>({
-    required BuildContext context,
-    required Future<T> Function() fetch,
-    required Widget Function(T) screenBuilder,
-  }) async {
-    try {
-      final data = await fetch();
-      await _showDialog(context, screenBuilder(data));
-    } catch (e) {
-      _showErrorDialog(context, e.toString());
-    }
-  }
 
   Future<void> _showDialog(BuildContext context, Widget child) async {
     showDialog(
@@ -31,22 +19,6 @@ class SectionDay extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         insetPadding: const EdgeInsets.all(30),
         child: child,
-      ),
-    );
-  }
-
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("에러"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("닫기"),
-          )
-        ],
       ),
     );
   }
@@ -114,28 +86,34 @@ class SectionDay extends StatelessWidget {
           _buildPreviewCard(
             context,
             "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
-            () => _handleTap<String>(
+            () => handleRequest<String>(
               context: context,
               fetch: () => DayService.fetchAnswer(Config.messageQuestionUrl),
-              screenBuilder: (answer) => RandomScreen(answer: answer),
+              onSuccess: (answer) {
+                _showDialog(context, RandomScreen(answer: answer));
+              },
             ),
           ),
           _buildPreviewCard(
             context,
             "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
-            () => _handleTap<String>(
+            () => handleRequest<String>(
               context: context,
               fetch: () => DayService.fetchAnswer(Config.messageCookieUrl),
-              screenBuilder: (answer) => CookieScreen(answer: answer),
+              onSuccess: (answer) {
+                _showDialog(context, CookieScreen(answer: answer));
+              },
             ),
           ),
           _buildPreviewCard(
             context,
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () => _handleTap<Map<String, dynamic>>(
+            () => handleRequest<Map<String, dynamic>>(
               context: context,
               fetch: () => DayService.fetchItem(Config.messageItemUrl),
-              screenBuilder: (item) => ItemScreen(item: item),
+              onSuccess: (item) {
+                _showDialog(context, ItemScreen(item: item));
+              },
             ),
           ),
         ],
