@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/card/card_api.dart';
+import 'package:haengunse/service/card/card_interactor.dart';
 
 class SectionCard extends StatelessWidget {
   final double screenHeight;
@@ -51,13 +52,10 @@ class SectionCard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final card = snapshot.data![index];
                     return GestureDetector(
-                      onTap: () async {
-                        final success =
-                            await CardService.requestCardData(card.route);
-                        if (success && context.mounted) {
-                          Navigator.pushNamed(context, card.route);
-                        }
-                      },
+                      onTap: () => CardInteractor.handleTap(
+                        context: context,
+                        route: card.route,
+                      ),
                       child: _buildFortuneCard(
                         imagePath: card.imagePath,
                         smallTitle: card.smallTitle,

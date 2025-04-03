@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:haengunse/config.dart';
+import 'package:haengunse/utils/request_helper.dart';
 
 class FortuneCardData {
   final String imagePath;
@@ -48,10 +49,18 @@ class CardService {
     ];
   }
 
-  static Future<bool> requestCardData(String route) async {
-    final dio = Dio();
-    String? uri;
+  static Future<void> fetchCardData({
+    required BuildContext context,
+    required String route,
+    required void Function() onSuccess,
+    required VoidCallback retry,
+  }) async {
+    if (route == CardRoute.dream) {
+      onSuccess();
+      return;
+    }
 
+    String? uri;
     switch (route) {
       case CardRoute.star:
         uri = Config.starApiUrl;
@@ -59,30 +68,28 @@ class CardService {
       case CardRoute.zodiac:
         uri = Config.zodiacApiUrl;
         break;
-      case CardRoute.dream:
-        return true;
-      default:
-        debugPrint("알 수 없는 route: $route");
-        return false;
     }
 
-    try {
-      final response = await dio.get(uri);
-      debugPrint("응답 데이터: ${response.data}");
+    await handleRequest(
+      context: context,
+      fetch: () async {
+        final dio = Dio();
+        final response = await dio.get(uri!);
+        debugPrint("응답 데이터: \${response.data}");
 
-      if (response.statusCode == 200) {
-        final data = response.data;
-        if (data is List && data.isNotEmpty) {
-          final firstItem = data[0];
-          debugPrint("mainMessage: ${firstItem['content']['mainMessage']}");
-          return true;
+        if (response.statusCode == 200) {
+          final data = response.data;
+          if (data is List && data.isNotEmpty) {
+            final firstItem = data[0];
+            debugPrint("mainMessage: \${firstItem['content']['mainMessage']}");
+            return true;
+          }
         }
-      }
 
-      return false;
-    } catch (e) {
-      debugPrint("예외 발생: $e");
-      return false;
-    }
+        throw Exception('데이터 형식 오류 또는 빈 데이터');
+      },
+      onSuccess: (_) => onSuccess(),
+      retry: retry,
+    );
   }
 }
