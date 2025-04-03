@@ -6,7 +6,7 @@ import 'package:haengunse/service/day/day_api.dart';
 import 'package:haengunse/utils/request_helper.dart';
 import 'package:haengunse/config.dart';
 
-class DayUiService {
+class DayInteractor {
   static Future<void> handleRandomTap(
       BuildContext context, Function(Widget) showDialog) async {
     handleRequest<String>(

@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:haengunse/config.dart';
 
 class FortuneCardData {
@@ -63,23 +63,26 @@ class CardService {
         uri = Config.dreamApiUrl;
         break;
       default:
-        print("알 수 없는 route: $route");
+        debugPrint("알 수 없는 route: $route");
         return false;
     }
 
     try {
       final response = await dio.get(uri);
-      print("응답 데이터: ${response.data}");
+      debugPrint("응답 데이터: ${response.data}");
 
-      if (response.statusCode == 200 && response.data['success'] == true) {
-        print("성공: ${response.data}");
-        return true;
-      } else {
-        print("실패: ${response.data}");
-        return false;
+      if (response.statusCode == 200) {
+        final data = response.data;
+        if (data is List && data.isNotEmpty) {
+          final firstItem = data[0];
+          debugPrint("mainMessage: ${firstItem['content']['mainMessage']}");
+          return true;
+        }
       }
+
+      return false;
     } catch (e) {
-      print("예외 발생: $e");
+      debugPrint("예외 발생: $e");
       return false;
     }
   }

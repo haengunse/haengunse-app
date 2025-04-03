@@ -81,19 +81,19 @@ class SectionDay extends StatelessWidget {
           _buildPreviewCard(
             context,
             "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
-            () => DayUiService.handleRandomTap(
+            () => DayInteractor.handleRandomTap(
                 context, (child) => _showDialog(context, child)),
           ),
           _buildPreviewCard(
             context,
             "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
-            () => DayUiService.handleCookieTap(
+            () => DayInteractor.handleCookieTap(
                 context, (child) => _showDialog(context, child)),
           ),
           _buildPreviewCard(
             context,
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () => DayUiService.handleItemTap(
+            () => DayInteractor.handleItemTap(
                 context, (child) => _showDialog(context, child)),
           ),
         ],
