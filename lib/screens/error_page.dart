@@ -5,14 +5,14 @@ enum ErrorType { badRequest, serverError, connectionError, unknown }
 class ErrorPage extends StatelessWidget {
   final String title;
   final String message;
-  final VoidCallback onRetry;
+  final VoidCallback? onRetry;
   final ErrorType errorType;
 
   const ErrorPage({
     super.key,
     required this.title,
     required this.message,
-    required this.onRetry,
+    this.onRetry,
     this.errorType = ErrorType.unknown,
   });
 
@@ -63,10 +63,11 @@ class ErrorPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: onRetry,
-                child: const Text("다시 시도"),
-              ),
+              if (onRetry != null)
+                ElevatedButton(
+                  onPressed: onRetry,
+                  child: const Text("다시 시도"),
+                ),
             ],
           ),
         ),
