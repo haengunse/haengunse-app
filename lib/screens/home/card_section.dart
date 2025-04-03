@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/service/card_service.dart';
+import 'package:haengunse/service/card/card_service.dart';
 
 class SectionCard extends StatelessWidget {
   final double screenHeight;

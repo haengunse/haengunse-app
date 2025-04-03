@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/day/random_screen.dart';
-import 'package:haengunse/screens/day/cookie_screen.dart';
-import 'package:haengunse/screens/day/item_screen.dart';
-import 'package:haengunse/service/day_service.dart';
-import 'package:haengunse/config.dart';
-import 'package:haengunse/utils/request_helper.dart';
+import 'package:haengunse/service/day/day_interactor.dart';
 
 class SectionDay extends StatelessWidget {
   final double screenHeight;
@@ -20,41 +15,6 @@ class SectionDay extends StatelessWidget {
         insetPadding: const EdgeInsets.all(30),
         child: child,
       ),
-    );
-  }
-
-  void _handleRandomTap(BuildContext context) {
-    final url = Config.messageRandomUrl;
-
-    handleRequest<String>(
-      context: context,
-      fetch: () => DayService.fetchAnswer(Config.messageRandomUrl),
-      onSuccess: (answer) {
-        _showDialog(context, RandomScreen(answer: answer));
-      },
-      retry: () => _handleRandomTap(context),
-    );
-  }
-
-  void _handleCookieTap(BuildContext context) {
-    handleRequest<String>(
-      context: context,
-      fetch: () => DayService.fetchAnswer(Config.messageCookieUrl),
-      onSuccess: (answer) {
-        _showDialog(context, CookieScreen(answer: answer));
-      },
-      retry: () => _handleCookieTap(context),
-    );
-  }
-
-  void _handleItemTap(BuildContext context) {
-    handleRequest<Map<String, dynamic>>(
-      context: context,
-      fetch: () => DayService.fetchItem(Config.messageItemUrl),
-      onSuccess: (item) {
-        _showDialog(context, ItemScreen(item: item));
-      },
-      retry: () => _handleItemTap(context),
     );
   }
 
@@ -121,17 +81,20 @@ class SectionDay extends StatelessWidget {
           _buildPreviewCard(
             context,
             "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
-            () => _handleRandomTap(context),
+            () => DayUiService.handleRandomTap(
+                context, (child) => _showDialog(context, child)),
           ),
           _buildPreviewCard(
             context,
             "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
-            () => _handleCookieTap(context),
+            () => DayUiService.handleCookieTap(
+                context, (child) => _showDialog(context, child)),
           ),
           _buildPreviewCard(
             context,
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () => _handleItemTap(context),
+            () => DayUiService.handleItemTap(
+                context, (child) => _showDialog(context, child)),
           ),
         ],
       ),
