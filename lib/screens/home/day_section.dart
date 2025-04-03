@@ -9,6 +9,19 @@ class SectionDay extends StatelessWidget {
 
   const SectionDay({super.key, required this.screenHeight});
 
+  Future<void> _handleTap<T>({
+    required BuildContext context,
+    required Future<T> Function() fetch,
+    required Widget Function(T) screenBuilder,
+  }) async {
+    try {
+      final data = await fetch();
+      await _showDialog(context, screenBuilder(data));
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+  }
+
   Future<void> _showDialog(BuildContext context, Widget child) async {
     showDialog(
       context: context,
@@ -19,16 +32,6 @@ class SectionDay extends StatelessWidget {
         child: child,
       ),
     );
-  }
-
-  Future<void> _handleTap(BuildContext context, String url,
-      Widget Function(String) screenBuilder) async {
-    try {
-      final answer = await DayService.fetchAnswer(url);
-      await _showDialog(context, screenBuilder(answer));
-    } catch (e) {
-      _showErrorDialog(context, e.toString());
-    }
   }
 
   void _showErrorDialog(BuildContext context, String message) {
@@ -110,34 +113,33 @@ class SectionDay extends StatelessWidget {
           _buildPreviewCard(
             context,
             "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
-            () => _handleTap(
-              context,
-              'http://localhost:8000/api/message/random',
-              (answer) => RandomScreen(answer: answer),
+            () => _handleTap<String>(
+              context: context,
+              fetch: () => DayService.fetchAnswer(
+                  'http://localhost:8000/api/message/random'),
+              screenBuilder: (answer) => RandomScreen(answer: answer),
             ),
           ),
           _buildPreviewCard(
             context,
             "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
-            () => _handleTap(
-              context,
-              'http://localhost:8000/api/message/cookie',
-              (answer) => CookieScreen(answer: answer),
+            () => _handleTap<String>(
+              context: context,
+              fetch: () => DayService.fetchAnswer(
+                  'http://localhost:8000/api/message/cookie'),
+              screenBuilder: (answer) => CookieScreen(answer: answer),
             ),
           ),
           _buildPreviewCard(
             context,
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () async {
-              try {
-                final item = await DayService.fetchItem(
-                    'http://localhost:8000/api/message/item');
-                await _showDialog(context, ItemScreen(item: item));
-              } catch (e) {
-                _showErrorDialog(context, e.toString());
-              }
-            },
-          )
+            () => _handleTap<Map<String, dynamic>>(
+              context: context,
+              fetch: () => DayService.fetchItem(
+                  'http://localhost:8000/api/message/item'),
+              screenBuilder: (item) => ItemScreen(item: item),
+            ),
+          ),
         ],
       ),
     );
