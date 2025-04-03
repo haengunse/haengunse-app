@@ -3,6 +3,7 @@ import 'package:haengunse/screens/day/random_screen.dart';
 import 'package:haengunse/screens/day/cookie_screen.dart';
 import 'package:haengunse/screens/day/item_screen.dart';
 import 'package:haengunse/service/day_service.dart';
+import 'package:haengunse/config.dart';
 
 class SectionDay extends StatelessWidget {
   final double screenHeight;
@@ -115,8 +116,7 @@ class SectionDay extends StatelessWidget {
             "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
             () => _handleTap<String>(
               context: context,
-              fetch: () => DayService.fetchAnswer(
-                  'http://localhost:8000/api/message/random'),
+              fetch: () => DayService.fetchAnswer(Config.messageQuestionUrl),
               screenBuilder: (answer) => RandomScreen(answer: answer),
             ),
           ),
@@ -125,8 +125,7 @@ class SectionDay extends StatelessWidget {
             "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
             () => _handleTap<String>(
               context: context,
-              fetch: () => DayService.fetchAnswer(
-                  'http://localhost:8000/api/message/cookie'),
+              fetch: () => DayService.fetchAnswer(Config.messageCookieUrl),
               screenBuilder: (answer) => CookieScreen(answer: answer),
             ),
           ),
@@ -135,8 +134,7 @@ class SectionDay extends StatelessWidget {
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
             () => _handleTap<Map<String, dynamic>>(
               context: context,
-              fetch: () => DayService.fetchItem(
-                  'http://localhost:8000/api/message/item'),
+              fetch: () => DayService.fetchItem(Config.messageItemUrl),
               screenBuilder: (item) => ItemScreen(item: item),
             ),
           ),
