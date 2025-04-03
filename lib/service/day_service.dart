@@ -15,4 +15,17 @@ class DayService {
       throw Exception('요청 실패: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> fetchItem(String url) async {
+    try {
+      final response = await _dio.get(url);
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('응답 오류: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('요청 실패: $e');
+    }
+  }
 }

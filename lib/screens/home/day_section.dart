@@ -128,12 +128,16 @@ class SectionDay extends StatelessWidget {
           _buildPreviewCard(
             context,
             "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () => _handleTap(
-              context,
-              'http://localhost:8000/api/message/item',
-              (answer) => ItemScreen(answer: answer),
-            ),
-          ),
+            () async {
+              try {
+                final item = await DayService.fetchItem(
+                    'http://localhost:8000/api/message/item');
+                await _showDialog(context, ItemScreen(item: item));
+              } catch (e) {
+                _showErrorDialog(context, e.toString());
+              }
+            },
+          )
         ],
       ),
     );
