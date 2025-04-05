@@ -16,7 +16,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => FutureBuilder<bool>(
             future: SharedPreferences.getInstance().then((prefs) {
-              prefs.clear(); // 테스트 초기화
+              // prefs.clear(); // <- 테스트 시에만 사용
               return prefs.getBool('isFirstRun') ?? true;
             }),
             builder: (context, snapshot) {
@@ -29,16 +29,19 @@ class RouteGenerator {
             },
           ),
         );
-      case '/today':
-        return MaterialPageRoute(builder: (_) => const TodayScreen());
+
       case '/splash':
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+
       case CardRoute.star:
         return MaterialPageRoute(builder: (_) => const StarScreen());
+
       case CardRoute.zodiac:
         return MaterialPageRoute(builder: (_) => const ZodiacScreen());
+
       case CardRoute.dream:
         return MaterialPageRoute(builder: (_) => const DreamScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

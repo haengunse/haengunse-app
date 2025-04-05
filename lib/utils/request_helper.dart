@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:haengunse/screens/error_page.dart';
+import 'package:haengunse/utils/error_type.dart';
 
 Future<void> handleRequest<T>({
   required BuildContext context,
@@ -10,19 +11,26 @@ Future<void> handleRequest<T>({
 }) async {
   try {
     final data = await fetch();
-    onSuccess(data);
+    if (context.mounted) {
+      onSuccess(data);
+    }
   } on DioException catch (e) {
-    _handleDioException(context, e, retry);
+    if (context.mounted) {
+      _handleDioException(context, e, retry);
+    }
   } catch (e) {
-    _handleUnknownException(context, retry);
+    if (context.mounted) {
+      _handleUnknownException(context, retry);
+    }
   }
 }
 
-/// Dio 예외 처리 전용
 void _handleDioException(
-    BuildContext context, DioException e, VoidCallback retry) {
+  BuildContext context,
+  DioException e,
+  VoidCallback retry,
+) {
   final error = _mapErrorFromDio(e);
-
   _goToError(
     context,
     title: error.title,
@@ -32,7 +40,6 @@ void _handleDioException(
   );
 }
 
-/// 기타 예외 처리
 void _handleUnknownException(BuildContext context, VoidCallback retry) {
   _goToError(
     context,
@@ -43,7 +50,6 @@ void _handleUnknownException(BuildContext context, VoidCallback retry) {
   );
 }
 
-/// 에러 페이지 이동
 void _goToError(
   BuildContext context, {
   required String title,
@@ -51,33 +57,33 @@ void _goToError(
   required ErrorType errorType,
   required VoidCallback retry,
 }) {
+  if (!context.mounted) return;
+
   Navigator.of(context).push(
     PageRouteBuilder(
       opaque: false,
       barrierDismissible: false,
-      transitionDuration: const Duration(milliseconds: 200), // 전환 속도
+      transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (_, __, ___) => ErrorPage(
         title: title,
         message: message,
         errorType: errorType,
         onRetry: () {
-          Navigator.of(context).pop();
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
           WidgetsBinding.instance.addPostFrameCallback((_) {
             retry();
           });
         },
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
+        return FadeTransition(opacity: animation, child: child);
       },
     ),
   );
 }
 
-/// Dio 예외를 ErrorData로 변환
 ErrorData _mapErrorFromDio(DioException e) {
   if (e.response?.statusCode == 400) {
     return const ErrorData(
@@ -92,6 +98,8 @@ ErrorData _mapErrorFromDio(DioException e) {
       type: ErrorType.serverError,
     );
   } else if (e.type == DioExceptionType.connectionTimeout ||
+      e.type == DioExceptionType.sendTimeout ||
+      e.type == DioExceptionType.receiveTimeout ||
       e.type == DioExceptionType.unknown) {
     return const ErrorData(
       title: "연결 실패",
@@ -107,7 +115,6 @@ ErrorData _mapErrorFromDio(DioException e) {
   );
 }
 
-/// 에러 데이터 모델
 class ErrorData {
   final String title;
   final String message;

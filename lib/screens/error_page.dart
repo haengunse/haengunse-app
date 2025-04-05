@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum ErrorType { badRequest, serverError, connectionError, unknown }
+import 'package:haengunse/utils/error_type.dart';
 
 class ErrorPage extends StatelessWidget {
   final String title;
