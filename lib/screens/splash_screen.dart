@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/today_screen.dart';
-import 'package:haengunse/service/today/today_repository.dart';
-import 'package:haengunse/utils/request_helper.dart';
+import 'package:haengunse/service/today/today_interactor.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,15 +10,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Map<String, dynamic>? requestData;
-
   @override
   void initState() {
     super.initState();
-    _fetchTodayFortune();
+    _prepareRequest();
   }
 
-  Future<void> _fetchTodayFortune() async {
+  Future<void> _prepareRequest() async {
     final prefs = await SharedPreferences.getInstance();
 
     final birthDate = prefs.getString('birthDate');
@@ -31,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if ([birthDate, solar, birthTime, gender, name].contains(null) ||
         name!.isEmpty) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("유저 정보가 누락되어 요청할 수 없습니다.")),
       );
@@ -45,27 +42,10 @@ class _SplashScreenState extends State<SplashScreen> {
       'name': name,
     };
 
-    setState(() {
-      requestData = jsonData;
-    });
-
-    await handleRequest<Map<String, dynamic>>(
+    TodayInteractor(
       context: context,
-      fetch: () => TodayRepository.fetchToday(jsonData),
-      onSuccess: (responseData) {
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TodayScreen(
-              requestData: jsonData,
-              responseData: responseData,
-            ),
-          ),
-        );
-      },
-      retry: _fetchTodayFortune,
-    );
+      userData: jsonData,
+    ).handleTodayRequest();
   }
 
   @override

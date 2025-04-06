@@ -1,69 +1,48 @@
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:haengunse/service/today/today_repository.dart';
-// import 'package:haengunse/utils/request_helper.dart';
-// import 'package:haengunse/screens/today_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:haengunse/service/today/today_repository.dart';
+import 'package:haengunse/utils/request_helper.dart';
+import 'package:haengunse/screens/today_screen.dart';
 
-// class TodayInteractor {
-//   static Future<void> handleTodayRequest(
-//     BuildContext context,
-//     String userName, {
-//     required VoidCallback onSplash,
-//   }) async {
-//     final prefs = await SharedPreferences.getInstance();
+class TodayInteractor {
+  final BuildContext context;
+  final Map<String, dynamic> userData;
 
-//     final birthDate = prefs.getString('birthDate');
-//     final solar = prefs.getString('solar');
-//     final birthTime = prefs.getString('birthTime');
-//     final gender = prefs.getString('gender');
+  TodayInteractor({
+    required this.context,
+    required this.userData,
+  });
 
-//     if ([birthDate, solar, birthTime, gender, userName].contains(null) ||
-//         userName.isEmpty) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text("유저 정보가 누락되어 요청할 수 없습니다.")),
-//       );
-//       return;
-//     }
+  /// 오늘의 운세 요청 및 스크린 전환 핸들링
+  Future<void> handleTodayRequest() async {
+    final minDelay = Future.delayed(const Duration(seconds: 3));
 
-//     final jsonData = {
-//       'birthDate': birthDate,
-//       'solar': solar,
-//       'birthTime': birthTime,
-//       'gender': gender,
-//       'name': userName,
-//     };
+    await handleRequest<Map<String, dynamic>>(
+      context: context,
+      fetch: () async {
+        final response = await TodayRepository.fetchToday(userData);
+        await minDelay; // 최소 3초 보장
+        return response;
+      },
+      onSuccess: (responseData) {
+        if (!context.mounted) return;
 
-//     // Splash UI 표시 트리거 (화면은 이미 splash 상태로 보여지고 있어야 함)
-//     onSplash();
-
-//     await handleRequest<Map<String, dynamic>>(
-//       context: context,
-//       fetch: () => TodayRepository.fetchToday(jsonData),
-//       onSuccess: (responseData) {
-//         if (context.mounted) {
-//           Navigator.pushReplacement(
-//             context,
-//             PageRouteBuilder(
-//               pageBuilder: (_, __, ___) => TodayScreen(
-//                 requestData: jsonData,
-//                 responseData: {
-//                   'totalScore': responseData['totalScore'],
-//                   'generalFortune': responseData['generalFortune'],
-//                   'wealthFortune': responseData['wealthFortune'],
-//                   'loveFortune': responseData['loveFortune'],
-//                   'healthFortune': responseData['healthFortune'],
-//                   'studyFortune': responseData['studyFortune'],
-//                   'careerFortune': responseData['careerFortune'],
-//                   'dailyMessage': responseData['dailyMessage'],
-//                 },
-//               ),
-//               transitionDuration: Duration.zero,
-//               reverseTransitionDuration: Duration.zero,
-//             ),
-//           );
-//         }
-//       },
-//       retry: () => handleTodayRequest(context, userName, onSplash: onSplash),
-//     );
-//   }
-// }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TodayScreen(
+              requestData: userData,
+              responseData: responseData,
+            ),
+          ),
+        );
+      },
+      retry: () {
+        final interactor = TodayInteractor(
+          context: context,
+          userData: userData,
+        );
+        interactor.handleTodayRequest();
+      },
+    );
+  }
+}
