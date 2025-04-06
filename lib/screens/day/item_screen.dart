@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ItemScreen extends StatelessWidget {
@@ -15,8 +16,8 @@ class ItemScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text("색상: ${item['color']}"),
-            Text("숫자: ${item['number']}"),
             Text("장소: ${item['place']}"),
+            Text("숫자: ${item['number']}"),
             Text("사물: ${item['object']}"),
           ],
         ),

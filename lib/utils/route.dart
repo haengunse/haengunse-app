@@ -16,7 +16,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => FutureBuilder<bool>(
             future: SharedPreferences.getInstance().then((prefs) {
-              // prefs.clear(); // <- 테스트 시에만 사용
+              prefs.clear(); // <- 테스트 시에만 사용
               return prefs.getBool('isFirstRun') ?? true;
             }),
             builder: (context, snapshot) {

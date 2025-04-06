@@ -3,17 +3,17 @@ import 'package:dio/dio.dart';
 class DayService {
   static final Dio _dio = Dio();
 
-  /// 랜덤 질문 / 쿠키 메시지 요청
+  /// 랜덤 질문, 쿠키 메시지 요청
   static Future<String> fetchAnswer(String url) async {
     try {
       final response = await _dio.get(url);
 
       if (response.statusCode == 200) {
         final data = response.data;
-        if (data is Map<String, dynamic> && data['answer'] is String) {
-          return data['answer'];
+        if (data is Map<String, dynamic> && data['message'] is String) {
+          return data['message'];
         } else {
-          throw Exception('응답 포맷 오류: answer 필드가 없습니다.');
+          throw Exception('응답 포맷 오류: message 필드가 없습니다.');
         }
       } else {
         throw Exception('응답 오류: ${response.statusCode}');

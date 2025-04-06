@@ -12,7 +12,7 @@ class DayInteractor {
     handleRequest<String>(
       context: context,
       fetch: () => DayService.fetchAnswer(Config.messageRandomUrl),
-      onSuccess: (answer) => showDialog(RandomScreen(answer: answer)),
+      onSuccess: (message) => showDialog(RandomScreen(message: message)),
       retry: () => handleRandomTap(context, showDialog),
     );
   }
@@ -22,7 +22,7 @@ class DayInteractor {
     handleRequest<String>(
       context: context,
       fetch: () => DayService.fetchAnswer(Config.messageCookieUrl),
-      onSuccess: (answer) => showDialog(CookieScreen(answer: answer)),
+      onSuccess: (message) => showDialog(CookieScreen(message: message)),
       retry: () => handleCookieTap(context, showDialog),
     );
   }
