@@ -40,7 +40,10 @@ void _handleDioException(
   );
 }
 
-void _handleUnknownException(BuildContext context, VoidCallback retry) {
+void _handleUnknownException(
+  BuildContext context,
+  VoidCallback retry,
+) {
   _goToError(
     context,
     title: "문제가 발생했어요",
@@ -84,6 +87,18 @@ void _goToError(
   );
 }
 
+class ErrorData {
+  final String title;
+  final String message;
+  final ErrorType type;
+
+  const ErrorData({
+    required this.title,
+    required this.message,
+    required this.type,
+  });
+}
+
 ErrorData _mapErrorFromDio(DioException e) {
   if (e.response?.statusCode == 400) {
     return const ErrorData(
@@ -113,16 +128,4 @@ ErrorData _mapErrorFromDio(DioException e) {
     message: "예기치 못한 문제가 발생했어요.",
     type: ErrorType.unknown,
   );
-}
-
-class ErrorData {
-  final String title;
-  final String message;
-  final ErrorType type;
-
-  const ErrorData({
-    required this.title,
-    required this.message,
-    required this.type,
-  });
 }

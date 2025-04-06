@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/utils/error_type.dart';
+import 'package:haengunse/screens/home_screen.dart';
 
 class ErrorPage extends StatelessWidget {
   final String title;
@@ -45,29 +46,39 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF3F3F3),
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(_getIcon(), size: 80, color: _getIconColor()),
-              const SizedBox(height: 20),
-              Text(
-                message,
-                style: const TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-              if (onRetry != null)
-                ElevatedButton(
-                  onPressed: onRetry,
-                  child: const Text("다시 시도"),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          (route) => false,
+        );
+        return false; // 뒤로가기 pop 방지
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF3F3F3),
+        appBar: AppBar(title: Text(title)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(_getIcon(), size: 80, color: _getIconColor()),
+                const SizedBox(height: 20),
+                Text(
+                  message,
+                  style: const TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
-            ],
+                const SizedBox(height: 30),
+                if (onRetry != null)
+                  ElevatedButton(
+                    onPressed: onRetry,
+                    child: const Text("다시 시도"),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
