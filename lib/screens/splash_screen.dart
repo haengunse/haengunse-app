@@ -25,15 +25,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final gender = prefs.getString('gender');
     final name = prefs.getString('name');
 
-    if ([birthDate, solar, birthTime, gender, name].contains(null) ||
-        name!.isEmpty) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("유저 정보가 누락되어 요청할 수 없습니다.")),
-      );
-      return;
-    }
-
     final jsonData = {
       'birthDate': birthDate,
       'solar': solar,
