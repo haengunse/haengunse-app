@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home_screen.dart';
+import 'package:haengunse/service/manse/manse_api.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
@@ -11,6 +12,8 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
   final _nameController = TextEditingController();
+  final ManseApiService _manseApi = ManseApiService();
+
   DateTime? _selectedDate;
   String _gender = 'M';
   String _calendarType = '양력';
@@ -37,19 +40,6 @@ class _InputScreenState extends State<InputScreen> {
     ..._birthTimeMap.keys,
   ];
 
-  String _calendarToServer(String calendar) {
-    switch (calendar) {
-      case "양력":
-        return "solar";
-      case "음력":
-        return "lunar";
-      case "음력(윤달)":
-        return "lunarLeaf";
-      default:
-        return "solar";
-    }
-  }
-
   Future<void> _saveAndGoHome() async {
     if (_nameController.text.isEmpty ||
         _selectedDate == null ||
@@ -60,30 +50,42 @@ class _InputScreenState extends State<InputScreen> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-
     final formattedBirthDate =
         "${_selectedDate!.year.toString().padLeft(4, '0')}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
 
-    final isSolar = _calendarType == "양력" ? "true" : "false";
-
-    await prefs.setBool('isFirstRun', false);
-    await prefs.setString('name', _nameController.text);
-    await prefs.setString('gender', _gender);
-    await prefs.setString('birthDate', formattedBirthDate);
-    await prefs.setString('solar', isSolar);
-
+    final isSolar = _calendarType == "양력";
     final birthTimeLabel =
         _selectedBirthTime == null || _selectedBirthTime == "모름"
-            ? "null"
+            ? "모름"
             : _selectedBirthTime!;
-    await prefs.setString('birthTime', birthTimeLabel);
 
-    if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    print("🌈 [DEBUG] 요청 전송 준비 완료");
+    print(
+        "birthDate: $formattedBirthDate, isSolar: $isSolar, birthTime: $birthTimeLabel");
+
+    final success = await _manseApi.sendManseData(
+      name: _nameController.text,
+      gender: _gender,
+      birthDate: formattedBirthDate,
+      isSolar: isSolar,
+      birthTime: birthTimeLabel,
     );
+
+    print("✅ [DEBUG] 요청 성공 여부: $success");
+    print("🧭 mounted 상태: $mounted");
+
+    if (success && mounted) {
+      print("🚀 홈 화면으로 이동 시작");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } else {
+      print("⚠️ 홈 화면 이동 실패 또는 요청 실패");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("서버와의 통신에 실패했습니다.")),
+      );
+    }
   }
 
   Future<void> _pickDate() async {
@@ -144,20 +146,17 @@ class _InputScreenState extends State<InputScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Center(
-                child: Text("내 정보 입력",
-                    style:
-                        TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-              ),
+                  child: Text("내 정보 입력",
+                      style: TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold))),
               const SizedBox(height: 1),
               const Center(
-                child: Text("서비스 이용을 위해 간단한 정보를 입력해주세요",
-                    style: TextStyle(fontSize: 13, color: Colors.grey)),
-              ),
+                  child: Text("서비스 이용을 위해 간단한 정보를 입력해주세요",
+                      style: TextStyle(fontSize: 13, color: Colors.grey))),
               const SizedBox(height: 20),
               Center(
-                child: Image.asset("assets/images/present.png",
-                    width: 100, height: 100),
-              ),
+                  child: Image.asset("assets/images/present.png",
+                      width: 100, height: 100)),
               const SizedBox(height: 32),
               const Text("이름", style: TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(height: 6),
@@ -171,11 +170,9 @@ class _InputScreenState extends State<InputScreen> {
                         controller: _nameController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(color: primaryColor),
-                          ),
+                              borderSide: BorderSide(color: primaryColor)),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: primaryColor),
-                          ),
+                              borderSide: BorderSide(color: primaryColor)),
                         ),
                       ),
                     ),
@@ -186,18 +183,14 @@ class _InputScreenState extends State<InputScreen> {
                     child: Row(
                       children: [
                         Radio<String>(
-                          value: 'M',
-                          groupValue: _gender,
-                          activeColor: primaryColor,
-                          onChanged: (val) => setState(() => _gender = val!),
-                        ),
+                            value: 'M',
+                            groupValue: _gender,
+                            onChanged: (val) => setState(() => _gender = val!)),
                         const Text("남"),
                         Radio<String>(
-                          value: 'F',
-                          groupValue: _gender,
-                          activeColor: primaryColor,
-                          onChanged: (val) => setState(() => _gender = val!),
-                        ),
+                            value: 'F',
+                            groupValue: _gender,
+                            onChanged: (val) => setState(() => _gender = val!)),
                         const Text("여"),
                       ],
                     ),
@@ -223,11 +216,9 @@ class _InputScreenState extends State<InputScreen> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                _selectedDate != null
-                                    ? "${_selectedDate!.year}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.day.toString().padLeft(2, '0')}"
-                                    : "날짜 선택",
-                              ),
+                              child: Text(_selectedDate != null
+                                  ? "${_selectedDate!.year}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.day.toString().padLeft(2, '0')}"
+                                  : "날짜 선택"),
                             ),
                             Icon(Icons.calendar_today,
                                 size: 20, color: Colors.grey[800]),
@@ -314,8 +305,7 @@ class _InputScreenState extends State<InputScreen> {
                     elevation: 4,
                     shadowColor: const Color.fromARGB(255, 173, 173, 173),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                        borderRadius: BorderRadius.circular(6)),
                   ),
                   child: const Text("저장",
                       style: TextStyle(
