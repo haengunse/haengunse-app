@@ -17,12 +17,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadName();
+    _loadUserData();
   }
 
-  Future<void> _loadName() async {
+  Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
+
     final name = prefs.getString('name') ?? "행운세";
+    final gender = prefs.getString('gender') ?? "모름";
+    final manseInfo = prefs.getString('manseInfo') ?? "없음";
+
+    debugPrint("이름: $name");
+    debugPrint("성별: $gender");
+    debugPrint("만세력: $manseInfo");
+
     setState(() {
       userName = name;
     });
@@ -37,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           SectionLucky(userName: userName, screenHeight: screenHeight),
-          SectionCard(screenHeight: screenHeight), //여기 수정할 것
-          SectionDay(screenHeight: screenHeight), //여기 수정할 것
+          SectionCard(screenHeight: screenHeight),
+          SectionDay(screenHeight: screenHeight),
         ],
       ),
     );
