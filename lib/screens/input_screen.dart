@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/progress_loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home_screen.dart';
 import 'package:haengunse/service/manse/manse_api.dart';
@@ -59,33 +60,20 @@ class _InputScreenState extends State<InputScreen> {
             ? "모름"
             : _selectedBirthTime!;
 
-    print("🌈 [DEBUG] 요청 전송 준비 완료");
-    print(
-        "birthDate: $formattedBirthDate, isSolar: $isSolar, birthTime: $birthTimeLabel");
+    final payload = {
+      "birthDate": formattedBirthDate,
+      "solar": isSolar,
+      "birthTime": birthTimeLabel,
+      "gender": _gender,
+      "name": _nameController.text,
+    };
 
-    final success = await _manseApi.sendManseData(
-      name: _nameController.text,
-      gender: _gender,
-      birthDate: formattedBirthDate,
-      isSolar: isSolar,
-      birthTime: birthTimeLabel,
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ProgressLoadingPage(payload: payload),
+      ),
     );
-
-    print("✅ [DEBUG] 요청 성공 여부: $success");
-    print("🧭 mounted 상태: $mounted");
-
-    if (success && mounted) {
-      print("🚀 홈 화면으로 이동 시작");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-    } else {
-      print("⚠️ 홈 화면 이동 실패 또는 요청 실패");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("서버와의 통신에 실패했습니다.")),
-      );
-    }
   }
 
   Future<void> _pickDate() async {
