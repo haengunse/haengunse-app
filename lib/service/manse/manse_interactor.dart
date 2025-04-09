@@ -20,7 +20,7 @@ class ManseInteractor {
       context: context,
       fetch: () async {
         final result = await ManseRepository.sendManse(payload);
-        await minDelay; // 3초 로딩 보장
+        await minDelay;
         return result;
       },
       onSuccess: (success) {

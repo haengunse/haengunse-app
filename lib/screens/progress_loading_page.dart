@@ -38,24 +38,30 @@ class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 60),
-                CircularProgressIndicator(
-                  color: Color(0xFF82c784),
-                  strokeWidth: 5.5,
+                SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF82c784),
+                    strokeWidth: 6.5,
+                  ),
                 ),
                 SizedBox(height: 40),
                 Text(
                   '내 정보 입력 완료',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontFamily: 'Pretendard',
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 5),
                 Text(
                   '작성하신 정보를 바탕으로\n운세를 계산하고 있어요',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontFamily: 'Pretendard',
+                    fontSize: 13,
                     color: Colors.black54,
                     height: 1.5,
                   ),
