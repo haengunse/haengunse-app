@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/input_screen.dart';
 import 'package:haengunse/utils/error_type.dart';
 import 'package:haengunse/screens/home_screen.dart';
 
@@ -7,6 +8,7 @@ class ErrorPage extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
   final ErrorType errorType;
+  final Widget? backScreen;
 
   const ErrorPage({
     super.key,
@@ -14,6 +16,7 @@ class ErrorPage extends StatelessWidget {
     required this.message,
     this.onRetry,
     this.errorType = ErrorType.unknown,
+    this.backScreen,
   });
 
   IconData _getIcon() {
@@ -50,10 +53,10 @@ class ErrorPage extends StatelessWidget {
       onWillPop: () async {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => backScreen ?? const HomeScreen()),
           (route) => false,
         );
-        return false; // 뒤로가기 pop 방지
+        return false;
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFF3F3F3),

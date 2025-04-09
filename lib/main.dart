@@ -1,5 +1,7 @@
+// main.dart
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/progress_loading_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:haengunse/utils/route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,21 +10,23 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  Future<bool> checkFirstRun() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // 테스트용 강제 초기화 (배포 시 제거)
+    await prefs.clear();
+
+    return prefs.getBool('isFirstRun') ?? true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "오늘의 운세",
       theme: ThemeData(primarySwatch: Colors.green),
-      home: const ProgressLoadingPage(
-        payload: {
-          "birthDate": "1995-06-15",
-          "solar": true,
-          "birthTime": "자시 (23:30~1:30)",
-          "gender": "M",
-          "name": "홍길동"
-        },
-      ),
+      onGenerateRoute: RouteGenerator.generateRoute,
+      initialRoute: '/',
     );
   }
 }

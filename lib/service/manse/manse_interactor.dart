@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/screens/home_screen.dart';
 import 'package:haengunse/service/manse/manse_repository.dart';
 import 'package:haengunse/utils/request_helper.dart';
+import 'package:haengunse/screens/input_screen.dart';
 
 class ManseInteractor {
   final BuildContext context;
@@ -12,7 +13,6 @@ class ManseInteractor {
     required this.payload,
   });
 
-  /// 만세력 데이터 요청 및 홈 화면 전환
   Future<void> handleManseRequest() async {
     final minDelay = Future.delayed(const Duration(seconds: 3));
 
@@ -38,6 +38,7 @@ class ManseInteractor {
         );
         interactor.handleManseRequest();
       },
+      backScreen: const InputScreen(),
     );
   }
 }

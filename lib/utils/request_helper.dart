@@ -8,6 +8,7 @@ Future<void> handleRequest<T>({
   required Future<T> Function() fetch,
   required void Function(T data) onSuccess,
   required VoidCallback retry,
+  Widget? backScreen,
 }) async {
   try {
     final data = await fetch();
@@ -16,11 +17,11 @@ Future<void> handleRequest<T>({
     }
   } on DioException catch (e) {
     if (context.mounted) {
-      _handleDioException(context, e, retry);
+      _handleDioException(context, e, retry, backScreen);
     }
   } catch (e) {
     if (context.mounted) {
-      _handleUnknownException(context, retry);
+      _handleUnknownException(context, retry, backScreen);
     }
   }
 }
@@ -29,6 +30,7 @@ void _handleDioException(
   BuildContext context,
   DioException e,
   VoidCallback retry,
+  Widget? backScreen,
 ) {
   final error = _mapErrorFromDio(e);
   _goToError(
@@ -37,12 +39,14 @@ void _handleDioException(
     message: error.message,
     errorType: error.type,
     retry: retry,
+    backScreen: backScreen,
   );
 }
 
 void _handleUnknownException(
   BuildContext context,
   VoidCallback retry,
+  Widget? backScreen,
 ) {
   _goToError(
     context,
@@ -50,6 +54,7 @@ void _handleUnknownException(
     message: "잠시 후 다시 시도해주세요.",
     errorType: ErrorType.unknown,
     retry: retry,
+    backScreen: backScreen,
   );
 }
 
@@ -59,6 +64,7 @@ void _goToError(
   required String message,
   required ErrorType errorType,
   required VoidCallback retry,
+  Widget? backScreen,
 }) {
   if (!context.mounted) return;
 
@@ -79,6 +85,7 @@ void _goToError(
             retry();
           });
         },
+        backScreen: backScreen,
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);

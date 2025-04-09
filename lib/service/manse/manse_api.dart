@@ -23,11 +23,12 @@ class ManseApiService {
         await prefs.setString('manseInfo', data['manseInfo'] ?? "해석 정보 없음");
 
         return true;
+      } else {
+        throw Exception("서버 상태 코드 오류: ${response.statusCode}");
       }
     } catch (e) {
       print("Error sending manse data: $e");
+      rethrow;
     }
-
-    return false;
   }
 }
