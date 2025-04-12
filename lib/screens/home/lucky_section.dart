@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/splash_screen.dart';
+import 'package:haengunse/screens/%08today_loading_page.dart';
 
 class SectionLucky extends StatelessWidget {
   final double screenHeight;
@@ -85,7 +85,7 @@ class SectionLucky extends StatelessWidget {
                   )),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/splash');
+                  Navigator.pushNamed(context, '/todaysplash');
                 },
                 child: const Text(
                   "오늘은\n어떤 하루일까요? ->",

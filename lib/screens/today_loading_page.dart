@@ -1,29 +1,37 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:haengunse/service/manse/manse_interactor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:haengunse/service/today/today_interactor.dart';
 
-class ProgressLoadingPage extends StatefulWidget {
-  final Map<String, dynamic> payload;
-
-  const ProgressLoadingPage({super.key, required this.payload});
+class TodayProgressLoadingPage extends StatefulWidget {
+  const TodayProgressLoadingPage({super.key});
 
   @override
-  State<ProgressLoadingPage> createState() => _ProgressLoadingPageState();
+  State<TodayProgressLoadingPage> createState() =>
+      _TodayProgressLoadingPageState();
 }
 
-class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
+class _TodayProgressLoadingPageState extends State<TodayProgressLoadingPage> {
   @override
   void initState() {
     super.initState();
-    _startRequest();
+    _prepareRequest();
   }
 
-  void _startRequest() {
-    final interactor = ManseInteractor(
+  Future<void> _prepareRequest() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final manseInfo = prefs.getString('manseInfo');
+    final gender = prefs.getString('gender');
+
+    final jsonData = {
+      'manseInfo': manseInfo,
+      'gender': gender,
+    };
+
+    TodayInteractor(
       context: context,
-      payload: widget.payload,
-    );
-    interactor.handleManseRequest();
+      userData: jsonData,
+    ).handleTodayRequest();
   }
 
   @override
@@ -48,7 +56,7 @@ class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
                 ),
                 SizedBox(height: 40),
                 Text(
-                  '내 정보 입력 완료',
+                  '곧 당신만의 운세가 도착합니다.',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 22,
@@ -58,7 +66,7 @@ class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '작성하신 정보를 바탕으로\n운세를 계산하고 있어요',
+                  '잠시만 기다려 주세요.\n 오늘의 운세를 예측하고 있어요.',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 13,

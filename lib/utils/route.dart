@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/%08today_loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home_screen.dart';
 import 'package:haengunse/screens/input_screen.dart';
-import 'package:haengunse/screens/splash_screen.dart';
 import 'package:haengunse/screens/today_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
@@ -30,8 +30,9 @@ class RouteGenerator {
           ),
         );
 
-      case '/splash':
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case '/todaysplash':
+        return MaterialPageRoute(
+            builder: (_) => const TodayProgressLoadingPage());
 
       case CardRoute.star:
         return MaterialPageRoute(builder: (_) => const StarScreen());
