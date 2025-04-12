@@ -19,18 +19,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _prepareRequest() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final birthDate = prefs.getString('birthDate');
-    final solar = prefs.getString('solar');
-    final birthTime = prefs.getString('birthTime');
+    final manseInfo = prefs.getString('manseInfo');
     final gender = prefs.getString('gender');
-    final name = prefs.getString('name');
 
     final jsonData = {
-      'birthDate': birthDate,
-      'solar': solar,
-      'birthTime': birthTime,
+      'manseInfo': manseInfo,
       'gender': gender,
-      'name': name,
     };
 
     TodayInteractor(
