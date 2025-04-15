@@ -76,7 +76,7 @@ class _SectionLuckyState extends State<SectionLucky> {
                 fit: BoxFit.cover,
               ),
 
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
 
               // 현재 온도
               Text(
@@ -102,6 +102,7 @@ class _SectionLuckyState extends State<SectionLucky> {
                   fontFamily: 'Pretendard',
                 ),
               ),
+              const SizedBox(width: 6),
               Text(
                 "${weather.tempMax.toInt()}°",
                 style: const TextStyle(
@@ -124,6 +125,7 @@ class _SectionLuckyState extends State<SectionLucky> {
                   fontFamily: 'Pretendard',
                 ),
               ),
+              const SizedBox(width: 6),
               Text(
                 "${weather.tempMin.toInt()}°",
                 style: const TextStyle(
