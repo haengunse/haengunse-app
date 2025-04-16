@@ -50,104 +50,108 @@ class _SectionLuckyState extends State<SectionLucky> {
           ],
         ),
         child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 도시명
-              Text(
-                CityMapper.getKoreanCityById(weather.cityId),
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Pretendard',
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 도시명
+                Text(
+                  CityMapper.getKoreanCityById(weather.cityId),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
-              ),
 
-              const SizedBox(width: 10),
-              const Text("|"),
-              const SizedBox(width: 6),
+                const SizedBox(width: 10),
+                const Text("|"),
+                const SizedBox(width: 6),
 
-              // 날씨 아이콘
-              Image.network(
-                'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
-                width: 20,
-                height: 20,
-                fit: BoxFit.cover,
-              ),
-
-              const SizedBox(width: 6),
-
-              // 현재 온도
-              Text(
-                "${weather.temp.toInt()}°",
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.black87,
-                  fontFamily: 'Pretendard',
+                // 날씨 아이콘
+                Image.network(
+                  'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
                 ),
-              ),
 
-              const SizedBox(width: 6),
-              const Text("|"),
-              const SizedBox(width: 10),
+                const SizedBox(width: 6),
 
-              // 최고 기온
-              Text(
-                "최고 ",
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.red[400],
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Pretendard',
+                // 현재 온도
+                Text(
+                  "${weather.temp.toInt()}°",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.black87,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                "${weather.tempMax.toInt()}°",
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontFamily: 'Pretendard',
+
+                const SizedBox(width: 6),
+                const Text("|"),
+                const SizedBox(width: 10),
+
+                // 최고 기온
+                Text(
+                  "최고 ",
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.red[400],
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
-              ),
-
-              const SizedBox(width: 6),
-              const Text("|"),
-              const SizedBox(width: 10),
-
-              // 최저 기온
-              Text(
-                "최저 ",
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.blue[400],
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Pretendard',
+                const SizedBox(width: 6),
+                Text(
+                  "${weather.tempMax.toInt()}°",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                "${weather.tempMin.toInt()}°",
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontFamily: 'Pretendard',
+
+                const SizedBox(width: 6),
+                const Text("|"),
+                const SizedBox(width: 10),
+
+                // 최저 기온
+                Text(
+                  "최저 ",
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.blue[400],
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
-              ),
+                const SizedBox(width: 6),
+                Text(
+                  "${weather.tempMin.toInt()}°",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
 
-              const SizedBox(width: 6),
-              const Text("|"),
-              const SizedBox(width: 10),
+                const SizedBox(width: 6),
+                const Text("|"),
+                const SizedBox(width: 10),
 
-              // 강수량
-              Text(
-                weather.rainfall == 0
-                    ? "강수량 없음"
-                    : "강수량 ${weather.rainfall!.toStringAsFixed(1)}mm",
-                style: const TextStyle(fontSize: 11, fontFamily: 'Pretendard'),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+                // 강수량
+                Text(
+                  weather.rainfall == 0
+                      ? "강수량 없음"
+                      : "강수량 ${weather.rainfall!.toStringAsFixed(1)}mm",
+                  style:
+                      const TextStyle(fontSize: 11, fontFamily: 'Pretendard'),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ),
       ),
