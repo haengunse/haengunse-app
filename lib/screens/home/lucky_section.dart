@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/weather/weather_model.dart';
 import 'package:haengunse/service/weather/weather_service.dart';
+import 'package:haengunse/utils/city_mapper.dart';
 
 class SectionLucky extends StatefulWidget {
   final double screenHeight;
@@ -55,7 +56,7 @@ class _SectionLuckyState extends State<SectionLucky> {
             children: [
               // 도시명
               Text(
-                "${weather.cityName}",
+                CityMapper.getKoreanCityById(weather.cityId),
                 style: const TextStyle(
                   fontSize: 11,
                   color: Colors.black87,

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home/lucky_section.dart';
 import 'package:haengunse/screens/home/card_section.dart';
 import 'package:haengunse/screens/home/day_section.dart';
+import 'package:haengunse/utils/city_mapper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _initCityMap();
     _loadUserData();
+  }
+
+  Future<void> _initCityMap() async {
+    await CityMapper.loadCityMap();
   }
 
   Future<void> _loadUserData() async {

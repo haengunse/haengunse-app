@@ -27,6 +27,7 @@ class WeatherService {
 
         try {
           return Weather(
+            cityId: data['id'],
             cityName: data['name'],
             condition: data['weather'][0]['description'],
             iconCode: data['weather'][0]['icon'],
