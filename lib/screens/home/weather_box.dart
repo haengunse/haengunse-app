@@ -10,13 +10,33 @@ class WeatherBox extends StatefulWidget {
   State<WeatherBox> createState() => _WeatherBoxState();
 }
 
-class _WeatherBoxState extends State<WeatherBox> {
+class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
   late Future<Weather?> _weatherFuture;
 
   @override
   void initState() {
     super.initState();
-    _weatherFuture = WeatherService().fetchWeather();
+    WidgetsBinding.instance.addObserver(this);
+    _fetchWeather();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _fetchWeather();
+    }
+  }
+
+  void _fetchWeather() {
+    setState(() {
+      _weatherFuture = WeatherService().fetchWeather();
+    });
   }
 
   @override
