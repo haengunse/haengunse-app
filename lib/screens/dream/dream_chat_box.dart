@@ -13,12 +13,40 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final List<DreamMessage> _messages = [];
+  int _chatCount = 0; // 채팅 횟수 제한용
 
   @override
   void initState() {
     super.initState();
-    _addSystemMessage(
-        "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.");
+    _messages.add(
+      DreamMessage(
+        text: "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.",
+        isUser: false,
+      ),
+    );
+  }
+
+  void _sendMessage(String input) async {
+    if (input.trim().isEmpty || _chatCount >= 3) return;
+
+    setState(() {
+      _messages.add(DreamMessage(text: input, isUser: true));
+      _chatCount++; // 채팅 횟수 증가
+    });
+
+    _controller.clear();
+    _scrollToBottom();
+
+    final history =
+        _messages.where((m) => m.isUser).map((m) => m.text).toList();
+    final reply = await DreamService.sendDream(history);
+
+    if (reply != null) {
+      setState(() {
+        _messages.add(DreamMessage(text: reply, isUser: false));
+      });
+      _scrollToBottom();
+    }
   }
 
   void _addSystemMessage(String text) {
@@ -79,8 +107,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(16),
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
@@ -91,11 +118,11 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       padding: const EdgeInsets.all(10),
-                      constraints: const BoxConstraints(maxWidth: 250),
                       decoration: BoxDecoration(
-                        color:
-                            message.isUser ? Colors.green[200] : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        color: message.isUser
+                            ? Colors.green[100]
+                            : Colors.white.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         message.text,
@@ -106,27 +133,39 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                 },
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              color: Colors.white.withOpacity(0.8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      onSubmitted: (_) => _handleSendMessage(),
-                      decoration: const InputDecoration.collapsed(
-                          hintText: "꿈을 입력해 주세요..."),
+            if (_chatCount < 3) // 3회 이하일 때만 입력 허용
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        onSubmitted: _sendMessage,
+                        decoration: const InputDecoration(
+                          hintText: "꿈 이야기를 들려주세요",
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: _handleSendMessage,
-                    color: Colors.green[700],
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: () => _sendMessage(_controller.text),
+                    ),
+                  ],
+                ),
+              )
+            else
+              const Padding(
+                padding: EdgeInsets.all(12),
+                child: Text(
+                  "꿈 해몽은 최대 3번까지 가능합니다.",
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
               ),
-            ),
           ],
         ),
       ],
