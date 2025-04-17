@@ -68,7 +68,7 @@ class SectionLucky extends StatelessWidget {
                     fontFamily: 'Pretendard'),
               ),
               const SizedBox(height: 13),
-              const WeatherBox(),
+              WeatherBox(),
             ],
           ),
         ],

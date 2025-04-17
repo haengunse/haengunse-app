@@ -46,11 +46,8 @@ class TodayScreen extends StatelessWidget {
             children: [
               const Text("📥 요청 정보", style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              _buildDataRow("이름", req['name']),
+              _buildDataRow("만세력", req['manseInfo']),
               _buildDataRow("성별", req['gender']),
-              _buildDataRow("생년월일", req['birthDate']),
-              _buildDataRow("출생시간", req['birthTime']),
-              _buildDataRow("달력", req['solar']),
               const SizedBox(height: 30),
               const Divider(),
               const Text("📤 응답 정보", style: TextStyle(fontSize: 18)),

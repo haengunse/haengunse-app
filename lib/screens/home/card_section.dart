@@ -37,7 +37,7 @@ class SectionCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: 145,
+            height: 150,
             child: FutureBuilder<List<FortuneCardData>>(
               future: CardService.fetchFortuneCards(),
               builder: (context, snapshot) {
@@ -80,22 +80,23 @@ class SectionCard extends StatelessWidget {
     return Container(
       width: 130,
       height: 150,
+      margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 1,
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
             spreadRadius: 1,
             offset: Offset(0, -1),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 1,
             spreadRadius: 1,
-            offset: Offset(0, 2),
+            offset: Offset(0, 1),
           ),
         ],
       ),
