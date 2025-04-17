@@ -44,6 +44,26 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     if (reply != null) {
       setState(() {
         _messages.add(DreamMessage(text: reply, isUser: false));
+
+        // 회차별 템플릿 응답
+        if (_chatCount == 1) {
+          _messages.add(DreamMessage(
+            text:
+                "꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면, 해석에 큰 도움이 돼요 :)\n추가로 궁금한 점이 있다면 지금이 첫 질문 기회예요!\n물론, 여기서 마무리하셔도 괜찮아요.",
+            isUser: false,
+          ));
+        } else if (_chatCount == 2) {
+          _messages.add(DreamMessage(
+            text:
+                "조금 더 깊이 들어가볼 수도 있어요.\n꿈속 상황이나 감정이 어땠는지 더 얘기해주시면 해석이 더 풍부해질 수 있답니다 :)\n이제 마지막 질문 기회예요!",
+            isUser: false,
+          ));
+        } else if (_chatCount == 3) {
+          _messages.add(DreamMessage(
+            text: "꿈 해몽 질문은 하루에 한 번만 가능해요. 신중하게 질문해주세요! 더 궁금하면 낼 찾아오슈",
+            isUser: false,
+          ));
+        }
       });
       _scrollToBottom();
     }
@@ -162,8 +182,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
               const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
-                  "꿈 해몽은 최대 3번까지 가능합니다.",
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+                  "꿈 해몽은 하루에 한 번만 가능해요! 궁금하다면 내일 다시 찾아와주세요.",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
           ],
