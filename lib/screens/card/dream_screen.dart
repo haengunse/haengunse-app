@@ -1,4 +1,6 @@
+// dream_screen.dart
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/dream/dream_chat_box.dart';
 
 class DreamScreen extends StatelessWidget {
   const DreamScreen({super.key});
@@ -7,13 +9,10 @@ class DreamScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("꿈 해몽"),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
-      body: Center(child: Text("꿈 해몽 화면")),
+      body: const DreamChatBox(),
     );
   }
 }
