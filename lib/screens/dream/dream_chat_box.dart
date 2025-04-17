@@ -16,8 +16,9 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   void initState() {
     super.initState();
 
+    // 초기 안내 메시지
     _messages.add(
-      _ChatMessage(
+      const _ChatMessage(
         text: "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.",
         isUser: false,
       ),
@@ -25,19 +26,21 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   }
 
   Future<void> _sendMessage() async {
-    final input = _controller.text.trim();
-    if (input.isEmpty) return;
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
 
     setState(() {
-      _messages.add(_ChatMessage(text: input, isUser: true));
+      _messages.add(_ChatMessage(text: text, isUser: true));
+      _controller.clear();
     });
-    _controller.clear();
 
-    final response = await DreamService.sendDream([input]);
+    final allUserMessages =
+        _messages.where((msg) => msg.isUser).map((msg) => msg.text).toList();
 
-    if (response != null) {
+    final interpretation = await DreamService.sendDream(allUserMessages);
+    if (interpretation != null) {
       setState(() {
-        _messages.add(_ChatMessage(text: response, isUser: false));
+        _messages.add(_ChatMessage(text: interpretation, isUser: false));
       });
     }
   }
@@ -46,17 +49,21 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(
-          'assets/images/dream_background.png', // 별밤 느낌 배경 이미지
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
+        // 별밤 배경
+        Positioned.fill(
+          child: Image.asset(
+            'assets/images/dream_background.png',
+            fit: BoxFit.cover,
+          ),
         ),
+        // 채팅 내용
         Column(
           children: [
+            const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                padding: const EdgeInsets.all(16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
@@ -67,13 +74,12 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      constraints: const BoxConstraints(maxWidth: 280),
+                          horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: message.isUser
-                            ? const Color(0xFFDCF8C6)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                            ? Colors.green[300]
+                            : Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
                         message.text,
@@ -84,33 +90,35 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                 },
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              color: Colors.black.withOpacity(0.2),
+            // 입력창
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                        hintText: '꿈 내용을 입력해주세요',
-                        border: OutlineInputBorder(),
-                        isDense: true,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      onSubmitted: (_) => _sendMessage(),
+                      child: TextField(
+                        controller: _controller,
+                        decoration: const InputDecoration(
+                          hintText: '꿈 내용을 입력해보세요...',
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 8),
                   IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
                     onPressed: _sendMessage,
-                    icon: const Icon(Icons.send),
-                    color: Colors.white,
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ],
@@ -122,5 +130,8 @@ class _ChatMessage {
   final String text;
   final bool isUser;
 
-  _ChatMessage({required this.text, required this.isUser});
+  const _ChatMessage({
+    required this.text,
+    required this.isUser,
+  });
 }
