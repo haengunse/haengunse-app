@@ -12,6 +12,18 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   final TextEditingController _controller = TextEditingController();
   final List<_ChatMessage> _messages = [];
 
+  @override
+  void initState() {
+    super.initState();
+
+    _messages.add(
+      _ChatMessage(
+        text: "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.",
+        isUser: false,
+      ),
+    );
+  }
+
   Future<void> _sendMessage() async {
     final input = _controller.text.trim();
     if (input.isEmpty) return;
