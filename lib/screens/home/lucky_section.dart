@@ -40,7 +40,7 @@ class SectionLucky extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("반가워요 ${userName}!",
+              Text("반가워요 ${userName}님",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:haengunse/screens/error_page.dart';
+import 'package:haengunse/screens/error/error_page.dart';
 import 'package:haengunse/utils/error_type.dart';
 
 Future<void> handleRequest<T>({

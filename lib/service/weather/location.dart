@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
 class MyLocation {
-  double latitude = 37.5665; // ✅ 기본값: 서울
+  double latitude = 37.5665; // 기본값: 서울
   double longitude = 126.9780;
 
   Future<void> getMyCurrentLocation() async {

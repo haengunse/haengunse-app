@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/today/today_repository.dart';
 import 'package:haengunse/utils/request_helper.dart';
-import 'package:haengunse/screens/today_screen.dart';
+import 'package:haengunse/screens/today/today_screen.dart';
 
 class TodayInteractor {
   final BuildContext context;

@@ -124,9 +124,14 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 10),
-                const Text("|"),
-                const SizedBox(width: 6),
+                const SizedBox(width: 8),
+                Text(
+                  "|",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 119, 119, 119),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Image.network(
                   'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
                   width: 20,
@@ -142,11 +147,16 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 6),
-                const Text("|"),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Text(
-                  "최고 ",
+                  "|",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 119, 119, 119),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "최고",
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.red[400],
@@ -154,7 +164,7 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 5),
                 Text(
                   "${weather.tempMax.toInt()}°",
                   style: const TextStyle(
@@ -162,11 +172,9 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 6),
-                const Text("|"),
-                const SizedBox(width: 10),
+                const SizedBox(width: 5),
                 Text(
-                  "최저 ",
+                  "최저",
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.blue[400],
@@ -174,7 +182,7 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 5),
                 Text(
                   "${weather.tempMin.toInt()}°",
                   style: const TextStyle(
@@ -182,9 +190,14 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(width: 6),
-                const Text("|"),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
+                Text(
+                  "|",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 119, 119, 119),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Text(
                   weather.rainfall == 0
                       ? "강수량 없음"

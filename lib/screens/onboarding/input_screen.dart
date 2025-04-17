@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/progress_loading_page.dart';
+import 'package:haengunse/screens/onboarding/progress_loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/home_screen.dart';
+import 'package:haengunse/screens/home/home_screen.dart';
 import 'package:haengunse/service/manse/manse_api.dart';
 
 class InputScreen extends StatefulWidget {

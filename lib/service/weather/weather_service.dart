@@ -9,18 +9,13 @@ class WeatherService {
   final String _baseUrl = Config.openWeatherApiBaseUrl;
 
   Future<Weather?> fetchWeather() async {
-    print("🚀 fetchWeather 호출됨");
     final location = MyLocation();
     await location.getMyCurrentLocation();
-    print("📍 위치: lat=${location.latitude}, lon=${location.longitude}");
 
     final url =
         '$_baseUrl?lat=${location.latitude}&lon=${location.longitude}&appid=$_apiKey&units=metric&lang=kr';
-    print("📡 날씨 요청 URL: $url");
     try {
       final response = await _dio.get(url);
-      print('✅ 응답 코드: ${response.statusCode}');
-      print('✅ 응답 데이터: ${response.data}');
 
       if (response.statusCode == 200) {
         final data = response.data;
