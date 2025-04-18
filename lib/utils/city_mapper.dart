@@ -2,16 +2,24 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class CityMapper {
-  static Map<int, String>? _cityIdMap;
+  static final Map<int, String> _cityIdToKoreanName = {};
 
   static Future<void> loadCityMap() async {
-    if (_cityIdMap != null) return; // 이미 불러왔으면 생략
-    final jsonStr = await rootBundle.loadString('assets/city.list.kr.json');
-    final decoded = json.decode(jsonStr) as Map<String, dynamic>;
-    _cityIdMap = decoded.map((key, value) => MapEntry(int.parse(key), value));
+    final jsonString = await rootBundle.loadString('assets/city.list.kr.json');
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+
+    for (var item in jsonList) {
+      final int? id = item['id'];
+      final String? name = item['name'];
+
+      if (id != null && name != null) {
+        _cityIdToKoreanName[id] = name;
+      }
+    }
   }
 
-  static String getKoreanCityById(int id) {
-    return _cityIdMap?[id] ?? '알 수 없음';
+  static String getCityName(
+      {required int cityId, required String fallbackName}) {
+    return _cityIdToKoreanName[cityId] ?? fallbackName;
   }
 }

@@ -116,7 +116,10 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  CityMapper.getKoreanCityById(weather.cityId),
+                  CityMapper.getCityName(
+                    cityId: weather.cityId,
+                    fallbackName: weather.cityName,
+                  ),
                   style: const TextStyle(
                     fontSize: 11,
                     color: Colors.black87,
