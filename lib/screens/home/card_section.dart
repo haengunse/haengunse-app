@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/card/card_api.dart';
 import 'package:haengunse/service/card/card_interactor.dart';
 
@@ -10,34 +11,33 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3.3,
+      height: (screenHeight / 3.3).h,
       width: double.infinity,
       color: const Color.fromARGB(231, 243, 243, 243),
-      padding: const EdgeInsets.fromLTRB(15, 20, 10, 15),
+      padding: EdgeInsets.fromLTRB(15.w, 20.h, 10.w, 15.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "다양한 운세를 알아볼까요?",
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 132, 131, 131),
+              color: const Color.fromARGB(255, 132, 131, 131),
               fontFamily: 'Pretendard',
             ),
           ),
-          const Text(
+          Text(
             "운세 카드",
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w700,
               color: Colors.black,
               fontFamily: 'Pretendard',
             ),
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 150,
+          SizedBox(height: 20.h),
+          Flexible(
             child: FutureBuilder<List<FortuneCardData>>(
               future: CardService.fetchFortuneCards(),
               builder: (context, snapshot) {
@@ -47,8 +47,7 @@ class SectionCard extends StatelessWidget {
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data!.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 10),
+                  separatorBuilder: (context, index) => SizedBox(width: 10.w),
                   itemBuilder: (context, index) {
                     final card = snapshot.data![index];
                     return GestureDetector(
@@ -78,25 +77,25 @@ class SectionCard extends StatelessWidget {
     required String bigTitle,
   }) {
     return Container(
-      width: 130,
-      height: 150,
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+      width: 130.w,
+      height: 150.h,
+      margin: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
+            blurRadius: 5.r,
             spreadRadius: 1,
-            offset: Offset(0, -1),
+            offset: const Offset(0, -1),
           ),
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 1,
+            blurRadius: 1.r,
             spreadRadius: 1,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -115,11 +114,11 @@ class SectionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 1),
+          SizedBox(height: 1.h),
           Text(
             smallTitle,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               color: Colors.grey[800],
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
@@ -127,8 +126,8 @@ class SectionCard extends StatelessWidget {
           ),
           Text(
             bigTitle,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: 18.sp,
               color: Colors.black,
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
