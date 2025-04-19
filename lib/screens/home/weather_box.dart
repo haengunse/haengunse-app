@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/weather/weather_model.dart';
 import 'package:haengunse/service/weather/weather_service.dart';
 import 'package:haengunse/utils/city_mapper.dart';
@@ -45,10 +46,10 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
       future: _weatherFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            width: 340,
-            height: 35,
-            child: Center(
+          return SizedBox(
+            width: 340.w,
+            height: 35.h,
+            child: const Center(
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
           );
@@ -63,17 +64,17 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
 
   Widget _buildErrorBox() {
     return SizedBox(
-      width: 340,
-      height: 35,
+      width: 340.w,
+      height: 35.h,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 3.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
+              blurRadius: 5.r,
               offset: const Offset(0, 3),
             ),
           ],
@@ -93,18 +94,20 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
   }
 
   Widget _buildWeatherInfo(Weather weather) {
-    return SizedBox(
-      width: 340,
-      height: 35,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: 345.w,
+        maxHeight: 34.h,
+      ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 3.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
+              blurRadius: 5.r,
               offset: const Offset(0, 3),
             ),
           ],
@@ -112,106 +115,85 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
         child: Center(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  CityMapper.getCityName(
-                    cityId: weather.cityId,
-                    fallbackName: weather.cityName,
+            physics: const BouncingScrollPhysics(),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                children: [
+                  Text(
+                    CityMapper.getCityName(
+                      cityId: weather.cityId,
+                      fallbackName: weather.cityName,
+                    ),
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Pretendard',
+                  SizedBox(width: 8.w),
+                  Text("|", style: TextStyle(color: const Color(0xFF777777))),
+                  SizedBox(width: 8.w),
+                  Image.network(
+                    'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
+                    width: 20.w,
+                    height: 20.h,
+                    fit: BoxFit.cover,
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "|",
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 119, 119, 119),
+                  SizedBox(width: 6.w),
+                  Text(
+                    "${weather.temp.toInt()}°",
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.black87,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Image.network(
-                  'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
-                  width: 20,
-                  height: 20,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  "${weather.temp.toInt()}°",
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.black87,
-                    fontFamily: 'Pretendard',
+                  SizedBox(width: 8.w),
+                  Text("|", style: TextStyle(color: const Color(0xFF777777))),
+                  SizedBox(width: 8.w),
+                  Text(
+                    "최고",
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.red[400],
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "|",
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 119, 119, 119),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "${weather.tempMax.toInt()}°",
+                    style: TextStyle(fontSize: 11.sp, fontFamily: 'Pretendard'),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "최고",
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.red[400],
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Pretendard',
+                  SizedBox(width: 5.w),
+                  Text(
+                    "최저",
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.blue[400],
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "${weather.tempMax.toInt()}°",
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'Pretendard',
+                  SizedBox(width: 5.w),
+                  Text(
+                    "${weather.tempMin.toInt()}°",
+                    style: TextStyle(fontSize: 11.sp, fontFamily: 'Pretendard'),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "최저",
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.blue[400],
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Pretendard',
+                  SizedBox(width: 7.w),
+                  Text("|", style: TextStyle(color: const Color(0xFF777777))),
+                  SizedBox(width: 8.w),
+                  Text(
+                    weather.rainfall == 0
+                        ? "강수량 없음"
+                        : "강수량 ${weather.rainfall!.toStringAsFixed(1)}mm",
+                    style: TextStyle(fontSize: 11.sp, fontFamily: 'Pretendard'),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "${weather.tempMin.toInt()}°",
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "|",
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 119, 119, 119),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  weather.rainfall == 0
-                      ? "강수량 없음"
-                      : "강수량 ${weather.rainfall!.toStringAsFixed(1)}mm",
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'Pretendard',
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

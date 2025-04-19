@@ -20,7 +20,7 @@ class SectionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: (screenHeight / 3).h, // 높이도 비례해서 반응형
+      height: 1.sh / 3, // 화면 높이의 1/3
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
@@ -41,15 +41,14 @@ class SectionLucky extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "반가워요 ${userName}님",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey[800],
-                  fontFamily: 'Pretendard',
-                ),
-              ),
+              Text("반가워요 ${userName}님",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[800],
+                    fontFamily: 'Pretendard',
+                  )),
+              SizedBox(height: 4.h),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/todaysplash');
@@ -57,23 +56,21 @@ class SectionLucky extends StatelessWidget {
                 child: Text(
                   "오늘은\n어떤 하루일까요? ->",
                   style: TextStyle(
-                    fontSize: 27.sp,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Pretendard',
-                  ),
+                      fontSize: 27.sp,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Pretendard'),
                 ),
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 4.h),
               Text(
                 _getTodayDate(),
                 style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey[700],
-                  fontFamily: 'Pretendard',
-                ),
+                    fontSize: 14.sp,
+                    color: Colors.grey[700],
+                    fontFamily: 'Pretendard'),
               ),
-              SizedBox(height: 13.h),
-              const WeatherBox(),
+              SizedBox(height: 8.h),
+              const WeatherBox(), // 내부에서도 .h/.w 적용 필요
             ],
           ),
         ],
