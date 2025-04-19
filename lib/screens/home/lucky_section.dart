@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/home/weather_box.dart';
 
 class SectionLucky extends StatelessWidget {
@@ -19,56 +20,60 @@ class SectionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeight / 3,
+      height: (screenHeight / 3).h, // 높이도 비례해서 반응형
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 100, 5, 16),
+      padding: EdgeInsets.fromLTRB(24.w, 100.h, 5.w, 16.h),
       child: Stack(
         children: [
           Positioned(
-            top: -30,
-            right: -30,
+            top: -30.h,
+            right: -30.w,
             child: Image.asset(
               "assets/images/home_main.png",
-              width: 230,
-              height: 230,
+              width: 230.w,
+              height: 230.h,
               fit: BoxFit.contain,
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("반가워요 ${userName}님",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[800],
-                    fontFamily: 'Pretendard',
-                  )),
+              Text(
+                "반가워요 ${userName}님",
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[800],
+                  fontFamily: 'Pretendard',
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/todaysplash');
                 },
-                child: const Text(
+                child: Text(
                   "오늘은\n어떤 하루일까요? ->",
                   style: TextStyle(
-                      fontSize: 27,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Pretendard'),
+                    fontSize: 27.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2.h),
               Text(
                 _getTodayDate(),
                 style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[700],
-                    fontFamily: 'Pretendard'),
+                  fontSize: 14.sp,
+                  color: Colors.grey[700],
+                  fontFamily: 'Pretendard',
+                ),
               ),
-              const SizedBox(height: 13),
-              WeatherBox(),
+              SizedBox(height: 13.h),
+              const WeatherBox(),
             ],
           ),
         ],
