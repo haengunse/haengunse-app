@@ -44,16 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: Column(
-        children: [
-          SectionLucky(userName: userName, screenHeight: screenHeight),
-          SectionCard(screenHeight: screenHeight),
-          SectionDay(screenHeight: screenHeight),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SectionLucky(userName: userName),
+            SectionCard(),
+            SectionDay(),
+          ],
+        ),
       ),
     );
   }

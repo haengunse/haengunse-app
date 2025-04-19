@@ -4,16 +4,11 @@ import 'package:haengunse/service/card/card_api.dart';
 import 'package:haengunse/service/card/card_interactor.dart';
 
 class SectionCard extends StatelessWidget {
-  final double screenHeight;
-
-  const SectionCard({super.key, required this.screenHeight});
+  const SectionCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: (screenHeight / 3.3).h,
-      width: double.infinity,
-      color: const Color.fromARGB(231, 243, 243, 243),
+    return Padding(
       padding: EdgeInsets.fromLTRB(15.w, 20.h, 10.w, 15.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +32,8 @@ class SectionCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20.h),
-          Flexible(
+          SizedBox(
+            height: 150.h,
             child: FutureBuilder<List<FortuneCardData>>(
               future: CardService.fetchFortuneCards(),
               builder: (context, snapshot) {

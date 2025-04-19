@@ -3,12 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/home/weather_box.dart';
 
 class SectionLucky extends StatelessWidget {
-  final double screenHeight;
   final String userName;
 
   const SectionLucky({
     super.key,
-    required this.screenHeight,
     required this.userName,
   });
 
@@ -20,12 +18,11 @@ class SectionLucky extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.sh / 3, // 화면 높이의 1/3
       width: double.infinity,
+      padding: EdgeInsets.fromLTRB(24.w, 100.h, 5.w, 16.h), // 위/아래 여백 조절
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
       ),
-      padding: EdgeInsets.fromLTRB(24.w, 100.h, 5.w, 16.h),
       child: Stack(
         children: [
           Positioned(
@@ -33,8 +30,8 @@ class SectionLucky extends StatelessWidget {
             right: -30.w,
             child: Image.asset(
               "assets/images/home_main.png",
-              width: 230.w,
-              height: 230.h,
+              width: 220.w,
+              height: 220.h,
               fit: BoxFit.contain,
             ),
           ),
@@ -50,27 +47,27 @@ class SectionLucky extends StatelessWidget {
                   )),
               SizedBox(height: 4.h),
               GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/todaysplash');
-                },
+                onTap: () => Navigator.pushNamed(context, '/todaysplash'),
                 child: Text(
                   "오늘은\n어떤 하루일까요? ->",
                   style: TextStyle(
-                      fontSize: 27.sp,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Pretendard'),
+                    fontSize: 27.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
               ),
               SizedBox(height: 4.h),
               Text(
                 _getTodayDate(),
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey[700],
-                    fontFamily: 'Pretendard'),
+                  fontSize: 14.sp,
+                  color: Colors.grey[700],
+                  fontFamily: 'Pretendard',
+                ),
               ),
-              SizedBox(height: 8.h),
-              const WeatherBox(), // 내부에서도 .h/.w 적용 필요
+              SizedBox(height: 13.h),
+              const WeatherBox(),
             ],
           ),
         ],
