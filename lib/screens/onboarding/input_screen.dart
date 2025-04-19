@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/onboarding/progress_loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/home/home_screen.dart';
+import 'package:haengunse/screens/onboarding/progress_loading_page.dart';
 import 'package:haengunse/service/manse/manse_api.dart';
 
 class InputScreen extends StatefulWidget {
@@ -113,16 +112,27 @@ class _InputScreenState extends State<InputScreen> {
       data: ThemeData(
         fontFamily: 'Pretendard',
         primarySwatch: Colors.grey,
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor!)
-            .copyWith(primary: primaryColor, secondary: primaryColor),
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.light(
+          primary: Colors.grey[800]!,
+          onPrimary: Colors.white,
+          secondary: Colors.grey[800]!,
+          onSecondary: Colors.white,
+          surface: Colors.white,
+          background: Colors.white,
+          onBackground: Colors.black,
+          onSurface: Colors.black,
+          brightness: Brightness.light,
+        ),
         checkboxTheme: CheckboxThemeData(
           fillColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) return primaryColor;
+            if (states.contains(MaterialState.selected))
+              return Colors.grey[800];
             return null;
           }),
         ),
         radioTheme: RadioThemeData(
-          fillColor: MaterialStateProperty.all(primaryColor),
+          fillColor: MaterialStateProperty.all(Colors.grey[800]),
         ),
       ),
       child: Scaffold(
@@ -158,7 +168,7 @@ class _InputScreenState extends State<InputScreen> {
                         controller: _nameController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(color: primaryColor)),
+                              borderSide: BorderSide(color: primaryColor!)),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: primaryColor)),
                         ),
@@ -274,7 +284,6 @@ class _InputScreenState extends State<InputScreen> {
               Row(
                 children: [
                   Checkbox(
-                    activeColor: primaryColor,
                     value: _agreedToTerms,
                     onChanged: (val) => setState(() => _agreedToTerms = val!),
                   ),
