@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/day/day_interactor.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SectionDay extends StatelessWidget {
   final double screenHeight;
@@ -11,8 +12,9 @@ class SectionDay extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        insetPadding: const EdgeInsets.all(30),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+        insetPadding: EdgeInsets.all(30.w),
         child: child,
       ),
     );
@@ -23,16 +25,16 @@ class SectionDay extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: EdgeInsets.symmetric(vertical: 6.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(30.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+              blurRadius: 5.r,
+              offset: Offset(0, 3.h),
             ),
           ],
         ),
@@ -42,16 +44,16 @@ class SectionDay extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 13,
+                style: TextStyle(
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF5E5E5E),
+                  color: const Color(0xFF5E5E5E),
                   fontFamily: 'Pretendard',
                 ),
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded,
-                size: 16, color: Colors.black54),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 16.sp, color: Colors.black54),
           ],
         ),
       ),
@@ -60,43 +62,51 @@ class SectionDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: screenHeight / 2.8,
-      width: double.infinity,
-      color: const Color.fromARGB(231, 243, 243, 243),
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "오늘, 나의 하루 미리보기",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-              fontFamily: 'Pretendard',
+    return SizedBox(
+      height: 240.h, // 또는 0.32.sh 등으로 비율 조절 가능
+      child: Container(
+        width: double.infinity,
+        color: const Color.fromARGB(231, 243, 243, 243),
+        padding: EdgeInsets.fromLTRB(15.w, 15.h, 15.w, 5.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "오늘, 나의 하루 미리보기",
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                fontFamily: 'Pretendard',
+              ),
             ),
-          ),
-          const SizedBox(height: 15),
-          _buildPreviewCard(
-            context,
-            "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
-            () => DayInteractor.handleRandomTap(
-                context, (child) => _showDialog(context, child)),
-          ),
-          _buildPreviewCard(
-            context,
-            "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
-            () => DayInteractor.handleCookieTap(
-                context, (child) => _showDialog(context, child)),
-          ),
-          _buildPreviewCard(
-            context,
-            "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
-            () => DayInteractor.handleItemTap(
-                context, (child) => _showDialog(context, child)),
-          ),
-        ],
+            SizedBox(height: 12.h),
+            Expanded(
+              child: Column(
+                children: [
+                  _buildPreviewCard(
+                    context,
+                    "오늘의 당신을 위한 랜덤 질문을 뽑아봤어요.",
+                    () => DayInteractor.handleRandomTap(
+                        context, (child) => _showDialog(context, child)),
+                  ),
+                  _buildPreviewCard(
+                    context,
+                    "오늘 하루, 마음에 담아두면 좋을 한마디예요.",
+                    () => DayInteractor.handleCookieTap(
+                        context, (child) => _showDialog(context, child)),
+                  ),
+                  _buildPreviewCard(
+                    context,
+                    "오늘 당신께 필요한 행운 아이템을 모아봤어요.",
+                    () => DayInteractor.handleItemTap(
+                        context, (child) => _showDialog(context, child)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
