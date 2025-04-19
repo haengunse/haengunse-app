@@ -1,8 +1,8 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/utils/route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,10 +29,20 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "오늘의 운세",
+          title: "행운세",
           theme: ThemeData(primarySwatch: Colors.green),
           onGenerateRoute: RouteGenerator.generateRoute,
           initialRoute: '/',
+          locale: const Locale('ko'),
+          supportedLocales: const [
+            Locale('ko'),
+            Locale('en'),
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
         );
       },
     );
