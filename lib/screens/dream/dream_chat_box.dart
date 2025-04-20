@@ -44,9 +44,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       if (!_scrollController.hasClients) return;
 
       Future.delayed(const Duration(milliseconds: 30), () {
-        final position = _scrollController.position;
-        final offset = position.maxScrollExtent;
-
+        final offset = _scrollController.position.maxScrollExtent;
         if (smooth) {
           _scrollController.animateTo(
             offset,
@@ -100,43 +98,49 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         Column(
           children: [
             Expanded(
-              child: Scrollbar(
-                controller: _scrollController,
-                thumbVisibility: false, // 기본적으로 숨김
-                trackVisibility: false, // 필요하면 true로
-                radius: const Radius.circular(10),
-                thickness: 6,
-                child: ListView.builder(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (_) {
+                  setState(() {}); // 스크롤 상태 감지용
+                  return false;
+                },
+                child: RawScrollbar(
                   controller: _scrollController,
-                  physics: const ClampingScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    final message = _messages[index];
-                    return Align(
-                      key: _messageKeys[index],
-                      alignment: message.isUser
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.75,
+                  thumbVisibility: false,
+                  thickness: 6,
+                  radius: const Radius.circular(10),
+                  thumbColor: Colors.white,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      final message = _messages[index];
+                      return Align(
+                        key: _messageKeys[index],
+                        alignment: message.isUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.75,
+                          ),
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: message.isUser
+                                ? Colors.green[100]
+                                : Colors.white.withOpacity(0.85),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            message.text,
+                            style: const TextStyle(fontSize: 13),
+                          ),
                         ),
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: message.isUser
-                              ? Colors.green[100]
-                              : Colors.white.withOpacity(0.85),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          message.text,
-                          style: const TextStyle(fontSize: 13),
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
