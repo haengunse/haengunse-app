@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/service/today/today_interactor.dart';
 
@@ -36,40 +37,40 @@ class _TodayProgressLoadingPageState extends State<TodayProgressLoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 SizedBox(
-                  width: 80,
-                  height: 80,
+                  width: 80.w,
+                  height: 80.w,
                   child: CircularProgressIndicator(
-                    color: Color(0xFF82c784),
+                    color: const Color(0xFF82c784),
                     strokeWidth: 6.5,
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 Text(
                   '곧 당신만의 운세가 도착합니다.',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
-                    fontSize: 22,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 5.h),
                 Text(
-                  '잠시만 기다려 주세요.\n 오늘의 운세를 예측하고 있어요.',
+                  '잠시만 기다려 주세요.\n오늘의 운세를 예측하고 있어요.',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: Colors.black54,
                     height: 1.5,
                   ),
