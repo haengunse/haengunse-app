@@ -2,12 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:haengunse/config.dart';
 import 'dart:convert';
 
+class DreamResult {
+  final String? reply;
+  final bool isNetworkError;
+
+  DreamResult({this.reply, this.isNetworkError = false});
+}
+
 class DreamService {
-  static Future<String?> sendDream(List<String> messages) async {
+  static Future<DreamResult> sendDream(List<String> messages) async {
     try {
       final dio = Dio();
-
-      print('📤 요청 보낼 데이터: ${jsonEncode(messages)}');
 
       final response = await dio.post(
         Config.dreamApiUrl,
@@ -18,14 +23,12 @@ class DreamService {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        return response.data['interpretation'] as String?;
+        return DreamResult(reply: response.data['interpretation'] as String?);
       } else {
-        print("응답 오류: ${response.statusCode}");
-        return null;
+        return DreamResult(); // 일반 서버 오류
       }
     } catch (e) {
-      print("서버 오류: $e");
-      return null;
+      return DreamResult(isNetworkError: true); // 네트워크 오류
     }
   }
 }
