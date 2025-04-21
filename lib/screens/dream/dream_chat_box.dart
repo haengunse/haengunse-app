@@ -58,43 +58,68 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     });
   }
 
+  void _retryMessage(String input) {
+    // 기존 에러 메시지 제거
+    setState(() {
+      final index = _messages.indexWhere(
+        (m) => m.isUser && m.text == input && m.isError,
+      );
+      if (index != -1) {
+        _messages.removeAt(index);
+        _messageKeys.removeAt(index);
+      }
+    });
+
+    // 재전송
+    _sendMessage(input);
+  }
+
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3) return;
 
-    // 먼저 reply를 보여줄 준비
+    // 임시 사용자 메시지 추가 (정상 응답 시 교체되거나 유지)
+    setState(() {
+      _messages.add(DreamMessage(text: input, isUser: true));
+      _messageKeys.add(GlobalKey());
+    });
     _controller.clear();
 
-    final history =
-        _messages.where((m) => m.isUser).map((m) => m.text).toList();
-    final result = await DreamService.sendDream([...history, input]);
+    final history = _messages
+        .where((m) => m.isUser && !m.isError)
+        .map((m) => m.text)
+        .toList();
+    final result = await DreamService.sendDream(history);
 
     if (result.reply != null) {
-      _addUserMessage(input);
+      // ✅ 정상 응답: 시스템 응답 추가 + 카운트 증가 + 템플릿 메시지
+      setState(() {
+        _messages.add(DreamMessage(text: result.reply!, isUser: false));
+        _messageKeys.add(GlobalKey());
+      });
       _chatCount++;
-      _addSystemMessage(result.reply!);
 
       if (_chatCount == 1) {
-        _addSystemMessage(
-            "꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면, 해석에 큰 도움이 돼요 :)\n추가로 궁금한 점이 있다면 지금이 첫 질문 기회예요!\n물론, 여기서 마무리하셔도 괜찮아요.");
+        _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
       } else if (_chatCount == 2) {
-        _addSystemMessage(
-            "조금 더 깊이 들어가볼 수도 있어요.\n꿈속 상황이나 감정이 어땠는지 더 얘기해주시면 해석이 더 풍부해질 수 있답니다 :)\n이제 마지막 질문 기회예요!");
+        _addSystemMessage("조금 더 깊이 들어가볼 수도 있어요...");
       } else if (_chatCount == 3) {
-        _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요. 신중하게 질문해주세요! 더 궁금하면 낼 찾아오슈");
+        _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요...");
       }
     } else if (result.isNetworkError) {
-      // 에러인 경우에는 사용자 말풍선 + 버튼으로 대체
+      // ❌ 네트워크 오류 → 방금 추가한 사용자 메시지를 제거 후 errorMessage로 교체
       setState(() {
+        _messages.removeLast();
+        _messageKeys.removeLast();
+
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
-      _scrollToBottom();
     } else {
-      // 서버 에러인 경우는 그냥 시스템 메시지로
-      _addUserMessage(input);
-      _chatCount++;
+      // ❌ 서버 오류 → 사용자 메시지 유지, 시스템 응답만 추가
       _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
     }
+
+    _scrollToBottom();
   }
 
   void _addUserErrorBubble(String errorMessage, String originalText) {
@@ -181,7 +206,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                         setState(() {
                                           _messages.removeAt(index);
                                           _messageKeys.removeAt(index);
-                                          _chatCount--; // 횟수 복구
+                                          //_chatCount--; // 실제로 질문을 안 한 걸로 간주
                                         });
                                       },
                                       icon: const Icon(Icons.close,
@@ -192,11 +217,14 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                     TextButton.icon(
                                       onPressed: () {
                                         final originalText = message.text;
+
                                         setState(() {
-                                          _messages.removeAt(index);
+                                          _messages
+                                              .removeAt(index); // 오류 메시지 제거
                                           _messageKeys.removeAt(index);
-                                          _chatCount--;
                                         });
+
+                                        // 재전송: count 확인 없이 바로 호출
                                         _sendMessage(originalText);
                                       },
                                       icon: const Icon(Icons.refresh,
