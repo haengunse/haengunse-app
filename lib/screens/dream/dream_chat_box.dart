@@ -61,15 +61,16 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3) return;
 
-    _addUserMessage(input);
+    // 먼저 reply를 보여줄 준비
     _controller.clear();
-    _chatCount++;
 
     final history =
         _messages.where((m) => m.isUser).map((m) => m.text).toList();
-    final result = await DreamService.sendDream(history);
+    final result = await DreamService.sendDream([...history, input]);
 
     if (result.reply != null) {
+      _addUserMessage(input);
+      _chatCount++;
       _addSystemMessage(result.reply!);
 
       if (_chatCount == 1) {
@@ -82,9 +83,17 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요. 신중하게 질문해주세요! 더 궁금하면 낼 찾아오슈");
       }
     } else if (result.isNetworkError) {
-      _addUserErrorBubble("네트워크 연결이 불안정해요. 인터넷 상태를 확인한 뒤 다시 시도해주세요.", input);
+      // 에러인 경우에는 사용자 말풍선 + 버튼으로 대체
+      setState(() {
+        _messages.add(DreamMessage(text: input, isUser: true, isError: true));
+        _messageKeys.add(GlobalKey());
+      });
+      _scrollToBottom();
     } else {
-      _addUserErrorBubble("죄송해요. 지금은 해석을 도와드릴 수 없어요.", input);
+      // 서버 에러인 경우는 그냥 시스템 메시지로
+      _addUserMessage(input);
+      _chatCount++;
+      _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
     }
   }
 
@@ -131,9 +140,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                     itemCount: _messages.length,
                     itemBuilder: (context, index) {
                       final message = _messages[index];
-                      final isErrorMessage =
-                          message.text.startsWith("네트워크 연결") ||
-                              message.text.startsWith("죄송해요.");
+                      final isNetworkError = message.isUser && message.isError;
 
                       return Align(
                         key: _messageKeys[index],
@@ -163,22 +170,35 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                 style: const TextStyle(fontSize: 13),
                               ),
                             ),
-                            if (!message.isUser && isErrorMessage)
+                            if (isNetworkError)
                               Padding(
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     TextButton.icon(
-                                      onPressed: () => Navigator.pop(context),
+                                      onPressed: () {
+                                        setState(() {
+                                          _messages.removeAt(index);
+                                          _messageKeys.removeAt(index);
+                                          _chatCount--; // 횟수 복구
+                                        });
+                                      },
                                       icon: const Icon(Icons.close,
                                           color: Colors.red),
                                       label: const Text("취소",
                                           style: TextStyle(color: Colors.red)),
                                     ),
                                     TextButton.icon(
-                                      onPressed: () =>
-                                          _sendMessage(_controller.text),
+                                      onPressed: () {
+                                        final originalText = message.text;
+                                        setState(() {
+                                          _messages.removeAt(index);
+                                          _messageKeys.removeAt(index);
+                                          _chatCount--;
+                                        });
+                                        _sendMessage(originalText);
+                                      },
                                       icon: const Icon(Icons.refresh,
                                           color: Colors.blue),
                                       label: const Text("다시 시도",
