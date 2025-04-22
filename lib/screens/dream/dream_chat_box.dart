@@ -84,14 +84,25 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     });
     _controller.clear();
 
+    setState(() {
+      _messages.add(DreamMessage(text: "...", isUser: false, isLoading: true));
+      _messageKeys.add(GlobalKey());
+    });
+
     final history = _messages
         .where((m) => m.isUser && !m.isError)
         .map((m) => m.text)
         .toList();
     final result = await DreamService.sendDream(history);
 
+    setState(() {
+      if (_messages.isNotEmpty && _messages.last.isLoading) {
+        _messages.removeLast();
+        _messageKeys.removeLast();
+      }
+    });
+
     if (result.reply != null) {
-      // ✅ 정상 응답: 시스템 응답 추가 + 카운트 증가 + 템플릿 메시지
       setState(() {
         _messages.add(DreamMessage(text: result.reply!, isUser: false));
         _messageKeys.add(GlobalKey());
@@ -191,7 +202,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                message.text,
+                                message.isLoading ? "..." : message.text,
                                 style: const TextStyle(fontSize: 13),
                               ),
                             ),
