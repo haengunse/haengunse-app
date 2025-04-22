@@ -74,6 +74,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     _sendMessage(input);
   }
 
+  bool _isInterpreting = false;
+
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3) return;
 
@@ -81,19 +83,17 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     setState(() {
       _messages.add(DreamMessage(text: input, isUser: true));
       _messageKeys.add(GlobalKey());
+      _isInterpreting = true;
     });
     _controller.clear();
-
-    setState(() {
-      _messages.add(DreamMessage(text: "...", isUser: false, isLoading: true));
-      _messageKeys.add(GlobalKey());
-    });
 
     final history = _messages
         .where((m) => m.isUser && !m.isError)
         .map((m) => m.text)
         .toList();
     final result = await DreamService.sendDream(history);
+
+    setState(() => _isInterpreting = false);
 
     setState(() {
       if (_messages.isNotEmpty && _messages.last.isLoading) {
@@ -201,10 +201,12 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                     : Colors.white.withOpacity(0.85),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Text(
-                                message.isLoading ? "..." : message.text,
-                                style: const TextStyle(fontSize: 13),
-                              ),
+                              child: message.isLoading
+                                  ? const AnimatedDotsCenter()
+                                  : Text(
+                                      message.text,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
                             ),
                             if (isNetworkError)
                               Padding(
@@ -289,7 +291,60 @@ class _DreamChatBoxState extends State<DreamChatBox> {
               ),
           ],
         ),
+        if (_isInterpreting)
+          const Center(
+            child: AnimatedDotsCenter(),
+          ),
       ],
     );
+  }
+}
+
+class AnimatedDotsCenter extends StatefulWidget {
+  const AnimatedDotsCenter({super.key});
+
+  @override
+  State<AnimatedDotsCenter> createState() => _AnimatedDotsCenterState();
+}
+
+class _AnimatedDotsCenterState extends State<AnimatedDotsCenter>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<int> _dotCount;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 900),
+      vsync: this,
+    )..repeat();
+
+    _dotCount = StepTween(begin: 1, end: 3).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.linear),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _dotCount,
+      builder: (context, child) {
+        return Text(
+          '해석 중${'.' * _dotCount.value}',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
