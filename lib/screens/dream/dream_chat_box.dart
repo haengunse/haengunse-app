@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/dream/dream_service.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
+import 'package:haengunse/screens/dream/animated_dots.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -74,17 +75,21 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     _sendMessage(input);
   }
 
-  bool _isInterpreting = false;
-
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3) return;
 
-    // 임시 사용자 메시지 추가 (정상 응답 시 교체되거나 유지)
     setState(() {
       _messages.add(DreamMessage(text: input, isUser: true));
       _messageKeys.add(GlobalKey());
-      _isInterpreting = true;
+
+      _messages.add(DreamMessage(
+        text: "loading",
+        isUser: false,
+        isLoading: true,
+      ));
+      _messageKeys.add(GlobalKey());
     });
+
     _controller.clear();
 
     final history = _messages
@@ -93,10 +98,9 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         .toList();
     final result = await DreamService.sendDream(history);
 
-    setState(() => _isInterpreting = false);
-
     setState(() {
-      if (_messages.isNotEmpty && _messages.last.isLoading) {
+      final last = _messages.isNotEmpty ? _messages.last : null;
+      if (last != null && last.isLoading) {
         _messages.removeLast();
         _messageKeys.removeLast();
       }
@@ -117,16 +121,13 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요...");
       }
     } else if (result.isNetworkError) {
-      // ❌ 네트워크 오류 → 방금 추가한 사용자 메시지를 제거 후 errorMessage로 교체
       setState(() {
-        _messages.removeLast();
+        _messages.removeLast(); // 사용자 말풍선 제거
         _messageKeys.removeLast();
-
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
     } else {
-      // ❌ 서버 오류 → 사용자 메시지 유지, 시스템 응답만 추가
       _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
     }
 
@@ -202,7 +203,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: message.isLoading
-                                  ? const AnimatedDotsCenter()
+                                  ? const AnimatedDots()
                                   : Text(
                                       message.text,
                                       style: const TextStyle(fontSize: 13),
@@ -219,7 +220,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                         setState(() {
                                           _messages.removeAt(index);
                                           _messageKeys.removeAt(index);
-                                          //_chatCount--; // 실제로 질문을 안 한 걸로 간주
                                         });
                                       },
                                       icon: const Icon(Icons.close,
@@ -232,12 +232,10 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                         final originalText = message.text;
 
                                         setState(() {
-                                          _messages
-                                              .removeAt(index); // 오류 메시지 제거
+                                          _messages.removeAt(index);
                                           _messageKeys.removeAt(index);
                                         });
 
-                                        // 재전송: count 확인 없이 바로 호출
                                         _sendMessage(originalText);
                                       },
                                       icon: const Icon(Icons.refresh,
@@ -291,60 +289,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
               ),
           ],
         ),
-        if (_isInterpreting)
-          const Center(
-            child: AnimatedDotsCenter(),
-          ),
       ],
     );
-  }
-}
-
-class AnimatedDotsCenter extends StatefulWidget {
-  const AnimatedDotsCenter({super.key});
-
-  @override
-  State<AnimatedDotsCenter> createState() => _AnimatedDotsCenterState();
-}
-
-class _AnimatedDotsCenterState extends State<AnimatedDotsCenter>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<int> _dotCount;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 900),
-      vsync: this,
-    )..repeat();
-
-    _dotCount = StepTween(begin: 1, end: 3).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.linear),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _dotCount,
-      builder: (context, child) {
-        return Text(
-          '해석 중${'.' * _dotCount.value}',
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
