@@ -3,6 +3,7 @@ import 'package:haengunse/service/dream/dream_service.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
 import 'package:haengunse/screens/dream/animated_dots.dart';
 import 'package:haengunse/service/dream/dream_chat_interactor.dart';
+import 'package:haengunse/screens/dream/network_error_dialog.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -140,6 +141,12 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
+
+      // 네트워크 에러 팝업
+      showDialog(
+        context: context,
+        builder: (context) => const NetworkErrorDialog(),
+      );
     } else {
       setState(() {
         _isWaitingResponse = false;
