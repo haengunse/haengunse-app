@@ -101,8 +101,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         .toList();
     final result = await DreamService.sendDream(history);
 
+    // 일단 로딩 메시지는 제거
     setState(() {
-      _isWaitingResponse = false;
       final last = _messages.isNotEmpty ? _messages.last : null;
       if (last != null && last.isLoading) {
         _messages.removeLast();
@@ -115,37 +115,38 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         _messages.add(DreamMessage(text: result.reply!, isUser: false));
         _messageKeys.add(GlobalKey());
       });
+
       _chatCount++;
 
+      // 👉 템플릿 메시지 딜레이 + 그 이후에만 응답 허용
       if (_chatCount == 1) {
+        await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
       } else if (_chatCount == 2) {
+        await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("조금 더 깊이 들어가볼 수도 있어요...");
       } else if (_chatCount == 3) {
+        await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요...");
       }
+
+      setState(() {
+        _isWaitingResponse = false;
+      });
     } else if (result.isNetworkError) {
       setState(() {
-        _messages.removeLast(); // 사용자 말풍선 제거
+        _isWaitingResponse = false; // 실패 시에도 반드시 해제
+        _messages.removeLast(); // loading 제거
         _messageKeys.removeLast();
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
     } else {
+      setState(() {
+        _isWaitingResponse = false;
+      });
       _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
     }
-
-    _scrollToBottom();
-  }
-
-  void _addUserErrorBubble(String errorMessage, String originalText) {
-    setState(() {
-      _messages.add(DreamMessage(text: originalText, isUser: true));
-      _messageKeys.add(GlobalKey());
-
-      _messages.add(DreamMessage(text: errorMessage, isUser: false));
-      _messageKeys.add(GlobalKey());
-    });
 
     _scrollToBottom();
   }
