@@ -75,10 +75,13 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     _sendMessage(input);
   }
 
+  bool _isWaitingResponse = false;
+
   void _sendMessage(String input) async {
-    if (input.trim().isEmpty || _chatCount >= 3) return;
+    if (input.trim().isEmpty || _chatCount >= 3 || _isWaitingResponse) return;
 
     setState(() {
+      _isWaitingResponse = true;
       _messages.add(DreamMessage(text: input, isUser: true));
       _messageKeys.add(GlobalKey());
 
@@ -99,6 +102,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     final result = await DreamService.sendDream(history);
 
     setState(() {
+      _isWaitingResponse = false;
       final last = _messages.isNotEmpty ? _messages.last : null;
       if (last != null && last.isLoading) {
         _messages.removeLast();
@@ -262,7 +266,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        onSubmitted: _sendMessage,
+                        onSubmitted: (value) => _sendMessage(value),
                         decoration: const InputDecoration(
                           hintText: "꿈 이야기를 들려주세요",
                           filled: true,
