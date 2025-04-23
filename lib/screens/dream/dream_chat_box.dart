@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/service/dream/dream_service.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
 import 'package:haengunse/screens/dream/animated_dots.dart';
+import 'package:haengunse/service/dream/dream_chat_interactor.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -60,7 +61,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   }
 
   void _retryMessage(String input) {
-    // 기존 에러 메시지 제거
     setState(() {
       final index = _messages.indexWhere(
         (m) => m.isUser && m.text == input && m.isError,
@@ -99,9 +99,9 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         .where((m) => m.isUser && !m.isError)
         .map((m) => m.text)
         .toList();
-    final result = await DreamService.sendDream(history);
 
-    // 일단 로딩 메시지는 제거
+    final result = await DreamChatInteractor.processChat(history);
+
     setState(() {
       final last = _messages.isNotEmpty ? _messages.last : null;
       if (last != null && last.isLoading) {
@@ -118,7 +118,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
 
       _chatCount++;
 
-      // 👉 템플릿 메시지 딜레이 + 그 이후에만 응답 허용
       if (_chatCount == 1) {
         await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
@@ -135,8 +134,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       });
     } else if (result.isNetworkError) {
       setState(() {
-        _isWaitingResponse = false; // 실패 시에도 반드시 해제
-        _messages.removeLast(); // loading 제거
+        _isWaitingResponse = false;
+        _messages.removeLast(); // 로딩 제거
         _messageKeys.removeLast();
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
