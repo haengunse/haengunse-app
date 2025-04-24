@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/screens/dream/animated_dots.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
 
-class SystemBubbleWithProfile extends StatelessWidget {
+class SystemBubble extends StatelessWidget {
   final DreamMessage message;
   final bool isFirst;
   final double maxWidth;
 
-  const SystemBubbleWithProfile({
+  const SystemBubble({
     super.key,
     required this.message,
     required this.isFirst,

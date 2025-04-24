@@ -219,14 +219,14 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                       isFirst: isFirst,
                                       maxWidth:
                                           MediaQuery.of(context).size.width *
-                                              0.75,
+                                              0.6,
                                     )
-                                  : SystemBubbleWithProfile(
+                                  : SystemBubble(
                                       message: message,
                                       isFirst: isFirst,
                                       maxWidth:
                                           MediaQuery.of(context).size.width *
-                                              0.75,
+                                              0.7,
                                     ),
                               if (isNetworkError && message.isUser)
                                 RetryButtons(
