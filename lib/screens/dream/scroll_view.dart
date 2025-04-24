@@ -41,7 +41,6 @@ class DreamScrollView extends StatelessWidget {
         itemCount: messages.length,
         itemBuilder: (context, index) {
           final message = messages[index];
-          final isFirst = index == 0;
           final isNetworkError = message.isUser && message.isError;
 
           return Align(
@@ -56,11 +55,9 @@ class DreamScrollView extends StatelessWidget {
                 message.isUser
                     ? UserBubble(
                         message: message,
-                        isFirst: isFirst,
                       )
                     : SystemBubble(
                         message: message,
-                        isFirst: isFirst,
                       ),
                 if (isNetworkError && message.isUser)
                   RetryButtons(

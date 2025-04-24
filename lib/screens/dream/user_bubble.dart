@@ -3,12 +3,10 @@ import 'package:haengunse/service/dream/dream_message.dart';
 
 class UserBubble extends StatelessWidget {
   final DreamMessage message;
-  final bool isFirst;
 
   const UserBubble({
     super.key,
     required this.message,
-    required this.isFirst,
   });
 
   @override
@@ -17,7 +15,7 @@ class UserBubble extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints(maxWidth: maxWidth),
-      margin: EdgeInsets.only(top: isFirst ? 0 : 4, bottom: 4),
+      margin: EdgeInsets.only(top: 0, bottom: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.green[100],
