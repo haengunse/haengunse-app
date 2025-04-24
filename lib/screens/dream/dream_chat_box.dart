@@ -4,6 +4,9 @@ import 'package:haengunse/service/dream/dream_message.dart';
 import 'package:haengunse/screens/dream/animated_dots.dart';
 import 'package:haengunse/service/dream/dream_chat_interactor.dart';
 import 'package:haengunse/screens/dream/network_error_dialog.dart';
+import 'package:haengunse/screens/dream/user_bubble.dart';
+import 'package:haengunse/screens/dream/system_bubble.dart';
+import 'package:haengunse/screens/dream/retry_buttons.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -207,67 +210,37 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.75,
-                                ),
-                                margin: EdgeInsets.only(
-                                  top: isFirst ? 0 : 4,
-                                  bottom: 4,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: message.isUser
-                                      ? Colors.green[100]
-                                      : Colors.white.withOpacity(0.85),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: message.isLoading
-                                    ? const AnimatedDots()
-                                    : Text(
-                                        message.text,
-                                        style: const TextStyle(fontSize: 13),
-                                      ),
-                              ),
-                              if (isNetworkError)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          setState(() {
-                                            _messages.removeAt(index);
-                                            _messageKeys.removeAt(index);
-                                          });
-                                        },
-                                        icon: const Icon(Icons.close,
-                                            color: Colors.red),
-                                        label: const Text("취소",
-                                            style:
-                                                TextStyle(color: Colors.red)),
-                                      ),
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          final originalText = message.text;
-
-                                          setState(() {
-                                            _messages.removeAt(index);
-                                            _messageKeys.removeAt(index);
-                                          });
-
-                                          _sendMessage(originalText);
-                                        },
-                                        icon: const Icon(Icons.refresh,
-                                            color: Colors.blue),
-                                        label: const Text("다시 시도",
-                                            style:
-                                                TextStyle(color: Colors.blue)),
-                                      ),
-                                    ],
-                                  ),
+                              message.isUser
+                                  ? UserBubble(
+                                      message: message,
+                                      isFirst: isFirst,
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.75,
+                                    )
+                                  : SystemBubbleWithProfile(
+                                      message: message,
+                                      isFirst: isFirst,
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.75,
+                                    ),
+                              if (isNetworkError && message.isUser)
+                                RetryButtons(
+                                  onCancel: () {
+                                    setState(() {
+                                      _messages.removeAt(index);
+                                      _messageKeys.removeAt(index);
+                                    });
+                                  },
+                                  onRetry: () {
+                                    final originalText = message.text;
+                                    setState(() {
+                                      _messages.removeAt(index);
+                                      _messageKeys.removeAt(index);
+                                    });
+                                    _sendMessage(originalText);
+                                  },
                                 ),
                             ],
                           ),
