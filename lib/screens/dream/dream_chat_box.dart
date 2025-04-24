@@ -159,6 +159,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
 
   @override
   Widget build(BuildContext context) {
+    final double topPadding = MediaQuery.of(context).padding.top;
+
     return Stack(
       children: [
         Image.asset(
@@ -167,105 +169,114 @@ class _DreamChatBoxState extends State<DreamChatBox> {
           width: double.infinity,
           height: double.infinity,
         ),
-        Column(
-          children: [
-            Expanded(
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (_) {
-                  setState(() {});
-                  return false;
-                },
-                child: RawScrollbar(
-                  controller: _scrollController,
-                  thumbVisibility: false,
-                  thickness: 6,
-                  radius: const Radius.circular(10),
-                  thumbColor: Colors.white,
-                  child: ListView.builder(
+        Padding(
+          padding: EdgeInsets.only(top: topPadding),
+          child: Column(
+            children: [
+              Expanded(
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (_) {
+                    setState(() {});
+                    return false;
+                  },
+                  child: RawScrollbar(
                     controller: _scrollController,
-                    physics: const ClampingScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final message = _messages[index];
-                      final isNetworkError = message.isUser && message.isError;
+                    thumbVisibility: false,
+                    thickness: 6,
+                    radius: const Radius.circular(10),
+                    thumbColor: Colors.white,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          top: 0, left: 16, right: 16, bottom: 16),
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final message = _messages[index];
+                        final isFirst = index == 0;
+                        final isNetworkError =
+                            message.isUser && message.isError;
 
-                      return Align(
-                        key: _messageKeys[index],
-                        alignment: message.isUser
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: message.isUser
-                              ? CrossAxisAlignment.end
-                              : CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.75,
-                              ),
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: message.isUser
-                                    ? Colors.green[100]
-                                    : Colors.white.withOpacity(0.85),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: message.isLoading
-                                  ? const AnimatedDots()
-                                  : Text(
-                                      message.text,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                            ),
-                            if (isNetworkError)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        setState(() {
-                                          _messages.removeAt(index);
-                                          _messageKeys.removeAt(index);
-                                        });
-                                      },
-                                      icon: const Icon(Icons.close,
-                                          color: Colors.red),
-                                      label: const Text("취소",
-                                          style: TextStyle(color: Colors.red)),
-                                    ),
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        final originalText = message.text;
-
-                                        setState(() {
-                                          _messages.removeAt(index);
-                                          _messageKeys.removeAt(index);
-                                        });
-
-                                        _sendMessage(originalText);
-                                      },
-                                      icon: const Icon(Icons.refresh,
-                                          color: Colors.blue),
-                                      label: const Text("다시 시도",
-                                          style: TextStyle(color: Colors.blue)),
-                                    ),
-                                  ],
+                        return Align(
+                          key: _messageKeys[index],
+                          alignment: message.isUser
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: message.isUser
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.75,
                                 ),
+                                margin: EdgeInsets.only(
+                                  top: isFirst ? 0 : 4,
+                                  bottom: 4,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: message.isUser
+                                      ? Colors.green[100]
+                                      : Colors.white.withOpacity(0.85),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: message.isLoading
+                                    ? const AnimatedDots()
+                                    : Text(
+                                        message.text,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
                               ),
-                          ],
-                        ),
-                      );
-                    },
+                              if (isNetworkError)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextButton.icon(
+                                        onPressed: () {
+                                          setState(() {
+                                            _messages.removeAt(index);
+                                            _messageKeys.removeAt(index);
+                                          });
+                                        },
+                                        icon: const Icon(Icons.close,
+                                            color: Colors.red),
+                                        label: const Text("취소",
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ),
+                                      TextButton.icon(
+                                        onPressed: () {
+                                          final originalText = message.text;
+
+                                          setState(() {
+                                            _messages.removeAt(index);
+                                            _messageKeys.removeAt(index);
+                                          });
+
+                                          _sendMessage(originalText);
+                                        },
+                                        icon: const Icon(Icons.refresh,
+                                            color: Colors.blue),
+                                        label: const Text("다시 시도",
+                                            style:
+                                                TextStyle(color: Colors.blue)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (_chatCount < 3)
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: _chatCount < 3
@@ -302,8 +313,9 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
               ),
-            const SizedBox(height: 15),
-          ],
+              const SizedBox(height: 15),
+            ],
+          ),
         ),
       ],
     );
