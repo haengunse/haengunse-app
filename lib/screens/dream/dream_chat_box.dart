@@ -97,6 +97,8 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       _messageKeys.add(GlobalKey());
     });
 
+    _scrollToBottom(); // 유저 채팅 입력 후 즉시 스크롤 이동
+
     _controller.clear();
 
     final history = _messages

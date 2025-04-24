@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/dream/animated_dots.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
 
 class SystemBubbleWithProfile extends StatelessWidget {
@@ -45,7 +46,12 @@ class SystemBubbleWithProfile extends StatelessWidget {
               color: Colors.white.withOpacity(0.85),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text(message.text, style: const TextStyle(fontSize: 13)),
+            child: message.isLoading
+                ? const AnimatedDots()
+                : Text(
+                    message.text,
+                    style: const TextStyle(fontSize: 13),
+                  ),
           ),
         ),
       ],
