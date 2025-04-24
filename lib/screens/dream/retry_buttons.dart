@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RetryButtons extends StatelessWidget {
   final VoidCallback onRetry;
@@ -13,19 +14,31 @@ class RetryButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 4),
+      padding: EdgeInsets.only(top: 4.h),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextButton.icon(
             onPressed: onCancel,
-            icon: const Icon(Icons.close, color: Colors.red),
-            label: const Text("취소", style: TextStyle(color: Colors.red)),
+            icon: Icon(Icons.close, color: Colors.red, size: 16.sp),
+            label: Text(
+              "취소",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 13.sp,
+              ),
+            ),
           ),
           TextButton.icon(
             onPressed: onRetry,
-            icon: const Icon(Icons.refresh, color: Colors.blue),
-            label: const Text("다시 시도", style: TextStyle(color: Colors.blue)),
+            icon: Icon(Icons.refresh, color: Colors.blue, size: 16.sp),
+            label: Text(
+              "다시 시도",
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 13.sp,
+              ),
+            ),
           ),
         ],
       ),

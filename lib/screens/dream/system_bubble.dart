@@ -5,17 +5,17 @@ import 'package:haengunse/service/dream/dream_message.dart';
 class SystemBubble extends StatelessWidget {
   final DreamMessage message;
   final bool isFirst;
-  final double maxWidth;
 
   const SystemBubble({
     super.key,
     required this.message,
     required this.isFirst,
-    required this.maxWidth,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double maxWidth = MediaQuery.of(context).size.width * 0.7;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -26,9 +26,9 @@ class SystemBubble extends StatelessWidget {
             height: 36,
             decoration: const BoxDecoration(
               color: Colors.white,
-              shape: BoxShape.circle, // 완전 원형
+              shape: BoxShape.circle,
             ),
-            padding: const EdgeInsets.all(2), // 내부 이미지 여백
+            padding: const EdgeInsets.all(2),
             child: ClipOval(
               child: Image.asset(
                 'assets/images/moon_profile.png',

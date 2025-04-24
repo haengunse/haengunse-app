@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/service/dream/dream_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:haengunse/screens/dream/scroll_view.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
-import 'package:haengunse/screens/dream/animated_dots.dart';
 import 'package:haengunse/service/dream/dream_chat_interactor.dart';
 import 'package:haengunse/screens/dream/network_error_dialog.dart';
-import 'package:haengunse/screens/dream/user_bubble.dart';
-import 'package:haengunse/screens/dream/system_bubble.dart';
-import 'package:haengunse/screens/dream/retry_buttons.dart';
 import 'package:haengunse/screens/dream/chat_input.dart';
 
 class DreamChatBox extends StatefulWidget {
@@ -22,6 +19,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   final List<DreamMessage> _messages = [];
   final List<GlobalKey> _messageKeys = [];
   int _chatCount = 0;
+  bool _isWaitingResponse = false;
 
   @override
   void initState() {
@@ -49,7 +47,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   void _scrollToBottom({bool smooth = true}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) return;
-
       Future.delayed(const Duration(milliseconds: 30), () {
         final offset = _scrollController.position.maxScrollExtent;
         if (smooth) {
@@ -67,20 +64,15 @@ class _DreamChatBoxState extends State<DreamChatBox> {
 
   void _retryMessage(String input) {
     setState(() {
-      final index = _messages.indexWhere(
-        (m) => m.isUser && m.text == input && m.isError,
-      );
+      final index =
+          _messages.indexWhere((m) => m.isUser && m.text == input && m.isError);
       if (index != -1) {
         _messages.removeAt(index);
         _messageKeys.removeAt(index);
       }
     });
-
-    // 재전송
     _sendMessage(input);
   }
-
-  bool _isWaitingResponse = false;
 
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3 || _isWaitingResponse) return;
@@ -89,29 +81,22 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       _isWaitingResponse = true;
       _messages.add(DreamMessage(text: input, isUser: true));
       _messageKeys.add(GlobalKey());
-
-      _messages.add(DreamMessage(
-        text: "loading",
-        isUser: false,
-        isLoading: true,
-      ));
+      _messages
+          .add(DreamMessage(text: "loading", isUser: false, isLoading: true));
       _messageKeys.add(GlobalKey());
     });
 
-    _scrollToBottom(); // 유저 채팅 입력 후 즉시 스크롤 이동
-
+    _scrollToBottom();
     _controller.clear();
 
     final history = _messages
         .where((m) => m.isUser && !m.isError)
         .map((m) => m.text)
         .toList();
-
     final result = await DreamChatInteractor.processChat(history);
 
     setState(() {
-      final last = _messages.isNotEmpty ? _messages.last : null;
-      if (last != null && last.isLoading) {
+      if (_messages.isNotEmpty && _messages.last.isLoading) {
         _messages.removeLast();
         _messageKeys.removeLast();
       }
@@ -124,7 +109,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       });
 
       _chatCount++;
-
       if (_chatCount == 1) {
         await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
@@ -142,13 +126,12 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     } else if (result.isNetworkError) {
       setState(() {
         _isWaitingResponse = false;
-        _messages.removeLast(); // 로딩 제거
+        _messages.removeLast();
         _messageKeys.removeLast();
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
 
-      // 네트워크 에러 팝업
       showDialog(
         context: context,
         builder: (context) => const NetworkErrorDialog(),
@@ -180,81 +163,21 @@ class _DreamChatBoxState extends State<DreamChatBox> {
           child: Column(
             children: [
               Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (_) {
-                    setState(() {});
-                    return false;
+                child: DreamScrollView(
+                  scrollController: _scrollController,
+                  messages: _messages,
+                  messageKeys: _messageKeys,
+                  onRetry: (text) => _sendMessage(text),
+                  onCancel: (index) {
+                    setState(() {
+                      _messages.removeAt(index);
+                      _messageKeys.removeAt(index);
+                    });
                   },
-                  child: RawScrollbar(
-                    controller: _scrollController,
-                    thumbVisibility: false,
-                    thickness: 6,
-                    radius: const Radius.circular(10),
-                    thumbColor: Colors.white,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      physics: const ClampingScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                          top: 0, left: 16, right: 16, bottom: 16),
-                      itemCount: _messages.length,
-                      itemBuilder: (context, index) {
-                        final message = _messages[index];
-                        final isFirst = index == 0;
-                        final isNetworkError =
-                            message.isUser && message.isError;
-
-                        return Align(
-                          key: _messageKeys[index],
-                          alignment: message.isUser
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: Column(
-                            crossAxisAlignment: message.isUser
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              message.isUser
-                                  ? UserBubble(
-                                      message: message,
-                                      isFirst: isFirst,
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.6,
-                                    )
-                                  : SystemBubble(
-                                      message: message,
-                                      isFirst: isFirst,
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.7,
-                                    ),
-                              if (isNetworkError && message.isUser)
-                                RetryButtons(
-                                  onCancel: () {
-                                    setState(() {
-                                      _messages.removeAt(index);
-                                      _messageKeys.removeAt(index);
-                                    });
-                                  },
-                                  onRetry: () {
-                                    final originalText = message.text;
-                                    setState(() {
-                                      _messages.removeAt(index);
-                                      _messageKeys.removeAt(index);
-                                    });
-                                    _sendMessage(originalText);
-                                  },
-                                ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(12.w),
                 child: _chatCount < 3
                     ? DreamChatInput(
                         controller: _controller,
@@ -262,7 +185,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                       )
                     : const LimitMessageBox(),
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15.h),
             ],
           ),
         ),
