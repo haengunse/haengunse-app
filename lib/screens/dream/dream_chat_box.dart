@@ -308,9 +308,25 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                           ],
                         ),
                       )
-                    : const Text(
-                        "꿈 해몽은 하루에 한 번만 가능해요! 궁금하다면 내일 다시 찾아와주세요.",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                    : Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          "꿈 해몽은 하루에 한 번만 가능해요!\n궁금하다면 내일 다시 찾아와주세요.",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                            height: 1.5,
+                            fontFamily: 'Pretendard',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
               ),
               const SizedBox(height: 15),
