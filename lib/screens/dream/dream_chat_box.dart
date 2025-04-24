@@ -7,6 +7,7 @@ import 'package:haengunse/screens/dream/network_error_dialog.dart';
 import 'package:haengunse/screens/dream/user_bubble.dart';
 import 'package:haengunse/screens/dream/system_bubble.dart';
 import 'package:haengunse/screens/dream/retry_buttons.dart';
+import 'package:haengunse/screens/dream/chat_input.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -255,54 +256,11 @@ class _DreamChatBoxState extends State<DreamChatBox> {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: _chatCount < 3
-                    ? Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _controller,
-                                onSubmitted: (value) => _sendMessage(value),
-                                style: const TextStyle(fontSize: 14),
-                                decoration: const InputDecoration(
-                                  hintText: "꿈 이야기를 들려주세요",
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () => _sendMessage(_controller.text),
-                              icon: const Icon(Icons.send, color: Colors.black),
-                              splashRadius: 20,
-                            ),
-                          ],
-                        ),
+                    ? DreamChatInput(
+                        controller: _controller,
+                        onSend: () => _sendMessage(_controller.text),
                       )
-                    : Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text(
-                          "꿈 해몽은 하루에 한 번만 가능해요!\n궁금하다면 내일 다시 찾아와주세요.",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                            height: 1.5,
-                            fontFamily: 'Pretendard',
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                    : const LimitMessageBox(),
               ),
               const SizedBox(height: 15),
             ],
