@@ -167,12 +167,19 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                   scrollController: _scrollController,
                   messages: _messages,
                   messageKeys: _messageKeys,
-                  onRetry: (text) => _sendMessage(text),
                   onCancel: (index) {
                     setState(() {
                       _messages.removeAt(index);
                       _messageKeys.removeAt(index);
                     });
+                  },
+                  onRetry: (index) {
+                    final originalText = _messages[index].text;
+                    setState(() {
+                      _messages.removeAt(index); // 에러 메시지 제거
+                      _messageKeys.removeAt(index); // 키도 제거
+                    });
+                    _sendMessage(originalText); // 동일한 텍스트로 다시 전송
                   },
                 ),
               ),

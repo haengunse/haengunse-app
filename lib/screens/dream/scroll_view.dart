@@ -9,7 +9,7 @@ class DreamScrollView extends StatelessWidget {
   final ScrollController scrollController;
   final List<DreamMessage> messages;
   final List<GlobalKey> messageKeys;
-  final void Function(String input) onRetry;
+  final void Function(int index) onRetry;
   final void Function(int index) onCancel;
 
   const DreamScrollView({
@@ -61,9 +61,10 @@ class DreamScrollView extends StatelessWidget {
                       ),
                 if (isNetworkError && message.isUser)
                   RetryButtons(
-                    onCancel: () => onCancel(index),
-                    onRetry: () => onRetry(message.text),
-                  ),
+                    index: index,
+                    onCancel: onCancel,
+                    onRetry: onRetry,
+                  )
               ],
             ),
           );

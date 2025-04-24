@@ -27,7 +27,7 @@ class DreamChatInput extends StatelessWidget {
               onSubmitted: (_) => onSend(),
               style: TextStyle(fontSize: 14.sp),
               decoration: InputDecoration(
-                hintText: "꿈 이야기를 들려주세요",
+                hintText: "꿈 이야기를 들려주세요.",
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 10.h),
