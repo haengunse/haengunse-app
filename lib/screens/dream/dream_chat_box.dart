@@ -268,36 +268,41 @@ class _DreamChatBoxState extends State<DreamChatBox> {
             if (_chatCount < 3)
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        onSubmitted: (value) => _sendMessage(value),
-                        decoration: const InputDecoration(
-                          hintText: "꿈 이야기를 들려주세요",
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(),
+                child: _chatCount < 3
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD9D9D9),
+                          borderRadius: BorderRadius.circular(30),
                         ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                onSubmitted: (value) => _sendMessage(value),
+                                style: const TextStyle(fontSize: 14),
+                                decoration: const InputDecoration(
+                                  hintText: "꿈 이야기를 들려주세요",
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () => _sendMessage(_controller.text),
+                              icon: const Icon(Icons.send, color: Colors.black),
+                              splashRadius: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Text(
+                        "꿈 해몽은 하루에 한 번만 가능해요! 궁금하다면 내일 다시 찾아와주세요.",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: () => _sendMessage(_controller.text),
-                    ),
-                  ],
-                ),
-              )
-            else
-              const Padding(
-                padding: EdgeInsets.all(12),
-                child: Text(
-                  "꿈 해몽은 하루에 한 번만 가능해요! 궁금하다면 내일 다시 찾아와주세요.",
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
               ),
+            const SizedBox(height: 15),
           ],
         ),
       ],
