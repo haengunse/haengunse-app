@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/dream/scroll_view.dart';
 import 'package:haengunse/service/dream/dream_message.dart';
 import 'package:haengunse/service/dream/dream_chat_interactor.dart';
+import 'package:haengunse/service/dream/dream_chat_storage.dart';
 import 'package:haengunse/screens/dream/network_error_dialog.dart';
 import 'package:haengunse/screens/dream/chat_input.dart';
 
@@ -24,8 +25,23 @@ class _DreamChatBoxState extends State<DreamChatBox> {
   @override
   void initState() {
     super.initState();
-    _addSystemMessage(
-        "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.");
+    _loadChatFromStorage();
+  }
+
+  Future<void> _loadChatFromStorage() async {
+    final (loadedMessages, loadedCount) = await DreamChatStorage.loadChat();
+
+    setState(() {
+      _messages.addAll(loadedMessages);
+      _messageKeys
+          .addAll(List.generate(loadedMessages.length, (_) => GlobalKey()));
+      _chatCount = loadedCount;
+    });
+
+    if (_messages.isEmpty) {
+      _addSystemMessage(
+          "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.");
+    }
   }
 
   void _addSystemMessage(String text) {
@@ -33,14 +49,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       _messages.add(DreamMessage(text: text, isUser: false));
       _messageKeys.add(GlobalKey());
     });
-    _scrollToBottom();
-  }
-
-  void _addUserMessage(String text) {
-    setState(() {
-      _messages.add(DreamMessage(text: text, isUser: true));
-      _messageKeys.add(GlobalKey());
-    });
+    _saveChat();
     _scrollToBottom();
   }
 
@@ -62,18 +71,6 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     });
   }
 
-  void _retryMessage(String input) {
-    setState(() {
-      final index =
-          _messages.indexWhere((m) => m.isUser && m.text == input && m.isError);
-      if (index != -1) {
-        _messages.removeAt(index);
-        _messageKeys.removeAt(index);
-      }
-    });
-    _sendMessage(input);
-  }
-
   void _sendMessage(String input) async {
     if (input.trim().isEmpty || _chatCount >= 3 || _isWaitingResponse) return;
 
@@ -88,6 +85,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
 
     _scrollToBottom();
     _controller.clear();
+    _saveChat();
 
     final history = _messages
         .where((m) => m.isUser && !m.isError)
@@ -106,9 +104,9 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       setState(() {
         _messages.add(DreamMessage(text: result.reply!, isUser: false));
         _messageKeys.add(GlobalKey());
+        _chatCount++;
       });
 
-      _chatCount++;
       if (_chatCount == 1) {
         await Future.delayed(const Duration(milliseconds: 300));
         _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
@@ -123,6 +121,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
       setState(() {
         _isWaitingResponse = false;
       });
+      _saveChat();
     } else if (result.isNetworkError) {
       setState(() {
         _isWaitingResponse = false;
@@ -131,6 +130,7 @@ class _DreamChatBoxState extends State<DreamChatBox> {
         _messages.add(DreamMessage(text: input, isUser: true, isError: true));
         _messageKeys.add(GlobalKey());
       });
+      _saveChat();
 
       showDialog(
         context: context,
@@ -144,6 +144,10 @@ class _DreamChatBoxState extends State<DreamChatBox> {
     }
 
     _scrollToBottom();
+  }
+
+  void _saveChat() {
+    DreamChatStorage.saveChat(_messages, _chatCount);
   }
 
   @override
@@ -172,14 +176,16 @@ class _DreamChatBoxState extends State<DreamChatBox> {
                       _messages.removeAt(index);
                       _messageKeys.removeAt(index);
                     });
+                    _saveChat();
                   },
                   onRetry: (index) {
                     final originalText = _messages[index].text;
                     setState(() {
-                      _messages.removeAt(index); // 에러 메시지 제거
-                      _messageKeys.removeAt(index); // 키도 제거
+                      _messages.removeAt(index);
+                      _messageKeys.removeAt(index);
                     });
-                    _sendMessage(originalText); // 동일한 텍스트로 다시 전송
+                    _saveChat();
+                    _sendMessage(originalText);
                   },
                 ),
               ),
