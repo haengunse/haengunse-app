@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/dream/scroll_view.dart';
-import 'package:haengunse/service/dream/dream_message.dart';
-import 'package:haengunse/service/dream/dream_chat_interactor.dart';
-import 'package:haengunse/service/dream/dream_chat_storage.dart';
-import 'package:haengunse/screens/dream/network_error_dialog.dart';
 import 'package:haengunse/screens/dream/chat_input.dart';
+import 'package:haengunse/screens/dream/network_error_dialog.dart';
+import 'package:haengunse/service/dream/dream_chat_logic.dart';
 
 class DreamChatBox extends StatefulWidget {
   const DreamChatBox({super.key});
@@ -15,144 +13,28 @@ class DreamChatBox extends StatefulWidget {
 }
 
 class _DreamChatBoxState extends State<DreamChatBox> {
-  final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final List<DreamMessage> _messages = [];
-  final List<GlobalKey> _messageKeys = [];
-  int _chatCount = 0;
-  bool _isWaitingResponse = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadChatFromStorage();
-  }
-
-  Future<void> _loadChatFromStorage() async {
-    final (loadedMessages, loadedCount) = await DreamChatStorage.loadChat();
-
-    setState(() {
-      _messages.addAll(loadedMessages);
-      _messageKeys
-          .addAll(List.generate(loadedMessages.length, (_) => GlobalKey()));
-      _chatCount = loadedCount;
-    });
-
-    if (_messages.isEmpty) {
-      _addSystemMessage(
-          "꿈은 마음이 보내는 반짝이는 메시지일지도 몰라요. 어떤 꿈이었는지 저에게 살짝 들려주신다면, 해석해드릴게요.");
-    }
-  }
-
-  void _addSystemMessage(String text) {
-    setState(() {
-      _messages.add(DreamMessage(text: text, isUser: false));
-      _messageKeys.add(GlobalKey());
-    });
-    _saveChat();
-    _scrollToBottom();
-  }
-
-  void _scrollToBottom({bool smooth = true}) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_scrollController.hasClients) return;
-      Future.delayed(const Duration(milliseconds: 30), () {
-        final offset = _scrollController.position.maxScrollExtent;
-        if (smooth) {
-          _scrollController.animateTo(
-            offset,
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.easeInOutCubic,
-          );
-        } else {
-          _scrollController.jumpTo(offset);
-        }
-      });
-    });
-  }
-
-  void _sendMessage(String input) async {
-    if (input.trim().isEmpty || _chatCount >= 3 || _isWaitingResponse) return;
-
-    setState(() {
-      _isWaitingResponse = true;
-      _messages.add(DreamMessage(text: input, isUser: true));
-      _messageKeys.add(GlobalKey());
-      _messages
-          .add(DreamMessage(text: "loading", isUser: false, isLoading: true));
-      _messageKeys.add(GlobalKey());
-    });
-
-    _scrollToBottom();
-    _controller.clear();
-    _saveChat();
-
-    final history = _messages
-        .where((m) => m.isUser && !m.isError)
-        .map((m) => m.text)
-        .toList();
-    final result = await DreamChatInteractor.processChat(history);
-
-    setState(() {
-      if (_messages.isNotEmpty && _messages.last.isLoading) {
-        _messages.removeLast();
-        _messageKeys.removeLast();
-      }
-    });
-
-    if (result.reply != null) {
-      setState(() {
-        _messages.add(DreamMessage(text: result.reply!, isUser: false));
-        _messageKeys.add(GlobalKey());
-        _chatCount++;
-      });
-
-      if (_chatCount == 1) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
-      } else if (_chatCount == 2) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        _addSystemMessage("조금 더 깊이 들어가볼 수도 있어요...");
-      } else if (_chatCount == 3) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요...");
-      }
-
-      setState(() {
-        _isWaitingResponse = false;
-      });
-      _saveChat();
-    } else if (result.isNetworkError) {
-      setState(() {
-        _isWaitingResponse = false;
-        _messages.removeLast();
-        _messageKeys.removeLast();
-        _messages.add(DreamMessage(text: input, isUser: true, isError: true));
-        _messageKeys.add(GlobalKey());
-      });
-      _saveChat();
-
+  final _controller = TextEditingController();
+  final _scrollController = ScrollController();
+  late final _chatController = DreamChatBoxController(
+    scrollController: _scrollController,
+    onUpdate: () => setState(() {}),
+    onShowErrorDialog: () {
       showDialog(
         context: context,
         builder: (context) => const NetworkErrorDialog(),
       );
-    } else {
-      setState(() {
-        _isWaitingResponse = false;
-      });
-      _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
-    }
+    },
+  );
 
-    _scrollToBottom();
-  }
-
-  void _saveChat() {
-    DreamChatStorage.saveChat(_messages, _chatCount);
+  @override
+  void initState() {
+    super.initState();
+    _chatController.init();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double topPadding = MediaQuery.of(context).padding.top;
+    final topPadding = MediaQuery.of(context).padding.top;
 
     return Stack(
       children: [
@@ -169,32 +51,19 @@ class _DreamChatBoxState extends State<DreamChatBox> {
               Expanded(
                 child: DreamScrollView(
                   scrollController: _scrollController,
-                  messages: _messages,
-                  messageKeys: _messageKeys,
-                  onCancel: (index) {
-                    setState(() {
-                      _messages.removeAt(index);
-                      _messageKeys.removeAt(index);
-                    });
-                    _saveChat();
-                  },
-                  onRetry: (index) {
-                    final originalText = _messages[index].text;
-                    setState(() {
-                      _messages.removeAt(index);
-                      _messageKeys.removeAt(index);
-                    });
-                    _saveChat();
-                    _sendMessage(originalText);
-                  },
+                  messages: _chatController.messages,
+                  messageKeys: _chatController.messageKeys,
+                  onCancel: _chatController.cancelMessage,
+                  onRetry: _chatController.retryMessage,
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(12.w),
-                child: _chatCount < 3
+                child: _chatController.chatCount < 3
                     ? DreamChatInput(
                         controller: _controller,
-                        onSend: () => _sendMessage(_controller.text),
+                        onSend: () => _chatController.sendMessage(
+                            _controller.text, _controller),
                       )
                     : const LimitMessageBox(),
               ),
