@@ -21,9 +21,12 @@ class DreamChatBoxController {
 
   void init() async {
     final (loadedMessages, loadedCount) = await DreamChatStorage.loadChat();
-    messages.addAll(loadedMessages);
+
+    final cleanedMessages = loadedMessages.where((m) => !m.isLoading).toList();
+
+    messages.addAll(cleanedMessages);
     messageKeys
-        .addAll(List.generate(loadedMessages.length, (_) => GlobalKey()));
+        .addAll(List.generate(cleanedMessages.length, (_) => GlobalKey()));
     chatCount = loadedCount;
     onUpdate();
 
