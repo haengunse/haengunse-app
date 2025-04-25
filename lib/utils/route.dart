@@ -7,6 +7,7 @@ import 'package:haengunse/screens/today/today_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
 import 'package:haengunse/screens/card/dream_screen.dart';
+import 'package:haengunse/screens/card/year_screen.dart';
 import 'package:haengunse/service/card/card_api.dart';
 
 class RouteGenerator {
@@ -33,6 +34,9 @@ class RouteGenerator {
       case '/todaysplash':
         return MaterialPageRoute(
             builder: (_) => const TodayProgressLoadingPage());
+
+      case CardRoute.year:
+        return MaterialPageRoute(builder: (_) => const YearScreen());
 
       case CardRoute.star:
         return MaterialPageRoute(builder: (_) => const StarScreen());

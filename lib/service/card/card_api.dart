@@ -21,6 +21,7 @@ class CardRoute {
   static const String star = '/star';
   static const String zodiac = '/zodiac';
   static const String dream = '/dream';
+  static const String year = '/year';
 }
 
 class CardService {
@@ -28,6 +29,12 @@ class CardService {
     await Future.delayed(const Duration(milliseconds: 300));
 
     return [
+      FortuneCardData(
+        imagePath: 'assets/images/fortune_year.png',
+        smallTitle: '사주로 보는 올해의 나',
+        bigTitle: '신년 사주',
+        route: CardRoute.year,
+      ),
       FortuneCardData(
         imagePath: 'assets/images/fortune_star.png',
         smallTitle: '별이 건네는 이야기',
