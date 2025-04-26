@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:haengunse/config.dart';
+import 'package:haengunse/screens/card/saju_loading_page.dart';
+import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/utils/request_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FortuneCardData {
   final String imagePath;
@@ -21,7 +24,7 @@ class CardRoute {
   static const String star = '/star';
   static const String zodiac = '/zodiac';
   static const String dream = '/dream';
-  static const String year = '/year';
+  static const String saju = '/saju';
 }
 
 class CardService {
@@ -30,10 +33,10 @@ class CardService {
 
     return [
       FortuneCardData(
-        imagePath: 'assets/images/fortune_year.png',
-        smallTitle: '사주로 보는 올해의 나',
-        bigTitle: '신년 사주',
-        route: CardRoute.year,
+        imagePath: 'assets/images/fortune.png',
+        smallTitle: '사주로 보는 나만의 흐름',
+        bigTitle: '사주 운세',
+        route: CardRoute.saju,
       ),
       FortuneCardData(
         imagePath: 'assets/images/fortune_star.png',
@@ -67,6 +70,51 @@ class CardService {
       return;
     }
 
+    if (route == CardRoute.saju) {
+      showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5), // 전체 화면 반투명
+        transitionDuration: const Duration(milliseconds: 150),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return const SajuLoadingPage();
+        },
+      );
+
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final manseInfo = prefs.getString('manseInfo') ?? '';
+        final gender = prefs.getString('gender') ?? 'M';
+
+        final dio = Dio();
+        final response = await dio.post(Config.sajuApiUrl, data: {
+          "manseInfo": manseInfo,
+          "gender": gender,
+        });
+
+        if (context.mounted) Navigator.pop(context); // 로딩 닫기
+
+        if (response.statusCode == 200 && response.data['text'] != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SajuScreen(
+                manseInfo: manseInfo,
+                resultText: response.data['text'],
+              ),
+            ),
+          );
+        } else {
+          throw Exception("응답 형식 오류");
+        }
+      } catch (e) {
+        if (context.mounted) Navigator.pop(context);
+        retry();
+      }
+
+      return;
+    }
+
     String? uri;
     switch (route) {
       case CardRoute.star:
@@ -82,13 +130,13 @@ class CardService {
       fetch: () async {
         final dio = Dio();
         final response = await dio.get(uri!);
-        debugPrint("응답 데이터: \${response.data}");
+        debugPrint("응답 데이터: ${response.data}");
 
         if (response.statusCode == 200) {
           final data = response.data;
           if (data is List && data.isNotEmpty) {
             final firstItem = data[0];
-            debugPrint("mainMessage: \${firstItem['content']['mainMessage']}");
+            debugPrint("mainMessage: ${firstItem['content']['mainMessage']}");
             return true;
           }
         }

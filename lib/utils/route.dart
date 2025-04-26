@@ -3,7 +3,6 @@ import 'package:haengunse/screens/today/%08today_loading_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home/home_screen.dart';
 import 'package:haengunse/screens/onboarding/input_screen.dart';
-import 'package:haengunse/screens/today/today_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
 import 'package:haengunse/screens/card/dream_screen.dart';
@@ -34,9 +33,6 @@ class RouteGenerator {
       case '/todaysplash':
         return MaterialPageRoute(
             builder: (_) => const TodayProgressLoadingPage());
-
-      case CardRoute.year:
-        return MaterialPageRoute(builder: (_) => const YearScreen());
 
       case CardRoute.star:
         return MaterialPageRoute(builder: (_) => const StarScreen());
