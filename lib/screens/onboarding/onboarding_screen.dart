@@ -9,11 +9,36 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
+
+    // ✅ Fade In 애니메이션 세팅
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800), // 0.8초
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
+
+    _animationController.forward(); // 시작하자마자 재생
+
+    // 네비게이션도 같이 실행
     OnboardingController.handleNavigation(context);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // 메모리 누수 방지
+    super.dispose();
   }
 
   @override
@@ -21,44 +46,47 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // ⭐ 배경 이미지
+          // 배경 이미지
           Positioned.fill(
             child: Image.asset(
               'assets/images/onboarding_background.png',
               fit: BoxFit.cover,
             ),
           ),
-          // ⭐ 메인 콘텐츠
+          // 메인 콘텐츠
           Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/onboarding_fortune.png',
-                  width: 180.w,
-                  height: 180.w,
-                ),
-                SizedBox(height: 5.h),
-                Text(
-                  "행운세",
-                  style: TextStyle(
-                    fontFamily: 'HakgyoansimDunggeunmiso',
-                    fontSize: 36.sp,
-                    fontWeight: FontWeight.w100,
-                    color: Colors.grey[800],
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/onboarding_fortune.png',
+                    width: 180.w,
+                    height: 180.w,
                   ),
-                ),
-                SizedBox(height: 5.h),
-                Text(
-                  "오늘은 어떤 하루일까요?",
-                  style: TextStyle(
-                    fontFamily: 'HakgyoansimDunggeunmiso',
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w100,
-                    color: const Color.fromARGB(255, 102, 152, 104),
+                  SizedBox(height: 5.h),
+                  Text(
+                    "행운세",
+                    style: TextStyle(
+                      fontFamily: 'HakgyoansimDunggeunmiso',
+                      fontSize: 36.sp,
+                      fontWeight: FontWeight.w100,
+                      color: const Color.fromARGB(255, 96, 95, 95),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 5.h),
+                  Text(
+                    "오늘은 어떤 하루일까요?",
+                    style: TextStyle(
+                      fontFamily: 'HakgyoansimDunggeunmiso',
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w100,
+                      color: const Color.fromARGB(255, 114, 172, 116),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
