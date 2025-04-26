@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/onboarding/onboarding_screen.dart';
 import 'package:haengunse/screens/today/%08today_loading_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/home/home_screen.dart';
-import 'package:haengunse/screens/onboarding/input_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
 import 'package:haengunse/screens/card/dream_screen.dart';
-import 'package:haengunse/screens/card/year_screen.dart';
 import 'package:haengunse/service/card/card_api.dart';
 
 class RouteGenerator {
@@ -14,20 +11,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (context) => FutureBuilder<bool>(
-            future: SharedPreferences.getInstance().then((prefs) {
-              prefs.clear(); // <- 테스트 시에만 사용
-              return prefs.getBool('isFirstRun') ?? true;
-            }),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
-                );
-              }
-              return snapshot.data! ? const InputScreen() : const HomeScreen();
-            },
-          ),
+          builder: (_) => const OnboardingScreen(),
         );
 
       case '/todaysplash':

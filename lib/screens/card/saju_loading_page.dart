@@ -21,7 +21,7 @@ class SajuLoadingPage extends StatelessWidget {
             ),
             const SizedBox(height: 25),
             const Text(
-              "신년 사주를 해석 중이에요...",
+              "사주 정보를 해석 중이에요...",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
