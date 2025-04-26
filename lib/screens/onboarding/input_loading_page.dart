@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:haengunse/service/onboarding/manse_interactor.dart';
+import 'package:haengunse/service/onboarding/input_loading_controller.dart';
 
-class ProgressLoadingPage extends StatefulWidget {
+class InputLoadingPage extends StatefulWidget {
   final Map<String, dynamic> payload;
 
-  const ProgressLoadingPage({super.key, required this.payload});
+  const InputLoadingPage({super.key, required this.payload});
 
   @override
-  State<ProgressLoadingPage> createState() => _ProgressLoadingPageState();
+  State<InputLoadingPage> createState() => _InputLoadingPageState();
 }
 
-class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
+class _InputLoadingPageState extends State<InputLoadingPage> {
+  late final InputLoadingController _controller;
+
   @override
   void initState() {
     super.initState();
-    _startRequest();
-  }
-
-  void _startRequest() {
-    final interactor = ManseInteractor(
+    _controller = InputLoadingController(
       context: context,
       payload: widget.payload,
     );
-    interactor.handleManseRequest();
+    _controller.start();
   }
 
   @override
@@ -35,8 +33,8 @@ class _ProgressLoadingPageState extends State<ProgressLoadingPage> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // 수직 가운데 정렬
-              crossAxisAlignment: CrossAxisAlignment.center, // 수평 가운데 정렬
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
                 SizedBox(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:haengunse/screens/onboarding/progress_loading_page.dart';
+import 'package:haengunse/screens/onboarding/input_loading_page.dart';
 
 class InputController {
   static Future<void> saveAndNavigateHome({
@@ -45,7 +45,7 @@ class InputController {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => ProgressLoadingPage(payload: payload),
+        builder: (_) => InputLoadingPage(payload: payload),
       ),
     );
   }
