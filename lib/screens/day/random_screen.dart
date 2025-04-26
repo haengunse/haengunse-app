@@ -31,7 +31,7 @@ class RandomScreen extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20.h),
+              SizedBox(height: 15.h),
               Image.asset(
                 'assets/images/random_card.png',
                 width: 150.w,
