@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/utils/onboarding_controller.dart';
+import 'package:haengunse/service/onboarding/onboarding_controller.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

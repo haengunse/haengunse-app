@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:haengunse/service/manse/manse_interactor.dart';
+import 'package:haengunse/service/onboarding/manse_interactor.dart';
 
 class ProgressLoadingPage extends StatefulWidget {
   final Map<String, dynamic> payload;

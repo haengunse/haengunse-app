@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/onboarding/progress_loading_page.dart';
-import 'package:haengunse/service/manse/manse_api.dart';
+import 'package:haengunse/service/onboarding/manse_api.dart';
+import 'package:haengunse/service/onboarding/input_controller.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
@@ -40,37 +40,14 @@ class _InputScreenState extends State<InputScreen> {
   ];
 
   Future<void> _saveAndGoHome() async {
-    if (_nameController.text.isEmpty ||
-        _selectedDate == null ||
-        !_agreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("필수 항목을 모두 입력해 주세요.")),
-      );
-      return;
-    }
-
-    final formattedBirthDate =
-        "${_selectedDate!.year.toString().padLeft(4, '0')}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
-
-    final isSolar = _calendarType == "양력";
-    final birthTimeLabel =
-        _selectedBirthTime == null || _selectedBirthTime == "모름"
-            ? "모름"
-            : _selectedBirthTime!;
-
-    final payload = {
-      "birthDate": formattedBirthDate,
-      "solar": isSolar,
-      "birthTime": birthTimeLabel,
-      "gender": _gender,
-      "name": _nameController.text,
-    };
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProgressLoadingPage(payload: payload),
-      ),
+    await InputController.saveAndNavigateHome(
+      context: context,
+      name: _nameController.text,
+      selectedDate: _selectedDate,
+      calendarType: _calendarType,
+      gender: _gender,
+      selectedBirthTime: _selectedBirthTime,
+      agreedToTerms: _agreedToTerms,
     );
   }
 
