@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/onboarding/onboarding_controller.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -20,38 +21,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // 배경 이미지
+          // ⭐ 배경 이미지
           Positioned.fill(
             child: Image.asset(
               'assets/images/onboarding_background.png',
               fit: BoxFit.cover,
             ),
           ),
-          // 가운데 메인 콘텐츠
+          // ⭐ 메인 콘텐츠
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
                   'assets/images/onboarding_fortune.png',
-                  width: 160,
-                  height: 160,
+                  width: 180.w,
+                  height: 180.w,
                 ),
-                const SizedBox(height: 24),
-                const Text(
+                SizedBox(height: 5.h),
+                Text(
                   "행운세",
                   style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontFamily: 'HakgyoansimDunggeunmiso',
+                    fontSize: 36.sp,
+                    fontWeight: FontWeight.w100,
+                    color: Colors.grey[800],
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 5.h),
+                Text(
                   "오늘은 어떤 하루일까요?",
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
+                    fontFamily: 'HakgyoansimDunggeunmiso',
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w100,
+                    color: const Color.fromARGB(255, 102, 152, 104),
                   ),
                 ),
               ],

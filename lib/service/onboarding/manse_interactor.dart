@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/screens/home/home_screen.dart';
-import 'package:haengunse/service/manse/manse_repository.dart';
+import 'package:haengunse/service/onboarding/manse_repository.dart';
 import 'package:haengunse/utils/request_helper.dart';
 import 'package:haengunse/screens/onboarding/input_screen.dart';
 

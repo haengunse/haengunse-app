@@ -105,5 +105,12 @@ flutter:
           weight: 800
         - asset: assets/fonts/Pretendard-Black.ttf
           weight: 900
+
+    - family: HakgyoansimDunggeunmiso
+      fonts:
+        - asset: assets/fonts/Hakgyoansim_Dunggeunmiso_B.ttf
+          weight: 100
+        - asset: assets/fonts/Hakgyoansim_Dunggeunmiso_R.ttf
+          weight: 200
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
