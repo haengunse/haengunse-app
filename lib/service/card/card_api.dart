@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:haengunse/config.dart';
 import 'package:haengunse/screens/card/saju_loading_page.dart';
-import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/utils/request_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +29,6 @@ class CardRoute {
 class CardService {
   static Future<List<FortuneCardData>> fetchFortuneCards() async {
     await Future.delayed(const Duration(milliseconds: 300));
-
     return [
       FortuneCardData(
         imagePath: 'assets/images/fortune.png',
@@ -62,59 +60,72 @@ class CardService {
   static Future<void> fetchCardData({
     required BuildContext context,
     required String route,
-    required void Function() onSuccess,
+    required void Function(dynamic data) onSuccess,
     required VoidCallback retry,
   }) async {
     if (route == CardRoute.dream) {
-      onSuccess();
+      onSuccess(null);
       return;
     }
 
     if (route == CardRoute.saju) {
-      showGeneralDialog(
-        context: context,
-        barrierDismissible: false,
-        barrierColor: Colors.black.withOpacity(0.5), // 전체 화면 반투명
-        transitionDuration: const Duration(milliseconds: 150),
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return const SajuLoadingPage();
-        },
-      );
-
-      try {
-        final prefs = await SharedPreferences.getInstance();
-        final manseInfo = prefs.getString('manseInfo') ?? '';
-        final gender = prefs.getString('gender') ?? 'M';
-
-        final dio = Dio();
-        final response = await dio.post(Config.sajuApiUrl, data: {
-          "manseInfo": manseInfo,
-          "gender": gender,
-        });
-
-        if (context.mounted) Navigator.pop(context); // 로딩 닫기
-
-        if (response.statusCode == 200 && response.data['text'] != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => SajuScreen(
-                manseInfo: manseInfo,
-                resultText: response.data['text'],
-              ),
-            ),
-          );
-        } else {
-          throw Exception("응답 형식 오류");
-        }
-      } catch (e) {
-        if (context.mounted) Navigator.pop(context);
-        retry();
-      }
-
+      await _fetchSajuData(context, onSuccess, retry);
       return;
     }
 
+    await _fetchListData(context, route, onSuccess, retry);
+  }
+
+  static Future<void> _fetchSajuData(
+    BuildContext context,
+    void Function(dynamic data) onSuccess,
+    VoidCallback retry,
+  ) async {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 150),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const SajuLoadingPage();
+      },
+    );
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final manseInfo = prefs.getString('manseInfo') ?? '';
+      final gender = prefs.getString('gender') ?? 'M';
+
+      final dio = Dio();
+      final response = await dio.post(Config.sajuApiUrl, data: {
+        "manseInfo": manseInfo,
+        "gender": gender,
+      });
+
+      if (context.mounted) Navigator.pop(context);
+
+      if (response.statusCode == 200 && response.data['text'] != null) {
+        onSuccess({
+          'manseInfo': manseInfo,
+          'resultText': response.data['text'],
+        });
+      } else {
+        throw Exception("응답 형식 오류");
+      }
+    } catch (e) {
+      if (context.mounted && Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      retry();
+    }
+  }
+
+  static Future<void> _fetchListData(
+    BuildContext context,
+    String route,
+    void Function(dynamic data) onSuccess,
+    VoidCallback retry,
+  ) async {
     String? uri;
     switch (route) {
       case CardRoute.star:
@@ -123,6 +134,8 @@ class CardService {
       case CardRoute.zodiac:
         uri = Config.zodiacApiUrl;
         break;
+      default:
+        throw Exception('지원하지 않는 route: $route');
     }
 
     await handleRequest(
@@ -130,20 +143,16 @@ class CardService {
       fetch: () async {
         final dio = Dio();
         final response = await dio.get(uri!);
-        debugPrint("응답 데이터: ${response.data}");
 
         if (response.statusCode == 200) {
           final data = response.data;
           if (data is List && data.isNotEmpty) {
-            final firstItem = data[0];
-            debugPrint("mainMessage: ${firstItem['content']['mainMessage']}");
-            return true;
+            return data; // 전체 리스트 반환
           }
         }
-
         throw Exception('데이터 형식 오류 또는 빈 데이터');
       },
-      onSuccess: (_) => onSuccess(),
+      onSuccess: (data) => onSuccess(data),
       retry: retry,
     );
   }

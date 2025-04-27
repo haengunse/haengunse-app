@@ -49,7 +49,7 @@ class SectionCard extends StatelessWidget {
                     return GestureDetector(
                       onTap: () => CardInteractor.handleTap(
                         context: context,
-                        route: card.route,
+                        card: card,
                       ),
                       child: _buildFortuneCard(
                         imagePath: card.imagePath,

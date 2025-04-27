@@ -67,6 +67,10 @@ flutter:
   assets:
     - assets/city.list.kr.json
     - assets/images/
+    - assets/images/character_star/
+    - assets/images/star/
+    - assets/images/character_zodiac/
+    - assets/images/zodiac/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/horoscope/horoscope_main_screen.dart';
+import 'package:haengunse/service/card/horoscope_fortune.dart';
 
 class ZodiacScreen extends StatelessWidget {
-  const ZodiacScreen({super.key});
+  final List<ZodiacFortune> fortuneList;
+
+  const ZodiacScreen({super.key, required this.fortuneList});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: const Center(
-        child: Text("띠 운세 화면"),
-      ),
+    return HoroscopeMainScreen<ZodiacFortune>(
+      fortuneList: fortuneList,
+      mode: HoroscopeMode.zodiac,
     );
   }
 }

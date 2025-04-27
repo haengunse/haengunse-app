@@ -13,7 +13,7 @@ class SajuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('신년 사주')),
+      appBar: AppBar(title: const Text('사주 해석')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
