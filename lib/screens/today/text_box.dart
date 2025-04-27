@@ -17,7 +17,7 @@ class FortuneTextBox extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(133, 232, 255, 244),
+        color: const Color.fromARGB(157, 211, 240, 210),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -48,7 +48,7 @@ class FortuneTextBox extends StatelessWidget {
                 height: 1.1, // 제목 줄간격
               ),
             ),
-            SizedBox(height: 4.h), // 제목과 본문 간격
+            SizedBox(height: 8.h), // 제목과 본문 간격
           ],
           Text(
             description,
