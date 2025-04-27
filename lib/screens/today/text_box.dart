@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TextBox extends StatelessWidget {
+class FortuneTextBox extends StatelessWidget {
   final String? title;
   final String description;
 
-  const TextBox({
+  const FortuneTextBox({
     super.key,
     this.title,
     required this.description,
@@ -22,7 +22,7 @@ class TextBox extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 1.r,
+            blurRadius: 2.r,
             spreadRadius: 1.r,
             offset: const Offset(0, -1), // 위쪽 그림자
           ),
