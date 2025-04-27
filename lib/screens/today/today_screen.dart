@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/today/score_widget.dart';
+import 'package:haengunse/screens/today/report_widget.dart';
 
 class TodayScreen extends StatelessWidget {
   final Map<String, dynamic>? requestData;
@@ -135,6 +136,23 @@ class TodayScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(height: 32.h),
+                      Text(
+                        "리포트",
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.grey,
+                        ),
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      // 리포트 위젯 추가
+                      Center(
+                        child: ReportWidget(responseData: responseData),
                       ),
                     ],
                   ),
