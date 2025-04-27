@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:haengunse/screens/today/score_widget.dart';
 
 class TodayScreen extends StatelessWidget {
   final Map<String, dynamic>? requestData;
@@ -11,15 +12,23 @@ class TodayScreen extends StatelessWidget {
     this.responseData,
   });
 
+  String _getTodayDate() {
+    final now = DateTime.now();
+    return "${now.year}년 ${now.month}월 ${now.day}일";
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dailyMessage = responseData?['dailyMessage'] ?? '오늘 하루도 힘차게 시작해요!';
+    final totalScore = responseData?['totalScore'] ?? 0;
+
     return Scaffold(
-      extendBodyBehindAppBar: true, // 배경을 AppBar 뒤까지 확장
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        centerTitle: false, // 왼쪽 정렬
+        centerTitle: false,
         title: const Text(
           "오늘의 운세",
           style: TextStyle(
@@ -36,7 +45,7 @@ class TodayScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // 1. 배경
+          // 1. 배경 이미지
           Positioned.fill(
             child: Image.asset(
               'assets/images/today_background.png',
@@ -44,18 +53,18 @@ class TodayScreen extends StatelessWidget {
             ),
           ),
 
-          // 2. 내용 (스크롤)
+          // 2. 메인 내용
           Positioned.fill(
             child: SafeArea(
-              top: false, // AppBar 영역은 우리가 직접 조정
+              top: false,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.only(
                   top: kToolbarHeight +
                       MediaQuery.of(context).padding.top +
-                      16.h, // 앱바+상단 SafeArea 높이
-                  left: 20.w,
-                  right: 20.w,
+                      16.h,
+                  left: 16.w,
+                  right: 16.w,
                   bottom: 30.h,
                 ),
                 child: Container(
@@ -68,26 +77,65 @@ class TodayScreen extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20.r,
-                        spreadRadius: 8,
+                        blurRadius: 18.r,
+                        spreadRadius: 5,
                         offset: const Offset(0, 8),
                       ),
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "여기에 오늘의 운세 상세 위젯 삽입",
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
+                      // 상단 날짜 + 메시지 + 점수
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 왼쪽: 날짜 + dailyMessage (반절만 차지)
+                          SizedBox(
+                            width: (MediaQuery.of(context).size.width -
+                                    32.w -
+                                    40.w) /
+                                2,
+                            // (전체 가로 - 좌우 패딩 - 컨테이너 패딩) / 2
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _getTodayDate(),
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontSize: 14.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 6.h),
+                                Text(
+                                  dailyMessage,
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                    height: 1.4,
+                                  ),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 12.w), // 왼쪽/오른쪽 사이 여백
+                          // 오른쪽: 스코어 (오른쪽 정렬)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                ScoreWidget(totalScore: totalScore),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 20.h),
-                      // 여기 이후로 ScoreWidget, ReportWidget, TextBox 추가
                     ],
                   ),
                 ),
