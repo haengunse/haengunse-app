@@ -105,7 +105,7 @@ class TodayScreen extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
                                     fontSize: 14.sp,
-                                    color: Colors.grey,
+                                    color: Colors.grey[800],
                                   ),
                                 ),
                                 SizedBox(height: 6.h),

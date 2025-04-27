@@ -9,11 +9,11 @@ class ScoreWidget extends StatelessWidget {
   String _getLabel(int score) {
     if (score <= 50) return '주의';
     if (score <= 70) return '보통';
-    return '최고';
+    return '좋음';
   }
 
   Color _getColor(int score) {
-    return Colors.orangeAccent;
+    return const Color(0xFFF28B30); // 주황
   }
 
   @override
@@ -21,24 +21,19 @@ class ScoreWidget extends StatelessWidget {
     final label = _getLabel(totalScore);
 
     return SizedBox(
-      width: 100.w,
-      height: 100.w,
+      width: 120.w,
+      height: 120.w,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // 배경 원
-          SizedBox(
-            width: 100.w,
-            height: 100.w,
-            child: CircularProgressIndicator(
-              value: totalScore / 100,
-              strokeWidth: 10.w,
-              backgroundColor: const Color(0xFFFCEFD9), // 연한 베이지색
-              valueColor: AlwaysStoppedAnimation<Color>(_getColor(totalScore)),
+          CustomPaint(
+            size: Size(120.w, 120.w),
+            painter: _DonutPainter(
+              progress: totalScore / 100,
+              backgroundColor: const Color(0xFFFCEFD9), // 연베이지
+              progressColor: _getColor(totalScore),
             ),
           ),
-
-          // 텍스트 레이어
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -46,17 +41,16 @@ class ScoreWidget extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontFamily: 'Pretendard',
-                  fontSize: 14.sp,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.w400,
-                  color: Colors.grey,
+                  color: Colors.grey[800],
                 ),
               ),
-              SizedBox(height: 2.h),
               Text(
                 "$totalScore점",
                 style: TextStyle(
                   fontFamily: 'Pretendard',
-                  fontSize: 20.sp,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
                   color: Colors.black,
                 ),
@@ -67,4 +61,76 @@ class ScoreWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DonutPainter extends CustomPainter {
+  final double progress;
+  final Color backgroundColor;
+  final Color progressColor;
+
+  _DonutPainter({
+    required this.progress,
+    required this.backgroundColor,
+    required this.progressColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokeWidth = 14.w;
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2;
+
+    final rect = Rect.fromCircle(center: center, radius: radius);
+
+    // 1. 회색 그림자 레이어
+    final shadowPaint = Paint()
+      ..color = const Color(0xFFE0E0E0) // 연회색
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawArc(
+      rect,
+      0,
+      2 * 3.1415926,
+      false,
+      shadowPaint,
+    );
+
+    // 2. 배경 (연베이지)
+    final backgroundPaint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawArc(
+      rect,
+      0,
+      2 * 3.1415926,
+      false,
+      backgroundPaint,
+    );
+
+    // 3. 진행도 (주황색)
+    final progressPaint = Paint()
+      ..color = progressColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    final startAngle = -90 * 3.1415926 / 180;
+    final sweepAngle = 2 * 3.1415926 * progress;
+
+    canvas.drawArc(
+      rect,
+      startAngle,
+      sweepAngle,
+      false,
+      progressPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
