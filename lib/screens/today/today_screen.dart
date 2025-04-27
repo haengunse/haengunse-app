@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/today/score_widget.dart';
 import 'package:haengunse/screens/today/report_widget.dart';
+import 'package:haengunse/screens/today/text_box.dart';
 
 class TodayScreen extends StatelessWidget {
   final Map<String, dynamic>? requestData;
@@ -30,18 +31,19 @@ class TodayScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
+        titleSpacing: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           "오늘의 운세",
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
-            fontSize: 20,
+            fontSize: 23,
             color: Colors.black,
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Stack(
@@ -64,14 +66,14 @@ class TodayScreen extends StatelessWidget {
                   top: kToolbarHeight +
                       MediaQuery.of(context).padding.top +
                       16.h,
-                  left: 16.w,
-                  right: 16.w,
+                  left: 25.w,
+                  right: 25.w,
                   bottom: 30.h,
                 ),
                 child: Container(
                   width: double.infinity,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                      EdgeInsets.symmetric(horizontal: 25.w, vertical: 30.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24.r),
@@ -153,6 +155,47 @@ class TodayScreen extends StatelessWidget {
                       // 리포트 위젯 추가
                       Center(
                         child: ReportWidget(responseData: responseData),
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      // 운세 설명
+                      TextBox(
+                        description: responseData?['generalFortune'] ?? '-',
+                      ),
+                      SizedBox(height: 8.h),
+                      TextBox(
+                        title: '재물운',
+                        description: responseData?['wealthFortune']
+                                ?['description'] ??
+                            '-',
+                      ),
+                      SizedBox(height: 8.h),
+                      TextBox(
+                        title: '애정운',
+                        description:
+                            responseData?['loveFortune']?['description'] ?? '-',
+                      ),
+                      SizedBox(height: 8.h),
+                      TextBox(
+                        title: '건강운',
+                        description: responseData?['healthFortune']
+                                ?['description'] ??
+                            '-',
+                      ),
+                      SizedBox(height: 8.h),
+                      TextBox(
+                        title: '학업운',
+                        description: responseData?['studyFortune']
+                                ?['description'] ??
+                            '-',
+                      ),
+                      SizedBox(height: 8.h),
+                      TextBox(
+                        title: '업무운',
+                        description: responseData?['careerFortune']
+                                ?['description'] ??
+                            '-',
                       ),
                     ],
                   ),
