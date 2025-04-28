@@ -17,7 +17,7 @@ class FortuneTextBox extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(157, 211, 240, 210),
+        color: const Color.fromARGB(186, 224, 251, 233),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(

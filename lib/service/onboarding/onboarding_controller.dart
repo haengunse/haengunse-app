@@ -5,7 +5,7 @@ import 'package:haengunse/screens/home/home_screen.dart';
 
 class OnboardingController {
   static Future<void> handleNavigation(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
 
     final prefs = await SharedPreferences.getInstance();
 

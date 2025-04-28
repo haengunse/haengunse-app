@@ -13,7 +13,7 @@ class ScoreWidget extends StatelessWidget {
   }
 
   Color _getColor(int score) {
-    return const Color(0xFFF28B30); // 주황
+    return const Color.fromARGB(255, 255, 170, 51); // 주황
   }
 
   @override

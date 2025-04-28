@@ -33,7 +33,7 @@ class CardService {
       FortuneCardData(
         imagePath: 'assets/images/fortune.png',
         smallTitle: '사주로 보는 나만의 흐름',
-        bigTitle: '사주 운세',
+        bigTitle: '사주 해석',
         route: CardRoute.saju,
       ),
       FortuneCardData(
