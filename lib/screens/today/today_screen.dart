@@ -118,7 +118,7 @@ class TodayScreen extends StatelessWidget {
                                         color: Colors.grey[800],
                                       ),
                                     ),
-                                    SizedBox(height: 6.h),
+                                    SizedBox(height: 10.h),
                                     Text(
                                       dailyMessage,
                                       style: TextStyle(
@@ -147,7 +147,7 @@ class TodayScreen extends StatelessWidget {
                           ),
                         ),
 
-                        SizedBox(height: 32.h),
+                        SizedBox(height: 15.h),
 
                         // 리포트
                         Padding(

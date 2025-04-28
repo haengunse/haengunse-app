@@ -49,7 +49,7 @@ class SectionLucky extends StatelessWidget {
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/todaysplash'),
                 child: Text(
-                  "오늘은\n어떤 하루일까요? ->",
+                  "오늘은\n어떤 하루일까요?",
                   style: TextStyle(
                     fontSize: 27.sp,
                     fontWeight: FontWeight.w700,
