@@ -64,9 +64,8 @@ class ItemScreen extends StatelessWidget {
                   "숫자: ${item['number']}\n"
                   "사물: ${item['object']}",
                   style: TextStyle(
-                    fontFamily: 'EliceDigitalBaeum', //HakgyoansimDunggeunmiso
+                    fontFamily: 'HakgyoansimDunggeunmiso',
                     fontSize: 22.sp,
-                    fontWeight: FontWeight.bold,
                     color: Colors.black,
                     height: 1.5,
                   ),
