@@ -1,5 +1,3 @@
-// lib/service/card/horoscope_fortune.dart
-
 /// 공통 인터페이스
 abstract class BaseFortune {
   String get titleName; // 띄울 이름 (starName or ageName)

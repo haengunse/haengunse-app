@@ -18,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void initState() {
     super.initState();
 
-    // ✅ Fade In 애니메이션 세팅
+    // Fade In 애니메이션 세팅
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800), // 0.8초

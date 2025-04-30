@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:haengunse/config.dart';
-import 'dart:convert';
 
 class DreamResponse {
   final String? reply;

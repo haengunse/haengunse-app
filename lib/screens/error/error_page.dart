@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/screens/onboarding/input_screen.dart';
 import 'package:haengunse/utils/error_type.dart';
 import 'package:haengunse/screens/home/home_screen.dart';
 

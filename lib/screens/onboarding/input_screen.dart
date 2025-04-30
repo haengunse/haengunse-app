@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:haengunse/service/onboarding/manse_api.dart';
 import 'package:haengunse/service/onboarding/input_controller.dart';
 
 class InputScreen extends StatefulWidget {
@@ -11,7 +10,6 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
   final _nameController = TextEditingController();
-  final ManseApiService _manseApi = ManseApiService();
 
   DateTime? _selectedDate;
   String _gender = 'M';
