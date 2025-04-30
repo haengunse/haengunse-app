@@ -48,22 +48,27 @@ class SectionLucky extends StatelessWidget {
               SizedBox(height: 4.h),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/todaysplash'),
-                child: Text(
-                  "오늘은\n어떤 하루일까요?",
-                  style: TextStyle(
-                    fontSize: 27.sp,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                _getTodayDate(),
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey[700],
-                  fontFamily: 'Pretendard',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "오늘은\n어떤 하루일까요?",
+                      style: TextStyle(
+                        fontSize: 27.sp,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "더 자세히 확인하기 ->",
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: Colors.grey[700],
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 13.h),

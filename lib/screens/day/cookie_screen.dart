@@ -62,7 +62,7 @@ class CookieScreen extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'HakgyoansimDunggeunmiso',
                   fontSize: 30.sp,
-                  fontWeight: FontWeight.bold,
+                  //fontWeight: FontWeight.bold,
                   color: Colors.black,
                   height: 1.4,
                 ),
