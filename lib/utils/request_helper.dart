@@ -110,13 +110,13 @@ ErrorData _mapErrorFromDio(DioException e) {
   if (e.response?.statusCode == 400) {
     return const ErrorData(
       title: "잘못된 요청",
-      message: "요청 형식이 올바르지 않아요.",
+      message: "요청을 처리하는 중 문제가 생겼습니다.\n 잠시 후 다시 시도해주세요.",
       type: ErrorType.badRequest,
     );
   } else if (e.response?.statusCode == 500) {
     return const ErrorData(
       title: "서버 오류",
-      message: "서버에서 문제가 발생했어요.\n잠시 후 다시 시도해주세요.",
+      message: "요청을 처리하는 중 문제가 생겼습니다.\n 잠시 후 다시 시도해주세요.",
       type: ErrorType.serverError,
     );
   } else if (e.type == DioExceptionType.connectionTimeout ||
@@ -132,7 +132,7 @@ ErrorData _mapErrorFromDio(DioException e) {
 
   return const ErrorData(
     title: "알 수 없는 오류",
-    message: "예기치 못한 문제가 발생했어요.",
+    message: "요청을 처리하는 중 문제가 생겼습니다.\n 잠시 후 다시 시도해주세요.",
     type: ErrorType.unknown,
   );
 }

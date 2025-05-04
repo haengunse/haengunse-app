@@ -18,31 +18,16 @@ class ErrorPage extends StatelessWidget {
     this.backScreen,
   });
 
-  IconData _getIcon() {
-    switch (errorType) {
-      case ErrorType.badRequest:
-        return Icons.warning_amber_rounded;
-      case ErrorType.serverError:
-        return Icons.cloud_off;
-      case ErrorType.connectionError:
-        return Icons.wifi_off;
-      case ErrorType.unknown:
-      default:
-        return Icons.error_outline;
-    }
-  }
-
-  Color _getIconColor() {
-    switch (errorType) {
-      case ErrorType.badRequest:
-        return Colors.orange;
-      case ErrorType.serverError:
-        return Colors.grey;
-      case ErrorType.connectionError:
-        return Colors.blueGrey;
-      case ErrorType.unknown:
-      default:
-        return Colors.redAccent;
+  Widget _getVisual() {
+    if (errorType == ErrorType.connectionError) {
+      return Icon(Icons.wifi_off, size: 80, color: Colors.blueGrey);
+    } else {
+      return Image.asset(
+        'assets/images/error_sad.png',
+        width: 180,
+        height: 180,
+        fit: BoxFit.contain,
+      );
     }
   }
 
@@ -58,24 +43,34 @@ class ErrorPage extends StatelessWidget {
         return false;
       },
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         backgroundColor: const Color(0xFFF3F3F3),
-        appBar: AppBar(title: Text(title)),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          title: const Text(''),
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(_getIcon(), size: 80, color: _getIconColor()),
+                _getVisual(),
                 const SizedBox(height: 20),
                 Text(
                   message,
                   style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 if (onRetry != null)
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                    ),
                     onPressed: onRetry,
                     child: const Text("다시 시도"),
                   ),
