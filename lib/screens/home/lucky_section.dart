@@ -19,7 +19,7 @@ class SectionLucky extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(24.w, 100.h, 5.w, 16.h), // 위/아래 여백 조절
+      padding: EdgeInsets.fromLTRB(24.w, 0.h, 5.w, 16.h), // 위/아래 여백 조절
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 231, 244, 231),
       ),
