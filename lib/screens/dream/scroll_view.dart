@@ -5,7 +5,7 @@ import 'package:haengunse/screens/dream/user_bubble.dart';
 import 'package:haengunse/screens/dream/system_bubble.dart';
 import 'package:haengunse/screens/dream/retry_buttons.dart';
 
-class DreamScrollView extends StatelessWidget {
+class DreamScrollView extends StatefulWidget {
   final ScrollController scrollController;
   final List<DreamMessage> messages;
   final List<GlobalKey> messageKeys;
@@ -22,15 +22,45 @@ class DreamScrollView extends StatelessWidget {
   });
 
   @override
+  State<DreamScrollView> createState() => _DreamScrollViewState();
+}
+
+class _DreamScrollViewState extends State<DreamScrollView> {
+  @override
+  void initState() {
+    super.initState();
+    // 최초 진입 시 자동 스크롤
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
+
+  @override
+  void didUpdateWidget(covariant DreamScrollView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 메시지 업데이트 시 자동 스크롤
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
+
+  void _scrollToBottom() {
+    if (!widget.scrollController.hasClients) return;
+
+    final position = widget.scrollController.position;
+    widget.scrollController.animateTo(
+      position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RawScrollbar(
-      controller: scrollController,
+      controller: widget.scrollController,
       thumbVisibility: false,
       thickness: 6.w,
       radius: Radius.circular(10.r),
       thumbColor: Colors.white,
       child: ListView.builder(
-        controller: scrollController,
+        controller: widget.scrollController,
         physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.only(
           top: 0.h,
@@ -38,13 +68,13 @@ class DreamScrollView extends StatelessWidget {
           right: 16.w,
           bottom: 16.h,
         ),
-        itemCount: messages.length,
+        itemCount: widget.messages.length,
         itemBuilder: (context, index) {
-          final message = messages[index];
+          final message = widget.messages[index];
           final isNetworkError = message.isUser && message.isError;
 
           return Align(
-            key: messageKeys[index],
+            key: widget.messageKeys[index],
             alignment:
                 message.isUser ? Alignment.centerRight : Alignment.centerLeft,
             child: Column(
@@ -53,18 +83,14 @@ class DreamScrollView extends StatelessWidget {
                   : CrossAxisAlignment.start,
               children: [
                 message.isUser
-                    ? UserBubble(
-                        message: message,
-                      )
-                    : SystemBubble(
-                        message: message,
-                      ),
+                    ? UserBubble(message: message)
+                    : SystemBubble(message: message),
                 if (isNetworkError && message.isUser)
                   RetryButtons(
                     index: index,
-                    onCancel: onCancel,
-                    onRetry: onRetry,
-                  )
+                    onCancel: widget.onCancel,
+                    onRetry: widget.onRetry,
+                  ),
               ],
             ),
           );
