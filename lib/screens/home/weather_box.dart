@@ -135,11 +135,11 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                   SizedBox(width: 8.w),
                   Text("|", style: TextStyle(color: const Color(0xFF777777))),
                   SizedBox(width: 8.w),
-                  Image.network(
-                    'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
+                  Image.asset(
+                    'assets/images/weather/${weather.iconCode}.png',
                     width: 20.w,
                     height: 20.h,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                   SizedBox(width: 6.w),
                   Text(
