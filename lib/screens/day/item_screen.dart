@@ -34,7 +34,7 @@ class ItemScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 5.h),
                 Image.asset(
-                  'assets/images/item_card.png', // 🎁 아이템 카드 이미지
+                  'assets/images/item_card.png', // 아이템 카드 이미지
                   width: 150.w,
                   height: 150.w,
                 ),
@@ -65,7 +65,7 @@ class ItemScreen extends StatelessWidget {
                   "사물: ${item['object']}",
                   style: TextStyle(
                     fontFamily: 'HakgyoansimDunggeunmiso',
-                    fontSize: 22.sp,
+                    fontSize: 24.sp,
                     color: Colors.black,
                     height: 1.5,
                   ),
