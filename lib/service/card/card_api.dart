@@ -104,13 +104,18 @@ class CardService {
           "gender": gender,
         });
 
-        if (response.statusCode == 200 && response.data['text'] != null) {
+        if (response.statusCode == 200 &&
+            response.data is Map<String, dynamic>) {
+          final sajuMap = response.data as Map<String, dynamic>;
+
           return {
             'manseInfo': manseInfo,
-            'resultText': response.data['text'],
+            'sajuResult': sajuMap.map(
+                (k, v) => MapEntry(k.toString(), v.toString())), // 👈 String 변환
+            'userName': prefs.getString('name') ?? '사용자',
           };
         } else {
-          throw Exception("응답 형식 오류");
+          throw Exception("예상과 다른 응답 형식");
         }
       },
       onSuccess: (data) {

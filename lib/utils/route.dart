@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
-import 'package:haengunse/screens/card/dream_screen.dart';
 import 'package:haengunse/screens/onboarding/onboarding_screen.dart';
 import 'package:haengunse/screens/today/today_loading_page.dart';
 import 'package:haengunse/service/card/card_api.dart';
@@ -51,20 +50,22 @@ class RouteGenerator {
           );
         }
 
-      case CardRoute.dream:
-        return MaterialPageRoute(
-          builder: (_) => const DreamScreen(),
-        );
-
       case CardRoute.saju:
         if (settings.arguments != null &&
             settings.arguments is Map<String, dynamic>) {
           final args = settings.arguments as Map<String, dynamic>;
 
+          final sajuResultRaw = args['sajuResult'];
+          final sajuResult = sajuResultRaw is Map
+              ? sajuResultRaw.map<String, String>(
+                  (key, value) => MapEntry(key.toString(), value.toString()))
+              : <String, String>{};
+
           return MaterialPageRoute(
             builder: (_) => SajuScreen(
               manseInfo: args['manseInfo'] ?? '',
-              resultText: args['resultText'] ?? '',
+              sajuResult: sajuResult,
+              userName: args['userName'] ?? '이름없음',
             ),
           );
         } else {

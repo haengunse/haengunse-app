@@ -22,7 +22,9 @@ class CardInteractor {
             card.route,
             arguments: {
               'manseInfo': sajuData['manseInfo'] ?? '',
-              'resultText': sajuData['resultText'] ?? '',
+              'sajuResult':
+                  Map<String, String>.from(sajuData['sajuResult'] ?? {}),
+              'userName': sajuData['userName'] ?? '이름없음',
             },
           );
         } else if (card.route == '/zodiac') {

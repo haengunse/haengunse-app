@@ -52,7 +52,7 @@ class TodayScreen extends StatelessWidget {
           // 배경 이미지
           Positioned.fill(
             child: Image.asset(
-              'assets/images/today_background.png',
+              'assets/images/background.png',
               fit: BoxFit.cover,
             ),
           ),
