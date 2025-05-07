@@ -91,33 +91,39 @@ class CardService {
       },
     );
 
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final manseInfo = prefs.getString('manseInfo') ?? '';
-      final gender = prefs.getString('gender') ?? 'M';
+    await handleRequest(
+      context: context,
+      fetch: () async {
+        final prefs = await SharedPreferences.getInstance();
+        final manseInfo = prefs.getString('manseInfo') ?? '';
+        final gender = prefs.getString('gender') ?? 'M';
 
-      final dio = Dio();
-      final response = await dio.post(Config.sajuApiUrl, data: {
-        "manseInfo": manseInfo,
-        "gender": gender,
-      });
-
-      if (context.mounted) Navigator.pop(context);
-
-      if (response.statusCode == 200 && response.data['text'] != null) {
-        onSuccess({
-          'manseInfo': manseInfo,
-          'resultText': response.data['text'],
+        final dio = Dio();
+        final response = await dio.post(Config.sajuApiUrl, data: {
+          "manseInfo": manseInfo,
+          "gender": gender,
         });
-      } else {
-        throw Exception("응답 형식 오류");
-      }
-    } catch (e) {
-      if (context.mounted && Navigator.canPop(context)) {
-        Navigator.pop(context);
-      }
-      retry();
-    }
+
+        if (response.statusCode == 200 && response.data['text'] != null) {
+          return {
+            'manseInfo': manseInfo,
+            'resultText': response.data['text'],
+          };
+        } else {
+          throw Exception("응답 형식 오류");
+        }
+      },
+      onSuccess: (data) {
+        if (context.mounted) Navigator.pop(context);
+        onSuccess(data);
+      },
+      retry: () {
+        if (context.mounted && Navigator.canPop(context)) {
+          Navigator.pop(context); // 로딩 다이얼로그 닫기
+        }
+        retry();
+      },
+    );
   }
 
   static Future<void> _fetchListData(
