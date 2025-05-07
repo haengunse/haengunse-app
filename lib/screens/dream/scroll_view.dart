@@ -60,42 +60,41 @@ class _DreamScrollViewState extends State<DreamScrollView> {
       radius: Radius.circular(10.r),
       thumbColor: Colors.white,
       child: ListView.builder(
-        controller: widget.scrollController,
-        physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.only(
-          top: 0.h,
-          left: 16.w,
-          right: 16.w,
-          bottom: 16.h,
-        ),
-        itemCount: widget.messages.length,
-        itemBuilder: (context, index) {
-          final message = widget.messages[index];
-          final isNetworkError = message.isUser && message.isError;
+          controller: widget.scrollController,
+          physics: const ClampingScrollPhysics(),
+          padding: EdgeInsets.only(
+            top: 0.h,
+            left: 16.w,
+            right: 16.w,
+            bottom: 16.h,
+          ),
+          itemCount: widget.messages.length,
+          itemBuilder: (context, index) {
+            final message = widget.messages[index];
+            final isNetworkError = message.isUser && message.isError;
 
-          return Align(
-            key: widget.messageKeys[index],
-            alignment:
-                message.isUser ? Alignment.centerRight : Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: message.isUser
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              children: [
-                message.isUser
-                    ? UserBubble(message: message)
-                    : SystemBubble(message: message),
-                if (isNetworkError && message.isUser)
-                  RetryButtons(
-                    index: index,
-                    onCancel: widget.onCancel,
-                    onRetry: widget.onRetry,
-                  ),
-              ],
-            ),
-          );
-        },
-      ),
+            return Align(
+              key: widget.messageKeys[index],
+              alignment:
+                  message.isUser ? Alignment.centerRight : Alignment.centerLeft,
+              child: message.isUser
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (isNetworkError)
+                          RetryButtons(
+                            index: index,
+                            onCancel: widget.onCancel,
+                            onRetry: widget.onRetry,
+                          ),
+                        SizedBox(width: 6.w),
+                        UserBubble(message: message),
+                      ],
+                    )
+                  : SystemBubble(message: message),
+            );
+          }),
     );
   }
 }
