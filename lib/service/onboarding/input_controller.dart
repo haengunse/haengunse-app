@@ -39,6 +39,7 @@ class InputController {
     // isFirstRun = false 저장
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstRun', false);
+    await prefs.setString('birthDate', formattedBirthDate);
 
     if (!context.mounted) return;
 
