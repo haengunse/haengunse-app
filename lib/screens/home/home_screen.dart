@@ -103,10 +103,15 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.edit),
               title: const Text('내 정보 수정'),
               onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const InputScreen()),
-                );
+                Navigator.pop(context); // drawer 먼저 닫기
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const InputScreen(showBackButton: true),
+                    ),
+                  );
+                });
               },
             ),
             ListTile(

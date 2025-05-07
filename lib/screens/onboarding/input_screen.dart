@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/service/onboarding/input_controller.dart';
 
 class InputScreen extends StatefulWidget {
-  const InputScreen({super.key});
+  final bool showBackButton;
+  const InputScreen({super.key, this.showBackButton = false});
 
   @override
   State<InputScreen> createState() => _InputScreenState();
@@ -111,7 +112,16 @@ class _InputScreenState extends State<InputScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
+        appBar: AppBar(
+          backgroundColor: Colors.white, elevation: 0,
+          automaticallyImplyLeading: false, // 자동 백버튼 제거
+          leading: widget.showBackButton
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                )
+              : null,
+        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           child: Column(

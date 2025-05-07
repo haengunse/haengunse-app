@@ -24,7 +24,7 @@ class HoroscopeMainContent<T extends BaseFortune> extends StatelessWidget {
             fit: BoxFit.contain,
           ),
 
-          // ⭐ 날짜 범위 (HoroscopeMode.star일 때만)
+          // 날짜 범위 (HoroscopeMode.star일 때만)
           if (mode == HoroscopeMode.star && fortune is StarFortune)
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
