@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
 import 'package:haengunse/screens/horoscope/horoscope_header_selector.dart';
 import 'package:haengunse/screens/horoscope/horoscope_main_content.dart';
+import 'package:haengunse/service/card/horoscope_calculator.dart';
 
 class HoroscopeMainScreen<T extends BaseFortune> extends StatefulWidget {
   final List<T> fortuneList;
@@ -24,7 +25,26 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
   @override
   void initState() {
     super.initState();
-    selectedFortune = widget.fortuneList.first;
+    _initSelectedFortune();
+  }
+
+  Future<void> _initSelectedFortune() async {
+    String? titleName;
+
+    if (widget.mode == HoroscopeMode.star) {
+      titleName = await HoroscopeCalculator.getStarSign();
+    } else {
+      titleName = await HoroscopeCalculator.getZodiacAnimal();
+    }
+
+    final matched = widget.fortuneList.firstWhere(
+      (f) => f.titleName == titleName,
+      orElse: () => widget.fortuneList.first,
+    );
+
+    setState(() {
+      selectedFortune = matched;
+    });
   }
 
   void selectFortune(T fortune) {
