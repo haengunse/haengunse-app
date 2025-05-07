@@ -106,13 +106,12 @@ class RetryButtons extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => _showBottomActionSheet(context),
-            child:
-                Icon(Icons.close, size: 14.sp, color: Colors.black54), // 아이콘 크기
+            child: Icon(Icons.close, size: 14.sp, color: Colors.red), // 아이콘 크기
           ),
           SizedBox(width: 8.w), // 아이콘 간격
           GestureDetector(
             onTap: () => _showBottomActionSheet(context),
-            child: Icon(Icons.refresh, size: 14.sp, color: Colors.black54),
+            child: Icon(Icons.refresh, size: 14.sp, color: Colors.blue),
           ),
         ],
       ),

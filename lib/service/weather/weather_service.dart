@@ -21,6 +21,13 @@ class WeatherService {
         final data = response.data;
 
         try {
+          final rawRain = data['rain']?['1h'] ??
+              data['rain']?['3h'] ??
+              data['snow']?['1h'] ??
+              data['snow']?['3h'];
+
+          print('[WeatherService] ☔ 강수량 정보(raw): ${rawRain ?? "없음"} mm');
+
           return Weather(
             cityId: data['id'],
             cityName: data['name'],
