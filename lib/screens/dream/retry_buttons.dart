@@ -97,7 +97,7 @@ class RetryButtons extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(right: 5.w, bottom: 11.h), // 전체 여백
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Colors.grey[300],
         borderRadius: BorderRadius.circular(16.r),
       ),
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h), // 내부 패딩

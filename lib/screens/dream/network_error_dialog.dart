@@ -7,7 +7,7 @@ class NetworkErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 30),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[300],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
       ),
@@ -17,7 +17,7 @@ class NetworkErrorDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '전송에 실패했어요.\n잠시 후 다시 시도해주세요.',
+              '연결 상태가 원활하지 않아요.\n잠시 후 다시 시도해 주세요.',
               style: TextStyle(
                 fontFamily: 'Pretendard',
                 fontSize: 16,
@@ -28,37 +28,49 @@ class NetworkErrorDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            const Text(
-              '연결 상태가 원활하지 않아요.',
-              style: TextStyle(
-                fontFamily: 'Pretendard',
-                fontSize: 13,
-                color: Colors.black87,
-                height: 1.4,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 14),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-                minimumSize: MaterialStateProperty.all<Size>(const Size(0, 0)),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                overlayColor: MaterialStateProperty.all<Color>(
-                  Colors.grey.withOpacity(0.1),
+            // const Text(
+            //   '연결 상태가 원활하지 않아요.',
+            //   style: TextStyle(
+            //     fontFamily: 'Pretendard',
+            //     fontSize: 13,
+            //     color: Colors.black87,
+            //     height: 1.4,
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 27),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  // 윤곽선 추가
+                  color: Colors.black26,
+                  width: 0.5,
                 ),
               ),
-              child: const Text(
-                '확인',
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+              child: TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  minimumSize: Size.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                child: const Text(
+                  '확인',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
