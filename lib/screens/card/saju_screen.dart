@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/card/saju_detail_page.dart';
 
 class SajuScreen extends StatelessWidget {
   final String manseInfo;
@@ -16,7 +17,6 @@ class SajuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // 🌌 배경 이미지
         Positioned.fill(
           child: Image.asset(
             'assets/images/background.png',
@@ -26,27 +26,32 @@ class SajuScreen extends StatelessWidget {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: const Text('사주 운세',
+            title: const Text('사주 해석',
                 style: TextStyle(fontWeight: FontWeight.w600)),
-            backgroundColor: Colors.black.withOpacity(0.5),
+            backgroundColor: Colors.transparent,
             elevation: 0,
           ),
-          floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // 저장 또는 공유 기능
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SajuDetailPage()),
+              );
             },
-            icon: const Icon(Icons.check),
-            label: const Text('확인'),
-            backgroundColor: Colors.deepPurpleAccent.withOpacity(0.85),
+            backgroundColor:
+                const Color.fromARGB(255, 114, 212, 140).withOpacity(0.85),
+            child:
+                const Icon(Icons.question_mark, size: 28, color: Colors.white),
+            shape: const CircleBorder(),
           ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: ListView(
                 children: [
-                  _buildSection("🧾 사주 정보", "$userName님의 사주\n\n$manseInfo"),
+                  _buildSection("$userName님의 사주", "$manseInfo"),
                   const SizedBox(height: 16),
-                  _buildSection("📜 전체 해석", sajuResult['summary'] ?? ''),
+                  _buildSection("💭 전체 해석", sajuResult['summary'] ?? ''),
                   const SizedBox(height: 16),
                   _buildSection("💬 내 성격은", sajuResult['personality'] ?? ''),
                   const SizedBox(height: 16),
