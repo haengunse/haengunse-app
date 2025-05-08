@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/onboarding/input_controller.dart';
+import 'package:flutter/gestures.dart';
 
 class InputScreen extends StatefulWidget {
   final bool showBackButton;
@@ -76,6 +77,17 @@ class _InputScreenState extends State<InputScreen> {
     if (picked != null) {
       setState(() => _selectedDate = picked);
     }
+  }
+
+  TextSpan _linkSpan(String text, VoidCallback onTap) {
+    return TextSpan(
+      text: text,
+      style: const TextStyle(
+        color: Color.fromARGB(255, 75, 109, 244),
+        fontWeight: FontWeight.w600,
+      ),
+      recognizer: TapGestureRecognizer()..onTap = onTap,
+    );
   }
 
   @override
@@ -266,13 +278,35 @@ class _InputScreenState extends State<InputScreen> {
               ),
               const SizedBox(height: 24),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Checkbox(
                     value: _agreedToTerms,
                     onChanged: (val) => setState(() => _agreedToTerms = val!),
                   ),
-                  const Expanded(child: Text("이용약관 동의(필수)")),
-                  TextButton(onPressed: () {}, child: const Text("보기")),
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                            color: Colors.black87, fontSize: 14),
+                        children: [
+                          const TextSpan(text: "(필수) "),
+                          _linkSpan("이용약관", () {
+                            Navigator.pushNamed(context, '/terms');
+                          }),
+                          const TextSpan(text: " 및 "),
+                          _linkSpan("개인정보 수집", () {
+                            Navigator.pushNamed(context, '/privacy');
+                          }),
+                          const TextSpan(text: " 및 "),
+                          _linkSpan("위치 동의", () {
+                            Navigator.pushNamed(context, '/location');
+                          }),
+                          const TextSpan(text: "에 동의합니다."),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),

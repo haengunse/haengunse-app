@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
+import 'package:haengunse/screens/onboarding/location_screen.dart';
 import 'package:haengunse/screens/onboarding/onboarding_screen.dart';
+import 'package:haengunse/screens/onboarding/privacy_screen.dart';
+import 'package:haengunse/screens/onboarding/terms_screen.dart';
 import 'package:haengunse/screens/today/today_loading_page.dart';
 import 'package:haengunse/service/card/card_api.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
@@ -75,6 +78,21 @@ class RouteGenerator {
             ),
           );
         }
+
+      case '/terms':
+        return MaterialPageRoute(
+          builder: (_) => const TermsScreen(),
+        );
+
+      case '/privacy':
+        return MaterialPageRoute(
+          builder: (_) => const PrivacyScreen(),
+        );
+
+      case '/location':
+        return MaterialPageRoute(
+          builder: (_) => const LocationScreen(),
+        );
 
       default:
         return MaterialPageRoute(

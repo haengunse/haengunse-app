@@ -57,8 +57,8 @@ class SajuScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   _buildSection("🌿 오행 분석", sajuResult['fiveElements'] ?? ''),
                   const SizedBox(height: 16),
-                  _buildSection("🌟 십성 분석", sajuResult['tenGods'] ?? ''),
-                  const SizedBox(height: 80), // FAB 공간 확보
+                  _buildSection("⚖️ 십성 분석", sajuResult['tenGods'] ?? ''),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
