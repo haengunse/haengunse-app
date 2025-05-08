@@ -63,6 +63,35 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _drawerTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(icon, color: Colors.black),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontFamily: 'Pretendard',
+              fontSize: 15,
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          onTap: onTap,
+        ),
+        const Divider(
+          height: 1,
+          thickness: 1,
+          color: Color(0xFFDDDDDD), // 연한 회색
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,26 +113,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        backgroundColor: Colors.white,
+        child: Column(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 95, 192, 108),
-              ),
-              child: Text(
+            Container(
+              padding: const EdgeInsets.only(top: 60, bottom: 12), // 상단 패딩 넉넉히
+              width: double.infinity,
+              alignment: Alignment.center, // 가운데 정렬
+              color: const Color(0xFFEFEFEF), // 연한 회색 배경
+              child: const Text(
                 'MENU',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+                  fontFamily: 'Pretendard',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey,
                 ),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text('내 정보 수정'),
+            const Divider(height: 1, color: Color(0xFFDDDDDD)), // 연한 회색 선
+            const SizedBox(height: 8),
+            _drawerTile(
+              icon: Icons.edit,
+              title: '내 정보 수정',
               onTap: () {
-                Navigator.pop(context); // drawer 먼저 닫기
+                Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 200), () {
                   Navigator.push(
                     context,
@@ -114,14 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('정보 삭제'),
+            _drawerTile(
+              icon: Icons.delete,
+              title: '정보 삭제',
               onTap: _clearUserData,
             ),
-            ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('오픈소스 라이선스'),
+            _drawerTile(
+              icon: Icons.info_outline,
+              title: '오픈소스 라이선스',
               onTap: _showLicense,
             ),
           ],

@@ -30,7 +30,21 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "행운세",
-          theme: ThemeData(primarySwatch: Colors.green),
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+            scaffoldBackgroundColor: Colors.white,
+            canvasColor: Colors.white,
+            drawerTheme: const DrawerThemeData(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.transparent,
+            ),
+            colorScheme: ColorScheme.light(
+              primary: Colors.green,
+              onPrimary: Colors.white,
+              background: Colors.white,
+              surface: Colors.white,
+            ),
+          ),
           onGenerateRoute: RouteGenerator.generateRoute,
           initialRoute: '/',
           locale: const Locale('ko'),
