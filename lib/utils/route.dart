@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
-import 'package:haengunse/screens/onboarding/location_screen.dart';
 import 'package:haengunse/screens/onboarding/onboarding_screen.dart';
 import 'package:haengunse/screens/onboarding/privacy_screen.dart';
 import 'package:haengunse/screens/onboarding/terms_screen.dart';
@@ -87,11 +86,6 @@ class RouteGenerator {
       case '/privacy':
         return MaterialPageRoute(
           builder: (_) => const PrivacyScreen(),
-        );
-
-      case '/location':
-        return MaterialPageRoute(
-          builder: (_) => const LocationScreen(),
         );
 
       default:

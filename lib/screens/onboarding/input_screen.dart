@@ -83,8 +83,9 @@ class _InputScreenState extends State<InputScreen> {
     return TextSpan(
       text: text,
       style: const TextStyle(
-        color: Color.fromARGB(255, 75, 109, 244),
-        fontWeight: FontWeight.w600,
+        color: Color.fromARGB(255, 0, 0, 0),
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.underline,
       ),
       recognizer: TapGestureRecognizer()..onTap = onTap,
     );
@@ -278,32 +279,34 @@ class _InputScreenState extends State<InputScreen> {
               ),
               const SizedBox(height: 24),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Checkbox(
                     value: _agreedToTerms,
                     onChanged: (val) => setState(() => _agreedToTerms = val!),
+                    visualDensity: VisualDensity.compact, // 위아래 여백 줄임
+                    materialTapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap, // 클릭 영역 최소화
                   ),
                   Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                            color: Colors.black87, fontSize: 14),
-                        children: [
-                          const TextSpan(text: "(필수) "),
-                          _linkSpan("이용약관", () {
-                            Navigator.pushNamed(context, '/terms');
-                          }),
-                          const TextSpan(text: " 및 "),
-                          _linkSpan("개인정보 수집", () {
-                            Navigator.pushNamed(context, '/privacy');
-                          }),
-                          const TextSpan(text: " 및 "),
-                          _linkSpan("위치 동의", () {
-                            Navigator.pushNamed(context, '/location');
-                          }),
-                          const TextSpan(text: "에 동의합니다."),
-                        ],
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                              color: Colors.black87, fontSize: 14),
+                          children: [
+                            const TextSpan(text: "(필수) "),
+                            _linkSpan("이용약관", () {
+                              Navigator.pushNamed(context, '/terms');
+                            }),
+                            const TextSpan(text: " 및 "),
+                            _linkSpan("개인정보 수집", () {
+                              Navigator.pushNamed(context, '/privacy');
+                            }),
+                            const TextSpan(text: "에 동의합니다."),
+                          ],
+                        ),
                       ),
                     ),
                   ),
