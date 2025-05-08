@@ -120,14 +120,14 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(top: 60, bottom: 12), // 상단 패딩 넉넉히
               width: double.infinity,
               alignment: Alignment.center, // 가운데 정렬
-              color: const Color(0xFFEFEFEF), // 연한 회색 배경
+              color: const Color(0xFF82c784),
               child: const Text(
                 'MENU',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
               ),
             ),

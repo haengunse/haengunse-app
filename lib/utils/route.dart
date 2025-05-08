@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haengunse/screens/card/dream_screen.dart';
 import 'package:haengunse/screens/card/saju_screen.dart';
 import 'package:haengunse/screens/card/star_screen.dart';
 import 'package:haengunse/screens/card/zodiac_screen.dart';
@@ -51,6 +52,11 @@ class RouteGenerator {
             ),
           );
         }
+
+      case CardRoute.dream:
+        return MaterialPageRoute(
+          builder: (_) => const DreamScreen(),
+        );
 
       case CardRoute.saju:
         if (settings.arguments != null &&
