@@ -205,7 +205,7 @@ class TodayScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 8.h),
                         FortuneTextBox(
-                          title: '업무운',
+                          title: '직장운',
                           description: responseData?['careerFortune']
                                   ?['description'] ??
                               '-',
