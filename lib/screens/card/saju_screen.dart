@@ -56,15 +56,11 @@ class SajuScreen extends StatelessWidget {
                     title: "$userName님의 사주",
                     content: "$manseInfo",
                   ),
-                  const SizedBox(height: 16),
+                  //const SizedBox(height: 16),
                   _buildSection("💭 전체 해석", sajuResult['summary'] ?? ''),
-                  const SizedBox(height: 16),
                   _buildSection("💬 내 성격은", sajuResult['personality'] ?? ''),
-                  const SizedBox(height: 16),
                   _buildSection("🌿 오행 분석", sajuResult['fiveElements'] ?? ''),
-                  const SizedBox(height: 16),
                   _buildSection("⚖️ 십성 분석", sajuResult['tenGods'] ?? ''),
-                  const SizedBox(height: 80),
                 ],
               ),
             ),
@@ -110,14 +106,22 @@ class SajuScreen extends StatelessWidget {
 
   Widget _buildSection(String title, String content) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
+        color: Colors.white.withOpacity(1),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            color: Colors.black12, // 🟡 그림자 색
+            offset: const Offset(4, 4), // 🟡 그림자 위치, 오 아
+            blurRadius: 2, // 🟡 흐림 강도
+            spreadRadius: 0.5, // 🟡 확산도
+          ),
+          BoxShadow(
+            color: Colors.black12, //
+            offset: const Offset(-4, 4), //
+            blurRadius: 2, //
+            spreadRadius: 0.5, //
           ),
         ],
       ),

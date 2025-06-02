@@ -25,14 +25,22 @@ class UserSajuSection extends StatelessWidget {
     }
 
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
+        color: Colors.white.withOpacity(1),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            color: Colors.black12, // 🟡 그림자 색
+            offset: const Offset(4, 4), // 🟡 그림자 위치, 오 아
+            blurRadius: 1, // 🟡 흐림 강도
+            spreadRadius: 0.5, // 🟡 확산도
+          ),
+          BoxShadow(
+            color: Colors.black12, //
+            offset: const Offset(-4, 4), //
+            blurRadius: 1, //
+            spreadRadius: 0.5, //
           ),
         ],
       ),
