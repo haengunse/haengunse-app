@@ -14,6 +14,14 @@ class UserSajuSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final jus = ['시주', '일주', '월주', '년주'];
 
+    final manseList = content.split(' ');
+    final topIndices = [6, 4, 2, 0]; // 7 5 3 1
+    final bottomIndices = [7, 5, 3, 1]; // 8 6 4 2
+
+    String imagePath(String label) {
+      return 'assets/images/saju/${label.replaceAll('/', '_')}.png';
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.92),
@@ -30,46 +38,73 @@ class UserSajuSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              )),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF1F1F1),
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: jus
-                  .map(
-                    (label) => Expanded(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          label,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            content,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              color: Colors.black87,
-            ),
+
+          // 긴 회색 바 + 텍스트 Row를 겹쳐서 오버레이
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // 긴 회색 바
+              Container(
+                height: 30,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F1F1),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+              ),
+              // 텍스트 라벨 Row
+              Row(
+                children: jus.map((label) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
+          // 이미지 2줄, 4개 column으로 구성
+          Row(
+            children: List.generate(4, (index) {
+              return Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Image.asset(
+                        imagePath(manseList[topIndices[index]]),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Image.asset(
+                        imagePath(manseList[bottomIndices[index]]),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
           ),
         ],
       ),
