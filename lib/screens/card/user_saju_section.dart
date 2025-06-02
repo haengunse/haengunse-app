@@ -14,10 +14,12 @@ class UserSajuSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final jus = ['시주', '일주', '월주', '년주'];
 
+    // 사주 정보 파싱
     final manseList = content.split(' ');
     final topIndices = [6, 4, 2, 0]; // 7 5 3 1
     final bottomIndices = [7, 5, 3, 1]; // 8 6 4 2
 
+    // 이미지 경로 생성 함수
     String imagePath(String label) {
       return 'assets/images/saju/${label.replaceAll('/', '_')}.png';
     }
@@ -38,6 +40,7 @@ class UserSajuSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 상단 제목
           Text(
             title,
             style: const TextStyle(
@@ -47,20 +50,22 @@ class UserSajuSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // 긴 회색 바 + 텍스트 Row를 겹쳐서 오버레이
+          // 회색 바 + 텍스트 라벨 (Stack 이용)
           Stack(
             alignment: Alignment.center,
             children: [
-              // 긴 회색 바
+              // 회색 배경 바
               Container(
                 height: 30,
                 decoration: BoxDecoration(
                   color: const Color(0xFFF1F1F1),
                   borderRadius: BorderRadius.circular(40),
                 ),
+                child: const Center(), // 수직 정렬 기준 제공
               ),
-              // 텍스트 라벨 Row
+              // 텍스트 라벨 (가운데 정렬)
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: jus.map((label) {
                   return Expanded(
                     child: Center(
@@ -79,23 +84,23 @@ class UserSajuSection extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 5),
 
-          // 이미지 2줄, 4개 column으로 구성
+          // 이미지 영역 (4열 × 2행)
           Row(
             children: List.generate(4, (index) {
               return Expanded(
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 0),
                       child: Image.asset(
                         imagePath(manseList[topIndices[index]]),
                         fit: BoxFit.contain,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 0),
                       child: Image.asset(
                         imagePath(manseList[bottomIndices[index]]),
                         fit: BoxFit.contain,

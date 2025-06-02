@@ -46,6 +46,8 @@ class SajuScreen extends StatelessWidget {
             shape: const CircleBorder(),
           ),
           body: SafeArea(
+            top: true,
+            bottom: false,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: ListView(
