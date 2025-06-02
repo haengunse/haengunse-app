@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/screens/card/saju_detail_page.dart';
+import 'package:haengunse/screens/card/user_saju_section.dart';
 
 class SajuScreen extends StatelessWidget {
   final String manseInfo;
@@ -49,7 +50,10 @@ class SajuScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: ListView(
                 children: [
-                  _buildSection("$userName님의 사주", "$manseInfo"),
+                  UserSajuSection(
+                    title: "$userName님의 사주",
+                    content: "$manseInfo",
+                  ),
                   const SizedBox(height: 16),
                   _buildSection("💭 전체 해석", sajuResult['summary'] ?? ''),
                   const SizedBox(height: 16),
@@ -65,6 +69,40 @@ class SajuScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildJusSelector() {
+    final jus = ['시주', '일주', '월주', '년주'];
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F1F1),
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: jus
+            .map(
+              (label) => Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 

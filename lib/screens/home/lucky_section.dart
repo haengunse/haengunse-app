@@ -61,7 +61,7 @@ class SectionLucky extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "더 자세히 확인하기 ->",
+                      " 더 자세히 확인하기 ->",
                       style: TextStyle(
                         fontSize: 15.sp,
                         color: Colors.grey[700],
