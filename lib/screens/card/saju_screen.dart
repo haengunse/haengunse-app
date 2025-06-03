@@ -28,9 +28,14 @@ class SajuScreen extends StatelessWidget {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text(
-              '사주 해석',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
+            title: const Text(
+              "사주 해석",
+              style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w600,
+                fontSize: 23,
+                color: Colors.black,
+              ),
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,

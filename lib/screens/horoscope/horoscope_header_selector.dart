@@ -16,8 +16,15 @@ class HoroscopeHeaderSelector<T extends BaseFortune> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
+    return Container(
+      height: 90,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: Colors.grey, width: 0.5),
+          bottom: BorderSide(color: Colors.grey, width: 0.5),
+        ),
+      ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: fortuneList.length,
@@ -28,25 +35,34 @@ class HoroscopeHeaderSelector<T extends BaseFortune> extends StatelessWidget {
           return GestureDetector(
             onTap: () => onSelect(fortune),
             child: Container(
-              width: 80,
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              decoration: BoxDecoration(
-                color: isSelected ? Colors.yellow[100] : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-              ),
+              width: 84,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/images/${mode == HoroscopeMode.star ? 'character_star' : 'character_zodiac'}/${mode == HoroscopeMode.star ? koreanToHoroscopeEnglish[fortune.titleName] : koreanToZodiacEnglish[fortune.titleName]}.png',
-                    width: 40,
-                    height: 40,
+                    width: 45,
+                    height: 45,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     fortune.titleName,
-                    style: const TextStyle(fontSize: 12),
-                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'HakgyoansimDunggeunmiso',
+                    ),
                   ),
+                  const SizedBox(height: 4),
+                  if (isSelected)
+                    Container(
+                      width: 60,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: Colors.black, // 검정 밑줄
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
                 ],
               ),
             ),

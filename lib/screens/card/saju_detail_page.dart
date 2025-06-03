@@ -6,7 +6,17 @@ class SajuDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('사주 해석 도움말')),
+      appBar: AppBar(
+        title: const Text(
+          "사주 해석 도움말",
+          style: TextStyle(
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w600,
+            fontSize: 23,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: const SafeArea(
         child: Padding(
           padding: EdgeInsets.all(25),
