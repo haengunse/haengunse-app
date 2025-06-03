@@ -87,6 +87,7 @@ class DreamChatBoxController {
     }
 
     if (result.reply != null) {
+      // 정상 응답 처리
       messages.add(DreamMessage(text: result.reply!, isUser: false));
       messageKeys.add(GlobalKey());
       chatCount++;
@@ -103,6 +104,7 @@ class DreamChatBoxController {
       _isWaitingResponse = false;
       DreamChatStorage.saveChat(messages, chatCount);
     } else if (result.isNetworkError) {
+      // 네트워크 오류 처리
       messages.removeLast();
       messageKeys.removeLast();
       messages.add(DreamMessage(text: input, isUser: true, isError: true));
@@ -112,6 +114,7 @@ class DreamChatBoxController {
       onUpdate();
       onShowErrorDialog();
     } else {
+      // 서버 오류든 기타 오류든 모두 동일한 문구 출력
       _isWaitingResponse = false;
       _addSystemMessage("죄송해요. 지금은 해석을 도와드릴 수 없어요.");
     }
