@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserSajuSection extends StatelessWidget {
   final String title;
@@ -14,64 +15,58 @@ class UserSajuSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final jus = ['시주', '일주', '월주', '년주'];
 
-    // 사주 정보 파싱
     final manseList = content.split(' ');
-    final topIndices = [6, 4, 2, 0]; // 7 5 3 1
-    final bottomIndices = [7, 5, 3, 1]; // 8 6 4 2
+    final topIndices = [6, 4, 2, 0];
+    final bottomIndices = [7, 5, 3, 1];
 
-    // 이미지 경로 생성 함수
     String imagePath(String label) {
       return 'assets/images/saju/${label.replaceAll('/', '_')}.png';
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(1),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12, // 🟡 그림자 색
-            offset: const Offset(4, 4), // 🟡 그림자 위치, 오 아
-            blurRadius: 1, // 🟡 흐림 강도
-            spreadRadius: 0.5, // 🟡 확산도
+            color: Colors.black12,
+            offset: Offset(4.w, 4.h),
+            blurRadius: 1.r,
+            spreadRadius: 0.5.r,
           ),
           BoxShadow(
-            color: Colors.black12, //
-            offset: const Offset(-4, 4), //
-            blurRadius: 1, //
-            spreadRadius: 0.5, //
+            color: Colors.black12,
+            offset: Offset(-4.w, 4.h),
+            blurRadius: 1.r,
+            spreadRadius: 0.5.r,
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 상단 제목
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 17,
+            style: TextStyle(
+              fontSize: 17.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
 
-          // 회색 바 + 텍스트 라벨 (Stack 이용)
+          // 회색 바 + 텍스트 라벨
           Stack(
             alignment: Alignment.center,
             children: [
-              // 회색 배경 바
               Container(
-                height: 30,
+                height: 30.h,
                 decoration: BoxDecoration(
                   color: const Color(0xFFF1F1F1),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(40.r),
                 ),
-                child: const Center(), // 수직 정렬 기준 제공
               ),
-              // 텍스트 라벨 (가운데 정렬)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: jus.map((label) {
@@ -80,8 +75,8 @@ class UserSajuSection extends StatelessWidget {
                       child: Text(
                         label,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: TextStyle(
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -92,26 +87,28 @@ class UserSajuSection extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 5),
+          SizedBox(height: 5.h),
 
-          // 이미지 영역 (4열 × 2행)
+          // 사주 이미지 2행
           Row(
             children: List.generate(4, (index) {
               return Expanded(
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
+                      padding: EdgeInsets.symmetric(vertical: 2.h),
                       child: Image.asset(
                         imagePath(manseList[topIndices[index]]),
                         fit: BoxFit.contain,
+                        height: 42.h, // 적절히 조절
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
+                      padding: EdgeInsets.symmetric(vertical: 2.h),
                       child: Image.asset(
                         imagePath(manseList[bottomIndices[index]]),
                         fit: BoxFit.contain,
+                        height: 42.h, // 적절히 조절
                       ),
                     ),
                   ],

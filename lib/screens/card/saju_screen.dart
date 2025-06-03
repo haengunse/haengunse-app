@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/card/saju_detail_page.dart';
 import 'package:haengunse/screens/card/user_saju_section.dart';
 
@@ -27,8 +28,10 @@ class SajuScreen extends StatelessWidget {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: const Text('사주 해석',
-                style: TextStyle(fontWeight: FontWeight.w600)),
+            title: Text(
+              '사주 해석',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
+            ),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
@@ -41,22 +44,20 @@ class SajuScreen extends StatelessWidget {
             },
             backgroundColor:
                 const Color.fromARGB(255, 114, 212, 140).withOpacity(0.85),
-            child:
-                const Icon(Icons.question_mark, size: 28, color: Colors.white),
+            child: Icon(Icons.question_mark, size: 28.sp, color: Colors.white),
             shape: const CircleBorder(),
           ),
           body: SafeArea(
             top: true,
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: ListView(
                 children: [
                   UserSajuSection(
                     title: "$userName님의 사주",
                     content: "$manseInfo",
                   ),
-                  //const SizedBox(height: 16),
                   _buildSection("💭 전체 해석", sajuResult['summary'] ?? ''),
                   _buildSection("💬 내 성격은", sajuResult['personality'] ?? ''),
                   _buildSection("🌿 오행 분석", sajuResult['fiveElements'] ?? ''),
@@ -74,11 +75,11 @@ class SajuScreen extends StatelessWidget {
     final jus = ['시주', '일주', '월주', '년주'];
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: const Color(0xFFF1F1F1),
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(40.r),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,11 +88,11 @@ class SajuScreen extends StatelessWidget {
               (label) => Expanded(
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(vertical: 8.h),
                     child: Text(
                       label,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -106,39 +107,41 @@ class SajuScreen extends StatelessWidget {
 
   Widget _buildSection(String title, String content) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12, // 🟡 그림자 색
-            offset: const Offset(4, 4), // 🟡 그림자 위치, 오 아
-            blurRadius: 2, // 🟡 흐림 강도
-            spreadRadius: 0.5, // 🟡 확산도
+            color: Colors.black12,
+            offset: Offset(4.w, 4.h),
+            blurRadius: 2.r,
+            spreadRadius: 0.5.r,
           ),
           BoxShadow(
-            color: Colors.black12, //
-            offset: const Offset(-4, 4), //
-            blurRadius: 2, //
-            spreadRadius: 0.5, //
+            color: Colors.black12,
+            offset: Offset(-4.w, 4.h),
+            blurRadius: 2.r,
+            spreadRadius: 0.5.r,
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              )),
-          const SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 17.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10.h),
           Text(
             content,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: 14.sp,
               height: 1.6,
               color: Colors.black87,
             ),
