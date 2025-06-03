@@ -57,7 +57,17 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedFortune.titleName),
+        title: Text(
+          selectedFortune.titleName,
+          style: TextStyle(
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w600,
+            fontSize: 23,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -71,6 +81,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
             selected: selectedFortune,
             onSelect: selectFortune,
             mode: widget.mode,
+            viewAllLabel: '모두 펼치기',
           ),
           Expanded(
             child: HoroscopeMainContent<T>(
