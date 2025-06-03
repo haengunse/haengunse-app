@@ -113,17 +113,19 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
   Widget _buildHorizontalList() {
     return SizedBox(
-      height: 90.h,
+      height: 86.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(left: 4.w, right: 16.w), // 간격 살짝 축소
+        padding: EdgeInsets.only(right: 16.w),
         itemCount: widget.fortuneList.length,
         itemBuilder: (context, index) {
           final fortune = widget.fortuneList[index];
           final isSelected = fortune.titleName == widget.selected.titleName;
+          final isFirst = index == 0;
+
           return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h), // 위아래 padding 자연스럽게
-            child: _buildItem(fortune, isSelected),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: _buildItem(fortune, isSelected, removeMargin: isFirst),
           );
         },
       ),
@@ -150,20 +152,20 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
         crossAxisSpacing: 16.w,
         children: widget.fortuneList.map((fortune) {
           final isSelected = fortune.titleName == widget.selected.titleName;
-          return _buildItem(fortune, isSelected);
+          return _buildItem(fortune, isSelected, removeMargin: true);
         }).toList(),
       ),
     );
   }
 
-  Widget _buildItem(T fortune, bool isSelected) {
+  Widget _buildItem(T fortune, bool isSelected, {bool removeMargin = false}) {
     return GestureDetector(
       onTap: () => widget.onSelect(fortune),
       child: Container(
         width: _itemWidth.w,
-        margin: EdgeInsets.symmetric(
-          horizontal: _itemMarginHorizontal.w,
-        ),
+        margin: removeMargin
+            ? EdgeInsets.zero
+            : EdgeInsets.symmetric(horizontal: _itemMarginHorizontal.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
