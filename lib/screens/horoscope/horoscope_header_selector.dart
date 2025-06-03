@@ -113,7 +113,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
   Widget _buildHorizontalList() {
     return SizedBox(
-      height: 86.h,
+      height: 90.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(right: 16.w),
@@ -135,7 +135,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
   Widget _buildFixedGridView() {
     const int columns = 4;
     const int rows = 3;
-    final double itemHeight = 85.h;
+    final double itemHeight = 90.h;
     final double spacing = 5.h;
     final double totalHeight =
         (itemHeight * rows) + (spacing * (rows - 1)) + 5.h;
@@ -181,7 +181,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
-                height: 1.1,
+                height: 1.sp,
                 fontFamily: 'HakgyoansimDunggeunmiso',
                 color: Colors.black,
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
 import 'package:haengunse/screens/horoscope/horoscope_header_selector.dart';
 import 'package:haengunse/screens/horoscope/horoscope_main_content.dart';
@@ -67,10 +68,10 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
       appBar: AppBar(
         title: Text(
           selectedFortune.titleName,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
-            fontSize: 23,
+            fontSize: 23.sp, // ✅ 반응형
             color: Colors.black,
           ),
         ),
@@ -78,7 +79,8 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon:
+              Icon(Icons.arrow_back, color: Colors.black, size: 24.w), // ✅ 반응형
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -90,7 +92,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
               opacity: isExpanded ? 0.4 : 1.0,
               child: Column(
                 children: [
-                  const SizedBox(height: 8), // 헤더 아래 공간
+                  SizedBox(height: 8.h), // ✅ 반응형 spacing
                   Expanded(
                     child: HoroscopeMainContent<T>(
                       fortune: selectedFortune,
@@ -109,11 +111,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
                 onSelect: selectFortune,
                 mode: widget.mode,
                 viewAllLabel: '모두 펼치기',
-                onExpandChanged: (expanded) {
-                  setState(() {
-                    isExpanded = expanded; // 어두움 효과 적용용
-                  });
-                },
+                onExpandChanged: handleExpandChange,
               ),
             ],
           ),
