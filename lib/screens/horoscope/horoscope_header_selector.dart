@@ -8,6 +8,7 @@ class HoroscopeHeaderSelector<T extends BaseFortune> extends StatefulWidget {
   final Function(T) onSelect;
   final HoroscopeMode mode;
   final String viewAllLabel;
+  final Function(bool)? onExpandChanged;
 
   const HoroscopeHeaderSelector({
     Key? key,
@@ -16,6 +17,7 @@ class HoroscopeHeaderSelector<T extends BaseFortune> extends StatefulWidget {
     required this.onSelect,
     required this.mode,
     required this.viewAllLabel,
+    this.onExpandChanged,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,11 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
   static const double _itemWidth = 84;
   static const double _itemMarginHorizontal = 8;
+
+  void _toggleExpand(bool expand) {
+    setState(() => _isExpanded = expand);
+    widget.onExpandChanged?.call(expand); // 외부 전달
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                 ),
                 IconButton(
                   icon: Icon(Icons.keyboard_arrow_up, color: Colors.grey[900]),
-                  onPressed: () => setState(() => _isExpanded = false),
+                  onPressed: () => _toggleExpand(false),
                 ),
               ],
             ),
@@ -83,7 +90,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                         child: IconButton(
                           icon: Icon(Icons.keyboard_arrow_down,
                               color: Colors.grey[900]),
-                          onPressed: () => setState(() => _isExpanded = true),
+                          onPressed: () => _toggleExpand(true),
                         ),
                       ),
                     ),

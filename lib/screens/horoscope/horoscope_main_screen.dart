@@ -109,6 +109,11 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
                 onSelect: selectFortune,
                 mode: widget.mode,
                 viewAllLabel: '모두 펼치기',
+                onExpandChanged: (expanded) {
+                  setState(() {
+                    isExpanded = expanded; // 어두움 효과 적용용
+                  });
+                },
               ),
             ],
           ),
