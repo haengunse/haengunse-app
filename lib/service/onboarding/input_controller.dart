@@ -12,9 +12,22 @@ class InputController {
     required String? selectedBirthTime,
     required bool agreedToTerms,
   }) async {
-    if (name.isEmpty || selectedDate == null || !agreedToTerms) {
+    if (name.isEmpty || selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("필수 항목을 모두 입력해 주세요.")),
+        SnackBar(
+          content: Text("입력이 완료되지 않았어요. 모든 항목을 입력해주세요."),
+          backgroundColor: Colors.grey[600],
+        ),
+      );
+      return;
+    }
+
+    if (!agreedToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("서비스 이용을 위해 약관 동의가 필요해요."),
+          backgroundColor: Colors.grey[600],
+        ),
       );
       return;
     }
