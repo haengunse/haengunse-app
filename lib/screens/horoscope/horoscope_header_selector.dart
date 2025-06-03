@@ -86,7 +86,17 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                       bottom: 0,
                       child: Container(
                         width: 44.w,
-                        color: Colors.white,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.white.withOpacity(0.0), // 투명
+                              Colors.white.withOpacity(0.8), // 중간
+                              Colors.white, // 완전 흰색
+                            ],
+                          ),
+                        ),
                         child: IconButton(
                           icon: Icon(Icons.keyboard_arrow_down,
                               color: Colors.grey[900]),
@@ -106,12 +116,15 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
       height: 90.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(left: 8.w, right: 48.w),
+        padding: EdgeInsets.only(left: 4.w, right: 16.w), // 간격 살짝 축소
         itemCount: widget.fortuneList.length,
         itemBuilder: (context, index) {
           final fortune = widget.fortuneList[index];
           final isSelected = fortune.titleName == widget.selected.titleName;
-          return _buildItem(fortune, isSelected);
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.h), // 위아래 padding 자연스럽게
+            child: _buildItem(fortune, isSelected),
+          );
         },
       ),
     );
