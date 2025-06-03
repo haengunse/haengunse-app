@@ -21,6 +21,7 @@ class HoroscopeMainScreen<T extends BaseFortune> extends StatefulWidget {
 class _HoroscopeMainScreenState<T extends BaseFortune>
     extends State<HoroscopeMainScreen<T>> {
   late T selectedFortune;
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -53,13 +54,20 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
     });
   }
 
+  void handleExpandChange(bool expanded) {
+    setState(() {
+      isExpanded = expanded;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           selectedFortune.titleName,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 23,
@@ -70,24 +78,39 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          HoroscopeHeaderSelector<T>(
-            fortuneList: widget.fortuneList,
-            selected: selectedFortune,
-            onSelect: selectFortune,
-            mode: widget.mode,
-            viewAllLabel: '모두 펼치기',
-          ),
-          Expanded(
-            child: HoroscopeMainContent<T>(
-              fortune: selectedFortune,
-              mode: widget.mode,
+          AbsorbPointer(
+            absorbing: isExpanded,
+            child: Opacity(
+              opacity: isExpanded ? 0.4 : 1.0,
+              child: Column(
+                children: [
+                  const SizedBox(height: 8), // 헤더 아래 공간
+                  Expanded(
+                    child: HoroscopeMainContent<T>(
+                      fortune: selectedFortune,
+                      mode: widget.mode,
+                    ),
+                  ),
+                ],
+              ),
             ),
+          ),
+          Column(
+            children: [
+              HoroscopeHeaderSelector<T>(
+                fortuneList: widget.fortuneList,
+                selected: selectedFortune,
+                onSelect: selectFortune,
+                mode: widget.mode,
+                viewAllLabel: '모두 펼치기',
+              ),
+            ],
           ),
         ],
       ),

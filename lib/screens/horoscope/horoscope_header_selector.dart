@@ -45,6 +45,7 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                   widget.viewAllLabel,
                   style: TextStyle(
                     fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'pretendard',
                     color: Colors.grey[900],
                   ),
@@ -112,8 +113,8 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
   Widget _buildFixedGridView() {
     const int columns = 4;
     const int rows = 3;
-    final double itemHeight = 90.h;
-    final double spacing = 20.h;
+    final double itemHeight = 85.h;
+    final double spacing = 5.h;
     final double totalHeight =
         (itemHeight * rows) + (spacing * (rows - 1)) + 5.h;
 
@@ -142,7 +143,6 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
         width: _itemWidth.w,
         margin: EdgeInsets.symmetric(
           horizontal: _itemMarginHorizontal.w,
-          vertical: 6.h,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
