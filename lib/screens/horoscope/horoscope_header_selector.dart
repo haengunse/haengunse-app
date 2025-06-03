@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
 
 class HoroscopeHeaderSelector<T extends BaseFortune> extends StatefulWidget {
@@ -36,14 +37,14 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
         if (_isExpanded)
           Padding(
             padding:
-                const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 0),
+                EdgeInsets.only(left: 12.w, right: 12.w, top: 4.h, bottom: 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.viewAllLabel,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontFamily: 'pretendard',
                     color: Colors.grey[900],
                   ),
@@ -58,15 +59,15 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
         // 헤더
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-              top: BorderSide(color: Colors.grey, width: 0.5),
-              bottom: BorderSide(color: Colors.grey, width: 0.5),
+              top: BorderSide(color: Colors.grey[400]!, width: 0.5),
+              bottom: BorderSide(color: Colors.grey[400]!, width: 0.5),
             ),
           ),
           child: _isExpanded
-              ? _buildGridFullView() // 전체가 보이도록 자동 높이 설정
+              ? _buildFixedGridView()
               : Stack(
                   alignment: Alignment.centerRight,
                   children: [
@@ -75,10 +76,14 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                       right: 0,
                       top: 0,
                       bottom: 0,
-                      child: IconButton(
-                        icon: Icon(Icons.keyboard_arrow_down,
-                            color: Colors.grey[900]),
-                        onPressed: () => setState(() => _isExpanded = true),
+                      child: Container(
+                        width: 44.w,
+                        color: Colors.white,
+                        child: IconButton(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: Colors.grey[900]),
+                          onPressed: () => setState(() => _isExpanded = true),
+                        ),
                       ),
                     ),
                   ],
@@ -90,10 +95,10 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
   Widget _buildHorizontalList() {
     return SizedBox(
-      height: 90,
+      height: 90.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 8, right: 16),
+        padding: EdgeInsets.only(left: 8.w, right: 48.w),
         itemCount: widget.fortuneList.length,
         itemBuilder: (context, index) {
           final fortune = widget.fortuneList[index];
@@ -104,17 +109,24 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
     );
   }
 
-  Widget _buildGridFullView() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+  Widget _buildFixedGridView() {
+    const int columns = 4;
+    const int rows = 3;
+    final double itemHeight = 90.h;
+    final double spacing = 20.h;
+    final double totalHeight =
+        (itemHeight * rows) + (spacing * (rows - 1)) + 5.h;
+
+    return SizedBox(
+      height: totalHeight,
       child: GridView.count(
-        crossAxisCount: 4,
+        crossAxisCount: columns,
+        childAspectRatio: _itemWidth.w / itemHeight,
         shrinkWrap: true,
-        physics:
-            const NeverScrollableScrollPhysics(), // SingleChildScrollView로 감싸기 전제
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0), // 마지막 줄과 화살표 거리 확보
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 16,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
+        mainAxisSpacing: spacing,
+        crossAxisSpacing: 16.w,
         children: widget.fortuneList.map((fortune) {
           final isSelected = fortune.titleName == widget.selected.titleName;
           return _buildItem(fortune, isSelected);
@@ -127,37 +139,39 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
     return GestureDetector(
       onTap: () => widget.onSelect(fortune),
       child: Container(
-        width: _itemWidth,
-        margin: const EdgeInsets.symmetric(
-          horizontal: _itemMarginHorizontal,
-          vertical: 6,
+        width: _itemWidth.w,
+        margin: EdgeInsets.symmetric(
+          horizontal: _itemMarginHorizontal.w,
+          vertical: 6.h,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               'assets/images/${widget.mode == HoroscopeMode.star ? 'character_star' : 'character_zodiac'}/${widget.mode == HoroscopeMode.star ? koreanToHoroscopeEnglish[fortune.titleName] : koreanToZodiacEnglish[fortune.titleName]}.png',
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.h,
+              fit: BoxFit.contain,
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6.h),
             Text(
               fortune.titleName,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: 14.sp,
+                height: 1.1,
                 fontFamily: 'HakgyoansimDunggeunmiso',
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             if (isSelected)
               Container(
-                width: 60,
-                height: 3,
+                width: 60.w,
+                height: 3.h,
                 decoration: BoxDecoration(
                   color: Colors.black,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
           ],
