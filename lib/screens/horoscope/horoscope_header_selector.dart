@@ -42,26 +42,29 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
     return Column(
       children: [
         if (_isExpanded)
-          Padding(
-            padding:
-                EdgeInsets.only(left: 12.w, right: 12.w, top: 4.h, bottom: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.viewAllLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'pretendard',
-                    color: Colors.grey[900],
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding:
+                  EdgeInsets.only(left: 12.w, right: 12.w, top: 4.h, bottom: 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.viewAllLabel,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'HakgyoansimDunggeunmiso',
+                      color: Colors.grey[900],
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.keyboard_arrow_up, color: Colors.grey[900]),
-                  onPressed: () => _toggleExpand(false),
-                ),
-              ],
+                  IconButton(
+                    icon: Icon(Icons.keyboard_arrow_up, color: Colors.grey[900]),
+                    onPressed: () => _toggleExpand(false),
+                  ),
+                ],
+              ),
             ),
           ),
 

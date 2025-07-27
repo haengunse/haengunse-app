@@ -69,9 +69,9 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
         title: Text(
           selectedFortune.titleName,
           style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 23.sp, // ✅ 반응형
+            fontFamily: 'HakgyoansimDunggeunmiso',
+            fontWeight: FontWeight.w400,
+            fontSize: 23.sp, // 반응형
             color: Colors.black,
           ),
         ),
@@ -79,8 +79,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon:
-              Icon(Icons.arrow_back, color: Colors.black, size: 24.w), // ✅ 반응형
+          icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.w), // 반응형
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -92,7 +91,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
               opacity: isExpanded ? 0.4 : 1.0,
               child: Column(
                 children: [
-                  SizedBox(height: 8.h), // ✅ 반응형 spacing
+                  SizedBox(height: 8.h), // 반응형 spacing
                   Expanded(
                     child: HoroscopeMainContent<T>(
                       fortune: selectedFortune,
