@@ -4,6 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haengunse/screens/home/lucky_section.dart';
 import 'package:haengunse/screens/home/card_section.dart';
 import 'package:haengunse/screens/home/day_section.dart';
+import 'package:haengunse/service/card/saju_cache_storage.dart';
+import 'package:haengunse/service/day/day_cache_storage.dart';
+import 'package:haengunse/service/dream/dream_chat_storage.dart';
+import 'package:haengunse/service/today/today_cache_storage.dart';
 import 'package:haengunse/utils/city_mapper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -134,6 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    
+    // 모든 캐시 초기화
+    await SajuCacheStorage.clearResponse();
+    await DayCacheStorage.clearAll();
+    await DreamChatStorage.clearChat();
+    await TodayCacheStorage.clearResponse();
 
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(

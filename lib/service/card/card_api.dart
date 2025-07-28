@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:haengunse/config.dart';
 import 'package:haengunse/screens/card/saju_loading_page.dart';
+import 'package:haengunse/service/card/saju_cache_storage.dart';
 import 'package:haengunse/utils/request_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,6 +82,14 @@ class CardService {
     void Function(dynamic data) onSuccess,
     VoidCallback retry,
   ) async {
+    // 캐시된 데이터 확인
+    final cachedResponse = await SajuCacheStorage.loadResponse();
+    if (cachedResponse != null) {
+      onSuccess(cachedResponse);
+      return;
+    }
+
+    // 캐시가 없으면 로딩 화면 표시
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
@@ -108,12 +117,17 @@ class CardService {
             response.data is Map<String, dynamic>) {
           final sajuMap = response.data as Map<String, dynamic>;
 
-          return {
+          final responseData = {
             'manseInfo': manseInfo,
             'sajuResult': sajuMap.map(
                 (k, v) => MapEntry(k.toString(), v.toString())), // 👈 String 변환
             'userName': prefs.getString('name') ?? '사용자',
           };
+          
+          // 응답 캐싱
+          await SajuCacheStorage.saveResponse(responseData, manseInfo);
+          
+          return responseData;
         } else {
           throw Exception("예상과 다른 응답 형식");
         }
