@@ -20,7 +20,10 @@ class UserSajuSection extends StatelessWidget {
     final bottomIndices = [7, 5, 3, 1];
 
     String imagePath(String label) {
-      return 'assets/images/saju/${label.replaceAll('/', '_')}.png';
+      if (label == '모름') {
+        return 'assets/images/saju/모름.png';
+      }
+      return 'assets/images/saju/${label.replaceAll('/', ':')}.png';
     }
 
     return Container(
@@ -96,19 +99,19 @@ class UserSajuSection extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 2.h),
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Image.asset(
                         imagePath(manseList[topIndices[index]]),
                         fit: BoxFit.contain,
-                        height: 42.h, // 적절히 조절
+                        height: 65.h,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 2.h),
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
                       child: Image.asset(
                         imagePath(manseList[bottomIndices[index]]),
                         fit: BoxFit.contain,
-                        height: 42.h, // 적절히 조절
+                        height: 65.h,
                       ),
                     ),
                   ],
