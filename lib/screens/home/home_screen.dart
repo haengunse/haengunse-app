@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(top: 60, bottom: 12), // 상단 패딩 넉넉히
               width: double.infinity,
               alignment: Alignment.center, // 가운데 정렬
-              color: const Color(0xFF82c784),
+              color: const Color.fromARGB(255, 231, 244, 231),
               child: const Text(
                 'MENU',
                 style: TextStyle(
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFDDDDDD)), // 연한 회색 선
+            //const Divider(height: 1, color: Color(0xFFDDDDDD)), // 연한 회색 선
             const SizedBox(height: 8),
             _drawerTile(
               icon: Icons.edit,

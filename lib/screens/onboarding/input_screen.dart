@@ -129,7 +129,7 @@ class _InputScreenState extends State<InputScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24.w, 40.h, 24.w, 24.h),
+            padding: EdgeInsets.fromLTRB(24.w, 50.h, 24.w, 24.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
