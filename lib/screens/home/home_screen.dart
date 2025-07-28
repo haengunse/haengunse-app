@@ -13,6 +13,94 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+class ConfirmDeleteDialog extends StatelessWidget {
+  final VoidCallback onConfirm;
+
+  const ConfirmDeleteDialog({super.key, required this.onConfirm});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 50),
+      backgroundColor: Colors.grey[300],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '정보를 삭제하시겠습니까?\n삭제된 정보는 복구할 수 없습니다.',
+              style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                height: 1.4,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _dialogButton(
+                  label: '확인',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onConfirm();
+                  },
+                  isPrimary: true,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _dialogButton({
+    required String label,
+    required VoidCallback onPressed,
+    bool isPrimary = false,
+  }) {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.black26,
+          width: 0.5,
+        ),
+      ),
+      child: TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          minimumSize: Size.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Pretendard',
+            fontSize: 13.5,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   String userName = "행운세";
 
@@ -151,7 +239,16 @@ class _HomeScreenState extends State<HomeScreen> {
             _drawerTile(
               icon: Icons.delete,
               title: '정보 삭제',
-              onTap: _clearUserData,
+              onTap: () {
+                Navigator.pop(context); // 드로어 닫기
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  showDialog(
+                    context: context,
+                    builder: (_) =>
+                        ConfirmDeleteDialog(onConfirm: _clearUserData),
+                  );
+                });
+              },
             ),
             _drawerTile(
               icon: Icons.info_outline,
