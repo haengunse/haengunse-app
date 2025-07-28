@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
 
     // 테스트용 강제 초기화 (배포 시 제거)
-    await prefs.clear();
+    // await prefs.clear();
 
     return prefs.getBool('isFirstRun') ?? true;
   }

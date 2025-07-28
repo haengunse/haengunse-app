@@ -159,6 +159,8 @@ class _InputScreenState extends State<InputScreen> {
                         child: TextField(
                           controller: _nameController,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 12.h, horizontal: 12.w),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[700]!),
                             ),

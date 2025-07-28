@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    
+
     // 모든 캐시 초기화
     await SajuCacheStorage.clearResponse();
     await DayCacheStorage.clearAll();
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 60, bottom: 12), // 상단 패딩 넉넉히
+              padding: const EdgeInsets.only(top: 50, bottom: 50), // 상단 패딩 넉넉히
               width: double.infinity,
               alignment: Alignment.center, // 가운데 정렬
               color: const Color.fromARGB(255, 231, 244, 231),
