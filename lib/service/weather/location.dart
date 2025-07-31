@@ -4,7 +4,7 @@ class MyLocation {
   // double latitude = 37.5665; // 기본값: 서울
   // double longitude = 126.9780;
 
-  double latitude = 35.94389; // 기본값: 서울
+  double latitude = 35.94389;
   double longitude = 126.954437;
 
   Future<void> getMyCurrentLocation() async {
@@ -14,7 +14,7 @@ class MyLocation {
     print("🛰 위치 서비스 상태: $serviceEnabled");
 
     if (!serviceEnabled) {
-      print("❗ 위치 서비스 꺼짐 → 서울 기본값 사용");
+      print("❗ 위치 서비스 꺼짐 → 기본값 사용");
       return;
     }
 
@@ -26,13 +26,13 @@ class MyLocation {
       print("🔓 요청 후 권한 상태: $permission");
 
       if (permission == LocationPermission.denied) {
-        print("❗ 권한 거부 → 서울 기본값 사용");
+        print("❗ 권한 거부 → 기본값 사용");
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      print("❗ 권한 영구 거부 → 서울 기본값 사용");
+      print("❗ 권한 영구 거부 → 기본값 사용");
       return;
     }
 
