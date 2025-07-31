@@ -75,8 +75,8 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-              top: BorderSide(color: Colors.grey[400]!, width: 0.5),
-              bottom: BorderSide(color: Colors.grey[400]!, width: 0.5),
+              top: BorderSide(color: Colors.grey[400] ?? Colors.grey, width: 0.5),
+              bottom: BorderSide(color: Colors.grey[400] ?? Colors.grey, width: 0.5),
             ),
           ),
           child: _isExpanded

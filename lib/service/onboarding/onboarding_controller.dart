@@ -10,7 +10,7 @@ class OnboardingController {
     final prefs = await SharedPreferences.getInstance();
 
     // 🔥 🔥 🔥 🔥 🔥 🔥  테스트용 초기화 (배포 전 삭제)
-    await prefs.clear();
+    // await prefs.clear();
 
     final isFirstRun = prefs.getBool('isFirstRun') ?? true;
 
