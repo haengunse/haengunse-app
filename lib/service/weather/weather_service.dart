@@ -26,7 +26,7 @@ class WeatherService {
               data['snow']?['1h'] ??
               data['snow']?['3h'];
 
-          print('[WeatherService] ☔ 강수량 정보(raw): ${rawRain ?? "없음"} mm');
+          // print('[WeatherService] ☔ 강수량 정보(raw): ${rawRain ?? "없음"} mm');
 
           return Weather(
             cityId: data['id'],

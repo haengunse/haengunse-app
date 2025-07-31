@@ -94,11 +94,11 @@ class DreamChatBoxController {
 
       await Future.delayed(const Duration(milliseconds: 300));
       if (chatCount == 1) {
-        _addSystemMessage("꿈속에서 느꼈던 감정이나 더 자세한 상황을 알려주시면...");
+        _addSystemMessage("꿈 속에서 느꼈던 감정이나 상황을 좀 더 알려주시면, 조금 더 정확하게 해석할 수 있어요.");
       } else if (chatCount == 2) {
-        _addSystemMessage("조금 더 깊이 들어가볼 수도 있어요...");
+        _addSystemMessage("조금만 더 설명해주시면, 당신에게 맞는 해석으로 도와드릴 수 있어요.");
       } else if (chatCount == 3) {
-        _addSystemMessage("꿈 해몽 질문은 하루에 한 번만 가능해요...");
+        _addSystemMessage("꿈 해몽은 하루에 한 번만 가능해요! 내일 다시 이야기해볼까요?");
       }
 
       _isWaitingResponse = false;
