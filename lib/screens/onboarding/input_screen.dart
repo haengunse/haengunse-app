@@ -67,7 +67,8 @@ class _InputScreenState extends State<InputScreen> {
               onSurface: Colors.grey[800] ?? Colors.grey,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: Colors.grey[800] ?? Colors.grey),
+              style: TextButton.styleFrom(
+                  foregroundColor: Colors.grey[800] ?? Colors.grey),
             ),
           ),
           child: child!,
@@ -127,9 +128,19 @@ class _InputScreenState extends State<InputScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
+        appBar: widget.showBackButton
+            ? AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              )
+            : null,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(24.w, 50.h, 24.w, 24.h),
+            padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 24.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -162,7 +173,8 @@ class _InputScreenState extends State<InputScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 12.h, horizontal: 12.w),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey[700] ?? Colors.grey),
+                              borderSide: BorderSide(
+                                  color: Colors.grey[700] ?? Colors.grey),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: primaryColor!),
@@ -208,7 +220,8 @@ class _InputScreenState extends State<InputScreen> {
                           height: fieldHeight,
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[700] ?? Colors.grey),
+                            border: Border.all(
+                                color: Colors.grey[700] ?? Colors.grey),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Row(
@@ -235,7 +248,8 @@ class _InputScreenState extends State<InputScreen> {
                         height: fieldHeight,
                         padding: EdgeInsets.symmetric(horizontal: 12.w),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[700] ?? Colors.grey),
+                          border: Border.all(
+                              color: Colors.grey[700] ?? Colors.grey),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: DropdownButton<String>(

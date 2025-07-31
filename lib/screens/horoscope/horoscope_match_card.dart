@@ -62,8 +62,14 @@ class HoroscopeMatchCard extends StatelessWidget {
           child: Center(
             child: Image.asset(
               characterImage,
-              width: 80.w,
-              height: 80.w,
+              width: mode == HoroscopeMode.star &&
+                      koreanToHoroscopeEnglish[ageName] == 'gemini'
+                  ? 65.w
+                  : 80.w,
+              height: mode == HoroscopeMode.star &&
+                      koreanToHoroscopeEnglish[ageName] == 'gemini'
+                  ? 65.w
+                  : 80.w,
               fit: BoxFit.contain,
             ),
           ),
