@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/card/card_api.dart';
 import 'package:haengunse/service/card/card_interactor.dart';
@@ -40,24 +41,32 @@ class SectionCard extends StatelessWidget {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: snapshot.data!.length,
-                  separatorBuilder: (context, index) => SizedBox(width: 10.w),
-                  itemBuilder: (context, index) {
-                    final card = snapshot.data![index];
-                    return GestureDetector(
-                      onTap: () => CardInteractor.handleTap(
-                        context: context,
-                        card: card,
-                      ),
-                      child: _buildFortuneCard(
-                        imagePath: card.imagePath,
-                        smallTitle: card.smallTitle,
-                        bigTitle: card.bigTitle,
-                      ),
-                    );
-                  },
+                return ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    },
+                  ),
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    separatorBuilder: (context, index) => SizedBox(width: 10.w),
+                    itemBuilder: (context, index) {
+                      final card = snapshot.data![index];
+                      return GestureDetector(
+                        onTap: () => CardInteractor.handleTap(
+                          context: context,
+                          card: card,
+                        ),
+                        child: _buildFortuneCard(
+                          imagePath: card.imagePath,
+                          smallTitle: card.smallTitle,
+                          bigTitle: card.bigTitle,
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),

@@ -193,11 +193,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // AppBar가 body 위에 그려지도록
+      extendBodyBehindAppBar: false, // AppBar와 body가 겹치지 않도록
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 231, 244, 231),
         elevation: 0,
         surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 0, // 스크롤 시 elevation 변경 방지
         automaticallyImplyLeading: false,
         actions: [
           Builder(
@@ -269,15 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SectionLucky(userName: userName),
-              const SectionCard(),
-              const SectionDay(),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SectionLucky(userName: userName),
+            const SectionCard(),
+            const SectionDay(),
+          ],
         ),
       ),
     );

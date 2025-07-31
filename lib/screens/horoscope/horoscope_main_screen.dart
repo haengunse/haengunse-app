@@ -21,7 +21,7 @@ class HoroscopeMainScreen<T extends BaseFortune> extends StatefulWidget {
 
 class _HoroscopeMainScreenState<T extends BaseFortune>
     extends State<HoroscopeMainScreen<T>> {
-  T? selectedFortune; // ✅ nullable 처리
+  T? selectedFortune; // nullable 처리
   bool isExpanded = false;
 
   @override
