@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
 
@@ -60,7 +61,8 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.keyboard_arrow_up, color: Colors.grey[900]),
+                    icon:
+                        Icon(Icons.keyboard_arrow_up, color: Colors.grey[900]),
                     onPressed: () => _toggleExpand(false),
                   ),
                 ],
@@ -117,20 +119,28 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
   Widget _buildHorizontalList() {
     return SizedBox(
       height: 90.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(right: 16.w),
-        itemCount: widget.fortuneList.length,
-        itemBuilder: (context, index) {
-          final fortune = widget.fortuneList[index];
-          final isSelected = fortune.titleName == widget.selected.titleName;
-          final isFirst = index == 0;
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          },
+        ),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.only(right: 16.w),
+          itemCount: widget.fortuneList.length,
+          itemBuilder: (context, index) {
+            final fortune = widget.fortuneList[index];
+            final isSelected = fortune.titleName == widget.selected.titleName;
+            final isFirst = index == 0;
 
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            child: _buildItem(fortune, isSelected, removeMargin: isFirst),
-          );
-        },
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h),
+              child: _buildItem(fortune, isSelected, removeMargin: isFirst),
+            );
+          },
+        ),
       ),
     );
   }
@@ -163,7 +173,12 @@ class _HoroscopeHeaderSelectorState<T extends BaseFortune>
 
   Widget _buildItem(T fortune, bool isSelected, {bool removeMargin = false}) {
     return GestureDetector(
-      onTap: () => widget.onSelect(fortune),
+      onTap: () {
+        widget.onSelect(fortune);
+        if (_isExpanded) {
+          _toggleExpand(false);
+        }
+      },
       child: Container(
         width: _itemWidth.w,
         margin: removeMargin

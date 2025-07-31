@@ -31,6 +31,39 @@
 
   <title>haengunse</title>
   <link rel="manifest" href="manifest.json">
+  
+  <style>
+    /* Hide scrollbars while keeping scroll functionality */
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+    
+    /* For Firefox */
+    html {
+      scrollbar-width: none;
+    }
+    
+    /* For IE and Edge */
+    body {
+      -ms-overflow-style: none;
+    }
+    
+    /* Ensure all scrollable elements hide scrollbars */
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+    *::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
