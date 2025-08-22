@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:haengunse/screens/home/weather_box.dart';
+import 'package:haengunse/utils/interstitial_ad_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:haengunse/service/today/today_interactor.dart';
 
 class SectionLucky extends StatelessWidget {
   final String userName;
@@ -13,6 +16,34 @@ class SectionLucky extends StatelessWidget {
   String _getTodayDate() {
     final now = DateTime.now();
     return "${now.year}년 ${now.month}월 ${now.day}일";
+  }
+
+  Future<void> _handleTodayTap(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final manseInfo = prefs.getString('manseInfo');
+    final gender = prefs.getString('gender');
+
+    final jsonData = {
+      'manseInfo': manseInfo,
+      'gender': gender,
+    };
+
+    bool isDataReady = false;
+    Map<String, dynamic>? responseData;
+    
+    // API 요청 시작
+    final interactor = TodayInteractor(
+      context: context,
+      userData: jsonData,
+    );
+    
+    // handleTodayRequest를 수정해야 하므로 여기서 직접 처리
+    Navigator.pushNamed(context, '/todaysplash');
+    
+    // 바로 광고 표시
+    Future.delayed(const Duration(milliseconds: 300), () {
+      InterstitialAdHelper.showInterstitialAd();
+    });
   }
 
   @override
@@ -47,7 +78,7 @@ class SectionLucky extends StatelessWidget {
                   )),
               SizedBox(height: 4.h),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/todaysplash'),
+                onTap: () => _handleTodayTap(context),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

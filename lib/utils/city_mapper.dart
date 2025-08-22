@@ -9,11 +9,12 @@ class CityMapper {
     final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
     for (var entry in jsonMap.entries) {
-      final String cityName = entry.key;
-      final dynamic idValue = entry.value;
+      final String cityIdString = entry.key;
+      final String koreanName = entry.value;
 
-      if (idValue is int) {
-        _cityIdToKoreanName[idValue] = cityName;
+      final int? cityId = int.tryParse(cityIdString);
+      if (cityId != null) {
+        _cityIdToKoreanName[cityId] = koreanName;
       }
     }
   }

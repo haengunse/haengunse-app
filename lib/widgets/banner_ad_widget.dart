@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class BannerAdWidget extends StatefulWidget {
-  const BannerAdWidget({super.key});
+  final bool isLarge;
+  final bool isLargeBanner;
+  final Color? backgroundColor;
+
+  const BannerAdWidget({super.key, this.isLarge = false, this.isLargeBanner = false, this.backgroundColor});
 
   @override
   State<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -21,10 +25,19 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   }
 
   void _loadAd() {
+    AdSize adSize;
+    if (widget.isLarge) {
+      adSize = AdSize.mediumRectangle;
+    } else if (widget.isLargeBanner) {
+      adSize = AdSize.largeBanner;
+    } else {
+      adSize = AdSize.banner;
+    }
+    
     _bannerAd = BannerAd(
       adUnitId: _testBannerAdUnitId,
       request: const AdRequest(),
-      size: AdSize.banner,
+      size: adSize,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
@@ -49,20 +62,33 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoaded) {
-      return Container(
-        alignment: Alignment.center,
-        width: 320,
-        height: 50,
-        child: const Center(
-          child: SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
+      if (widget.backgroundColor != null) {
+        AdSize adSize;
+        if (widget.isLarge) {
+          adSize = AdSize.mediumRectangle;
+        } else if (widget.isLargeBanner) {
+          adSize = AdSize.largeBanner;
+        } else {
+          adSize = AdSize.banner;
+        }
+        
+        return Container(
+          alignment: Alignment.center,
+          width: adSize.width.toDouble(),
+          height: adSize.height.toDouble(),
+          color: widget.backgroundColor,
+          child: const Center(
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
+      return const SizedBox.shrink();
     }
 
     return Container(

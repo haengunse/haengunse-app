@@ -106,10 +106,7 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
                       mode: widget.mode,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: BannerAdWidget(),
-                  ),
+                  const BannerAdWidget(isLargeBanner: true),
                 ],
               ),
             ),
