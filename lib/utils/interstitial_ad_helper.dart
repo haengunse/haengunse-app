@@ -1,5 +1,8 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:haengunse/utils/platform_helper.dart';
+import 'dart:io';
 
 class InterstitialAdHelper {
   static InterstitialAd? _interstitialAd;
@@ -7,12 +10,26 @@ class InterstitialAdHelper {
   static int _numInterstitialLoadAttempts = 0;
   static const int maxFailedLoadAttempts = 3;
   
-  // 테스트용 전면 광고 ID
-  static const String _testInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
+  // 플랫폼별 전면 광고 ID
+  static String get _interstitialAdUnitId {
+    if (kDebugMode) {
+      // 개발/테스트 환경에서는 테스트 ID 사용
+      return 'ca-app-pub-3940256099942544/1033173712';
+    } else {
+      // 실제 환경에서는 플랫폼별 실제 ID 사용
+      if (Platform.isIOS) {
+        return 'ca-app-pub-2831429243631696/8036720698'; // iOS 전면 광고 ID
+      } else if (Platform.isAndroid) {
+        return 'ca-app-pub-2831429243631696/5602129044'; // Android 전면 광고 ID
+      } else {
+        return 'ca-app-pub-3940256099942544/1033173712'; // 기본값
+      }
+    }
+  }
   
   static void createInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: _testInterstitialAdUnitId,
+      adUnitId: _interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -36,6 +53,15 @@ class InterstitialAdHelper {
   }
   
   static void showInterstitialAd({VoidCallback? onAdDismissed}) {
+    // 웹에서는 AdSense 비네트 광고가 자동으로 표시됨
+    if (PlatformHelper.isWeb) {
+      debugPrint('웹 환경: AdSense 자동광고(비네트) 활성화됨');
+      // 웹에서는 자동광고가 적절한 타이밍에 표시되므로 바로 콜백 실행
+      onAdDismissed?.call();
+      return;
+    }
+    
+    // 모바일에서는 기존 AdMob 전면광고 로직
     if (_interstitialAd == null || !_isAdLoaded) {
       debugPrint('Warning: attempt to show interstitial before loaded.');
       onAdDismissed?.call();

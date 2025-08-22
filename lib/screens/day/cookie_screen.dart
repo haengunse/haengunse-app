@@ -10,8 +10,8 @@ class CookieScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330.w,
-      height: 470.h,
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.height * 0.6,
       decoration: BoxDecoration(
         color: const Color(0xFFFFFEED),
         borderRadius: BorderRadius.circular(20.r),

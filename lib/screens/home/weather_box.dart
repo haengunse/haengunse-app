@@ -186,9 +186,7 @@ class _WeatherBoxState extends State<WeatherBox> with WidgetsBindingObserver {
                   Text("|", style: TextStyle(color: const Color(0xFF777777))),
                   SizedBox(width: 8.w),
                   Text(
-                    (weather.rainfall == null || weather.rainfall == 0)
-                        ? "강수량 없음"
-                        : "강수량 ${weather.rainfall!.toStringAsFixed(1)}mm",
+                    weather.precipitationText,
                     style: TextStyle(fontSize: 11.sp, fontFamily: 'Pretendard'),
                     overflow: TextOverflow.ellipsis,
                   ),

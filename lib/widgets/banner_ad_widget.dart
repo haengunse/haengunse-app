@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:haengunse/utils/platform_helper.dart';
+import 'package:haengunse/widgets/web_ad_widget.dart';
+import 'dart:io';
 
 class BannerAdWidget extends StatefulWidget {
   final bool isLarge;
@@ -16,7 +20,21 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
   bool _isLoaded = false;
 
-  final String _testBannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
+  String get _bannerAdUnitId {
+    if (kDebugMode) {
+      // 개발/테스트 환경에서는 테스트 ID 사용
+      return 'ca-app-pub-3940256099942544/6300978111';
+    } else {
+      // 실제 환경에서는 플랫폼별 실제 ID 사용
+      if (Platform.isIOS) {
+        return 'ca-app-pub-2831429243631696/3031806028'; // iOS 배너 ID
+      } else if (Platform.isAndroid) {
+        return 'ca-app-pub-2831429243631696/8228292380'; // Android 배너 ID
+      } else {
+        return 'ca-app-pub-3940256099942544/6300978111'; // 기본값
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -35,7 +53,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     }
     
     _bannerAd = BannerAd(
-      adUnitId: _testBannerAdUnitId,
+      adUnitId: _bannerAdUnitId,
       request: const AdRequest(),
       size: adSize,
       listener: BannerAdListener(
@@ -61,6 +79,16 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // 웹에서는 WebAdWidget 사용
+    if (PlatformHelper.isWeb) {
+      return WebAdWidget(
+        isLarge: widget.isLarge,
+        isLargeBanner: widget.isLargeBanner,
+        backgroundColor: widget.backgroundColor,
+      );
+    }
+
+    // 모바일에서는 기존 AdMob 로직 사용
     if (!_isLoaded) {
       if (widget.backgroundColor != null) {
         AdSize adSize;
@@ -77,15 +105,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           width: adSize.width.toDouble(),
           height: adSize.height.toDouble(),
           color: widget.backgroundColor,
-          child: const Center(
-            child: SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            ),
-          ),
         );
       }
       return const SizedBox.shrink();

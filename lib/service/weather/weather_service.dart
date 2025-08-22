@@ -21,12 +21,27 @@ class WeatherService {
         final data = response.data;
 
         try {
-          final rawRain = data['rain']?['1h'] ??
-              data['rain']?['3h'] ??
-              data['snow']?['1h'] ??
-              data['snow']?['3h'];
-
-          print('[WeatherService] ☔ 강수량 정보(raw): ${rawRain ?? "없음"} mm');
+          // 강수량 정보 상세 로깅
+          final rainData = data['rain'];
+          final snowData = data['snow'];
+          
+          print('[WeatherService] 🌧️ 비 데이터: $rainData');
+          print('[WeatherService] ❄️ 눈 데이터: $snowData');
+          
+          // 비 강수량 (1시간 또는 3시간)
+          final rain1h = rainData?['1h']?.toDouble();
+          final rain3h = rainData?['3h']?.toDouble();
+          
+          // 눈 강수량 (1시간 또는 3시간)  
+          final snow1h = snowData?['1h']?.toDouble();
+          final snow3h = snowData?['3h']?.toDouble();
+          
+          // 총 강수량 계산 (비 + 눈)
+          final totalRainfall = (rain1h ?? rain3h ?? 0.0) + (snow1h ?? snow3h ?? 0.0);
+          
+          print('[WeatherService] ☔ 비 1h: ${rain1h ?? "없음"}mm, 3h: ${rain3h ?? "없음"}mm');
+          print('[WeatherService] ❄️ 눈 1h: ${snow1h ?? "없음"}mm, 3h: ${snow3h ?? "없음"}mm');
+          print('[WeatherService] 🌦️ 총 강수량: ${totalRainfall}mm');
 
           return Weather(
             cityId: data['id'],
@@ -36,11 +51,9 @@ class WeatherService {
             temp: data['main']['temp'].toDouble(),
             tempMin: data['main']['temp_min'].toDouble(),
             tempMax: data['main']['temp_max'].toDouble(),
-            rainfall: data['rain']?['1h']?.toDouble() ??
-                data['rain']?['3h']?.toDouble() ??
-                data['snow']?['1h']?.toDouble() ??
-                data['snow']?['3h']?.toDouble() ??
-                0.0,
+            rainfall: totalRainfall,
+            rainAmount: rain1h ?? rain3h,
+            snowAmount: snow1h ?? snow3h,
           );
         } catch (e) {
           print("❗ Weather 파싱 중 오류 발생: $e");

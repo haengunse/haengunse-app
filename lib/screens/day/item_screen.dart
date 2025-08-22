@@ -10,8 +10,8 @@ class ItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330.w,
-      height: 550.h,
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
         color: const Color(0xFFFFFEED),
         borderRadius: BorderRadius.circular(20.r),
