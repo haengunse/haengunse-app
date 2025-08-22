@@ -59,7 +59,6 @@ class TodayScreen extends StatelessWidget {
           // 메인 내용
           Positioned.fill(
             child: SafeArea(
-              bottom: false,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
@@ -68,7 +67,7 @@ class TodayScreen extends StatelessWidget {
                     top: 10.h,
                     left: 25.w,
                     right: 25.w,
-                    bottom: 25.h,
+                    bottom: 0.h,
                   ),
                   child: Container(
                     width: double.infinity,

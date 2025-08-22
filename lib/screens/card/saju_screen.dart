@@ -54,9 +54,13 @@ class SajuScreen extends StatelessWidget {
           ),
           body: SafeArea(
             top: true,
-            bottom: false,
             child: Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.only(
+                left: 16.w,
+                right: 16.w,
+                top: 16.w,
+                bottom: 0.w,
+              ),
               child: ListView(
                 children: [
                   UserSajuSection(

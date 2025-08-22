@@ -82,7 +82,7 @@ class SectionCard extends StatelessWidget {
     required String bigTitle,
   }) {
     return Container(
-      width: 118.w,
+      width: 130.w,
       height: 180,
       margin: EdgeInsets.symmetric(vertical: 4.h),
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4),
@@ -107,8 +107,7 @@ class SectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 1.2,
+          Expanded(
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -119,7 +118,7 @@ class SectionCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 1.h),
+          SizedBox(height: 2.h),
           Text(
             smallTitle,
             style: TextStyle(
@@ -128,6 +127,8 @@ class SectionCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           Text(
             bigTitle,
@@ -137,6 +138,8 @@ class SectionCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
