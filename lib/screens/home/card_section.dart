@@ -82,10 +82,10 @@ class SectionCard extends StatelessWidget {
     required String bigTitle,
   }) {
     return Container(
-      width: 130.w,
-      height: 150.h,
+      width: 118.w,
+      height: 180,
       margin: EdgeInsets.symmetric(vertical: 4.h),
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.r),

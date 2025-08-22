@@ -10,6 +10,22 @@ import 'package:haengunse/service/dream/dream_chat_storage.dart';
 import 'package:haengunse/service/today/today_cache_storage.dart';
 import 'package:haengunse/utils/city_mapper.dart';
 
+// overscroll 방지용 커스텀 ScrollBehavior
+class NoOverScrollBehavior extends ScrollBehavior {
+  const NoOverScrollBehavior();
+
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const ClampingScrollPhysics();
+  }
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -139,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
-    // 모든 캐시 초기화
     await SajuCacheStorage.clearResponse();
     await DayCacheStorage.clearAll();
     await DreamChatStorage.clearChat();
@@ -184,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(
           height: 1,
           thickness: 1,
-          color: Color(0xFFDDDDDD), // 연한 회색
+          color: Color(0xFFDDDDDD),
         ),
       ],
     );
@@ -193,12 +208,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: false, // AppBar와 body가 겹치지 않도록
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 231, 244, 231),
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        scrolledUnderElevation: 0, // 스크롤 시 elevation 변경 방지
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         actions: [
           Builder(
@@ -216,9 +231,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 50, bottom: 50), // 상단 패딩 넉넉히
+              padding: const EdgeInsets.only(top: 50, bottom: 50),
               width: double.infinity,
-              alignment: Alignment.center, // 가운데 정렬
+              alignment: Alignment.center,
               color: const Color.fromARGB(255, 231, 244, 231),
               child: const Text(
                 'MENU',
@@ -230,7 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            //const Divider(height: 1, color: Color(0xFFDDDDDD)), // 연한 회색 선
             const SizedBox(height: 8),
             _drawerTile(
               icon: Icons.edit,
@@ -251,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.delete,
               title: '정보 삭제',
               onTap: () {
-                Navigator.pop(context); // 드로어 닫기
+                Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 200), () {
                   showDialog(
                     context: context,
@@ -270,13 +284,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SectionLucky(userName: userName),
-            const SectionCard(),
-            const SectionDay(),
-          ],
+      body: ScrollConfiguration(
+        behavior: const NoOverScrollBehavior(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SectionLucky(userName: userName),
+              const SectionCard(),
+              const SectionDay(),
+            ],
+          ),
         ),
       ),
     );

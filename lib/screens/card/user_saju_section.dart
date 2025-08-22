@@ -21,7 +21,7 @@ class UserSajuSection extends StatelessWidget {
 
     String imagePath(String label) {
       if (label == '모름') {
-        return 'assets/images/saju/모름.png';
+        return 'assets/images/saju/unknown.png';
       }
       return 'assets/images/saju/${label.replaceAll('/', ':')}.png';
     }

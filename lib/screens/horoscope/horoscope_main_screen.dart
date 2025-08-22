@@ -4,6 +4,7 @@ import 'package:haengunse/service/card/horoscope_fortune.dart';
 import 'package:haengunse/screens/horoscope/horoscope_header_selector.dart';
 import 'package:haengunse/screens/horoscope/horoscope_main_content.dart';
 import 'package:haengunse/service/card/horoscope_calculator.dart';
+import 'package:haengunse/widgets/banner_ad_widget.dart';
 
 class HoroscopeMainScreen<T extends BaseFortune> extends StatefulWidget {
   final List<T> fortuneList;
@@ -104,6 +105,10 @@ class _HoroscopeMainScreenState<T extends BaseFortune>
                       fortune: selectedFortune!,
                       mode: widget.mode,
                     ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: BannerAdWidget(),
                   ),
                 ],
               ),

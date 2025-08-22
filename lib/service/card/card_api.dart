@@ -33,7 +33,7 @@ class CardService {
     return [
       FortuneCardData(
         imagePath: 'assets/images/fortune.png',
-        smallTitle: '사주로 보는 나만의 흐름',
+        smallTitle: '사주로 보는 나의 흐름',
         bigTitle: '사주 해석',
         route: CardRoute.saju,
       ),
@@ -123,10 +123,10 @@ class CardService {
                 (k, v) => MapEntry(k.toString(), v.toString())), // 👈 String 변환
             'userName': prefs.getString('name') ?? '사용자',
           };
-          
+
           // 응답 캐싱
           await SajuCacheStorage.saveResponse(responseData, manseInfo);
-          
+
           return responseData;
         } else {
           throw Exception("예상과 다른 응답 형식");

@@ -42,6 +42,7 @@ dependencies:
   dio: ^5.8.0+1
   flutter_dotenv: ^5.2.1
   flutter_screenutil: ^5.8.4
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:
