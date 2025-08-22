@@ -4,10 +4,12 @@ import 'package:haengunse/utils/route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:haengunse/utils/interstitial_ad_helper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  InterstitialAdHelper.createInterstitialAd();
   runApp(const MyApp());
 }
 

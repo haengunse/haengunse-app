@@ -49,7 +49,20 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoaded) {
-      return const SizedBox.shrink();
+      return Container(
+        alignment: Alignment.center,
+        width: 320,
+        height: 50,
+        child: const Center(
+          child: SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+        ),
+      );
     }
 
     return Container(

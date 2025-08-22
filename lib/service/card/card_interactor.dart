@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haengunse/service/card/card_api.dart';
 import 'package:haengunse/service/card/horoscope_fortune.dart';
+import 'package:haengunse/utils/interstitial_ad_helper.dart';
 
 class CardInteractor {
   static Future<void> handleTap({
@@ -14,7 +15,13 @@ class CardInteractor {
         if (!context.mounted) return;
 
         if (card.route == '/dream') {
-          Navigator.pushNamed(context, card.route);
+          InterstitialAdHelper.showInterstitialAd(
+            onAdDismissed: () {
+              if (context.mounted) {
+                Navigator.pushNamed(context, card.route);
+              }
+            },
+          );
         } else if (card.route == '/saju') {
           final sajuData = data as Map<String, dynamic>;
           Navigator.pushNamed(
