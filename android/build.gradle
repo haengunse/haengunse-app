@@ -13,6 +13,22 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// Define Flutter SDK properties for all projects
+subprojects {
+    afterEvaluate {
+        // Ensure all subprojects have access to flutter properties
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 34
+                
+                defaultConfig {
+                    minSdkVersion 21
+                }
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
