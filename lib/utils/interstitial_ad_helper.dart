@@ -16,6 +16,10 @@ class InterstitialAdHelper {
       // 개발/테스트 환경에서는 테스트 ID 사용
       return 'ca-app-pub-3940256099942544/1033173712';
     } else {
+      // 웹에서는 기본값 사용
+      if (PlatformHelper.isWeb) {
+        return 'ca-app-pub-3940256099942544/1033173712'; // 웹 기본값
+      }
       // 실제 환경에서는 플랫폼별 실제 ID 사용
       if (Platform.isIOS) {
         return 'ca-app-pub-2831429243631696/8036720698'; // iOS 전면 광고 ID
