@@ -1,4 +1,3 @@
-// geolocator_android 등 구식 플러그인이 기대하는 값 제공
 ext {
     flutter = [
             compileSdkVersion: 34,
@@ -20,26 +19,39 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 
-/**
- * afterEvaluate 금지 → plugins.withId 로 안전하게 적용
- * 앱/라이브러리 모듈 모두 동일 정책 적용
- */
-subprojects {
-    plugins.withId('com.android.application') {
-        android {
-            compileSdkVersion 34
-            defaultConfig {
-                minSdkVersion 21
-                targetSdkVersion 34
+// 모든 모듈에 공통 적용 - 강제로 Java/Kotlin 17 통일
+subprojects { subproject ->
+    afterEvaluate {
+        if (subproject.plugins.hasPlugin('com.android.application') || 
+            subproject.plugins.hasPlugin('com.android.library')) {
+            
+            subproject.android {
+                compileSdkVersion 34
+                
+                if (subproject.android.hasProperty('defaultConfig')) {
+                    defaultConfig {
+                        minSdkVersion 21
+                        targetSdkVersion 34
+                    }
+                }
+                
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
             }
-        }
-    }
-    plugins.withId('com.android.library') {
-        android {
-            compileSdkVersion 34
-            defaultConfig {
-                minSdkVersion 21
-                targetSdkVersion 34
+            
+            // 모든 Java 컴파일 태스크에 강제 적용
+            subproject.tasks.withType(JavaCompile).configureEach {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+            
+            // 모든 Kotlin 컴파일 태스크에 강제 적용
+            subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
             }
         }
     }

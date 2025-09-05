@@ -1,4 +1,4 @@
-package com.example.haengunse
+package com.haengunse
 
 import io.flutter.embedding.android.FlutterActivity
 
