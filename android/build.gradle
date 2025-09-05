@@ -1,3 +1,12 @@
+// geolocator_android 등 구식 플러그인이 기대하는 값 제공
+ext {
+    flutter = [
+            compileSdkVersion: 34,
+            minSdkVersion    : 21,
+            targetSdkVersion : 34
+    ]
+}
+
 allprojects {
     repositories {
         google()
@@ -6,24 +15,31 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-subprojects {
-    project.evaluationDependsOn(":app")
-}
 
-// Define Flutter SDK properties for all projects
+/**
+ * afterEvaluate 금지 → plugins.withId 로 안전하게 적용
+ * 앱/라이브러리 모듈 모두 동일 정책 적용
+ */
 subprojects {
-    afterEvaluate {
-        // Ensure all subprojects have access to flutter properties
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 34
-                
-                defaultConfig {
-                    minSdkVersion 21
-                }
+    plugins.withId('com.android.application') {
+        android {
+            compileSdkVersion 34
+            defaultConfig {
+                minSdkVersion 21
+                targetSdkVersion 34
+            }
+        }
+    }
+    plugins.withId('com.android.library') {
+        android {
+            compileSdkVersion 34
+            defaultConfig {
+                minSdkVersion 21
+                targetSdkVersion 34
             }
         }
     }

@@ -37,11 +37,25 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2831429243631696"
      crossorigin="anonymous"></script>
   
-  <!-- AdSense 자동광고 (비네트 광고 포함) -->
+  <!-- AdMob 웹 광고 설정 -->
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
       google_ad_client: "ca-pub-2831429243631696",
       enable_page_level_ads: true
+    });
+  </script>
+  
+  <!-- 테스트용 광고 슬롯 -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // 페이지 로드 후 광고 초기화
+      setTimeout(function() {
+        if (window.adsbygoogle) {
+          console.log('AdSense loaded successfully');
+        } else {
+          console.log('AdSense failed to load');
+        }
+      }, 2000);
     });
   </script>
   
